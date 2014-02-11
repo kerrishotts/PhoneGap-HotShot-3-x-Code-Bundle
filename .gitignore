@@ -6,4 +6,5 @@ prep-yasmf.sh
 */.cordova
 */www/.idea
 *sublime*
+caverunner2/www/js/app.js
 

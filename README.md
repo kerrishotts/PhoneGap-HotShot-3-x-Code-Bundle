@@ -8,23 +8,23 @@ Furthermore, the code herein is not a complete Cordova project. The build artifa
 
 ## Chapter/Project Lookup
 
-|    Chapter | Project         |
-|-----------:|:----------------|
-|          1 | Not applicable  |
-|          2 | Not applicable  |
-|          3 | FilerV1         |
-|          4 | FilerV2         |
-|          5 | FilerV3         |
-|          6 | FilerV4         |
-|          7 | FilerV5         |
-|          8 | FilerV6         |
-|          9 | FilerV7         |
-|         10 | PathRec         |
-|         11 | Native          |
-|         12 | CaveRunner      |
-|         13 | CaveRunner2     |
-| Appendix A | Not Applicable  |
-| Appendix B | Not Applicable  |
+|    Chapter | Title                              | Project         |
+|-----------:|:---------------------------------- |:----------------|
+|          1 | Your First Project                 | Not applicable  |
+|          2 | Localization and Globalization     | Not applicable  |
+|          3 | App Design                         | FilerV1         |
+|          4 | The File API                       | FilerV2         |
+|          5 | Working with Audio                 | FilerV3         |
+|          6 | Working with Still images          | FilerV4         |
+|          7 | Working with Video                 | FilerV5         |
+|          8 | Sharing Content                    | FilerV6         |
+|          9 | Dealing With Tablets               | FilerV7         |
+|         10 | Maps and GPS                       | PathRec         |
+|         11 | Using Native Controls              | Native          |
+|         12 | Canvas Games and the Accelerometer | CaveRunner      |
+|         13 | Adding a Back-end (Parse)          | CaveRunner2     |
+| Appendix A | Quick Design Pattern Reference     | Not Applicable  |
+| Appendix B | Quirks and Gotchas                 | Not Applicable  |
 
 ## License
 

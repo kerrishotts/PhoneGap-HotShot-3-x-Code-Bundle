@@ -1,2 +1,9 @@
 
 prep-yasmf.sh
+*/platforms
+*/plugins
+*/hooks
+*/.cordova
+*/www/.idea
+*sublime*
+

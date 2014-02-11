@@ -1,0 +1,311 @@
+/**
+ * Filer v1 Styles
+ */
+
+body
+{
+  background-color: #f1eee5;
+}
+body.android
+{
+  background-color: #000;
+}
+
+.ui-tint-color
+{
+  color: #45bc64; 
+}
+.android .ui-tint-color
+{
+  color: #669900;
+}
+
+.ui-background-tint-color
+{
+  background-color: #45bc64; 
+}
+.android .ui-background-tint-color
+{
+  background-color: #669900;
+}
+
+.ui-navigation-bar
+{
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+}
+.android .ui-navigation-bar
+{
+  border-bottom: 2px solid #669900;
+}
+
+.ui-back-button::before
+{
+  background-color: #45bc64;
+}
+.android .ui-back-button::before
+{
+  background-color: #669900;
+}
+.android .ui-back-button
+{
+  color: transparent;
+}
+
+
+
+.noteListView, .noteEditView
+{
+  background-color: #f1eee5;
+  color: #573920; /*rgba (87, 52, 32)*/
+}
+.android .noteListView, .android .noteEditView
+{
+  background-color: #000;
+  color: #FFF;
+}
+
+.noteListView .ui-list-item
+{
+  overflow: auto; /* so we don't have to clear */
+  border-bottom: 1px solid rgba(87,52, 32, 0.25);
+}
+.android .noteListView .ui-list-item
+{
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  z-index: 1;
+}
+.noteListView .ui-list-item-contents
+{
+  background-color: #f1eee5;
+}
+.android .noteListView .ui-list-item-contents
+{
+  background-color: #000;
+}
+
+.noteListView .ui-list-item .note-representation
+{
+  background-color: rgba(87,52, 32, 0.5);
+  float: left;
+  height: 30px;
+  width: 30px;
+}
+.android .noteListView .ui-list-item .note-representation
+{
+  background-color: #669900;
+}
+.noteListView .ui-list-item .note-name
+{
+  font-size: 25px;
+  line-height: 30px;
+  font-weight: 200;
+  margin-right: 35px;
+  margin-left: 40px;
+}
+
+.noteListView .ui-list-item .note-modified-date
+{
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 300;
+  color: rgba(87, 52, 32, 0.5);
+  float: left;
+}
+.android .noteListView .ui-list-item .note-modified-date
+{
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.noteListView .ui-list-item .note-info
+{
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 300;
+  color: rgba(87, 52, 32, 0.5);
+  float: right;
+}
+.android .noteListView .ui-list-item .note-info
+{
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.noteListView .ui-list-item .ui-indicator
+{
+  background-color: rgba(87,52, 32, 0.5);
+}
+.android .noteListView .ui-list-item .ui-indicator
+{
+  background-color: #669900;
+}
+
+.noteEditView .ui-navigation-bar .ui-title, .noteEditView .ui-text-box
+{
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+.noteEditView .ui-navigation-bar .ui-title
+{
+  left: 70px;
+  right: 70px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.android .noteEditView .ui-navigation-bar .ui-title
+{
+  left: 20px;
+}
+
+
+
+.noteEditView .ui-text-box
+{
+  line-height: 1.25em;
+  display:block;
+  border:0;
+  background-color:transparent;
+  padding:10px;
+  margin:0;
+  box-sizing:border-box;
+  width:100%;
+  font-family: -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-Serif;
+  font-size:20px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  color: #573920;
+  line-height: 1.5em;
+  font-weight: 200;
+  height: 100%;
+  border-radius: 0;
+}
+.android .noteEditView .ui-text-box
+{
+  font-family: "Roboto", "DroidSans", Helvetica, Arial, Sans-Serif;
+  color: #FFF;
+}
+.AudioNoteEditView .ui-text-box
+{
+  height: calc(100% - 100px);
+}
+.ImageNoteEditView .ui-text-box, .VideoNoteEditView .ui-text-box
+{
+  height: calc(100% - 200px);
+  -webkit-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  -moz-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  -ms-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  background-color: #f1eee5;
+}
+.android .ImageNoteEditView .ui-text-box,
+.android .VideoNoteEditView .ui-text-box
+{
+  background-color: #000;
+}
+
+.ImageNoteEditView .ui-text-box.editing, .VideoNoteEditView .ui-text-box.editing
+{
+  height: 100%;
+  margin-top: -200px;
+}
+
+.AudioNoteEditView .audio-container
+{
+  text-align: center;
+  background-color: #FFF;
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+  height: 100px;
+}
+.android .AudioNoteEditView .audio-container
+{
+  background-color: #333;
+  border-bottom: 2px solid #669900;
+}
+.AudioNoteEditView .audio-container div
+{
+  display: inline-block;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.ImageNoteEditView .image-container
+{
+  text-align: center;
+  background-color: #000;
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+  height: 200px;  
+  background-position: center center;
+  background-size: contain;
+  position: relative;
+}
+.android .ImageNoteEditView .image-container
+{
+  background-color: #000;
+  border-bottom: 2px solid #669900;
+}
+.ImageNoteEditView .image-container div
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-mask-position-y: 160px;
+  -moz-mask-position-y: 160px;
+  -ms-mask-position-y: 160px;
+  mask-position-y: 160px;
+  background-color: white;
+}
+
+.ImageNoteEditView .image-container div.outline
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-mask-position-y: 161px;
+  -moz-mask-position-y: 161px;
+  -ms-mask-position-y: 161px;
+  mask-position-y: 161px;
+  background-color: black;
+}
+
+.VideoNoteEditView .video-container
+{
+  text-align: center;
+  background-color: #000;
+  height: 200px;  
+  position: relative;  
+}
+
+.VideoNoteEditView .video-container .video-element video
+{
+  width: 100%;
+  height: 156px;
+}
+.android .VideoNoteEditView .video-container .video-element video
+{
+  height: 154px;
+}
+
+.VideoNoteEditView .video-container .video-actions
+{
+  height: 44px;
+  text-align: center;
+  line-height: 44px;
+  border-top: 1px solid rgba(87, 52, 32, 0.25);
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+}
+
+.android .VideoNoteEditView .video-container .video-actions
+{
+  height: 48px;
+  line-height: 48px;
+  border-top: 2px solid #669900;
+  border-bottom: 2px solid #669900;
+}

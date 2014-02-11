@@ -1,0 +1,27 @@
+<html>
+  <!--
+      imageNoteEditView.html
+
+      This template generates the code for the imageNoteEditView's HTML.
+    -->
+  <body>
+    <div class="ui-navigation-bar">
+      <div class="ui-title" contenteditable="true">%NOTE_NAME%</div>
+      <div class="ui-bar-button-group ui-align-left">
+        <div class="ui-bar-button ui-tint-color ui-back-button">%BACK%</div>
+      </div>
+      <div class="ui-bar-button-group ui-align-right">
+        <div class="ui-bar-button ui-destructive-color">%DELETE_NOTE%</div>
+      </div>
+    </div>
+    <div class="ui-scroll-container ui-avoid-navigation-bar ui-avoid-tool-bar">
+      <div class="image-container">
+        <div class="ui-glyph ui-background-tint-color ui-glyph-camera outline"></div>
+        <div class="ui-glyph ui-background-tint-color ui-glyph-camera non-outline"></div>
+         <div class="ui-glyph ui-background-tint-color ui-glyph-share outline"></div>
+        <div class="ui-glyph ui-background-tint-color ui-glyph-share non-outline share-button"></div>
+      </div>
+      <textarea class="ui-text-box" onblur="this.classList.remove('editing');" onfocus="this.classList.add('editing');">%NOTE_CONTENTS%</textarea>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,229 @@
+body
+{
+  background-color: #000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.startView, .optionsView, .gameView
+{
+  background-color: #081020;
+  background-image: -webkit-linear-gradient(top, rgb(0, 0, 0) 0%, rgb(16, 32, 64) 100%);
+}
+
+.action-group
+{
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  color: #FFFFFF;
+  font-size: 25px;
+}
+
+.button
+{
+  display: inline-block;
+  box-sizing: border-box;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 40%;
+  border: 25px solid rgba(128,192,255, 0.5);
+  border-left: 0;
+  border-right: 0;
+  background-color: rgba(128,192,255,0.75);
+  line-height: 50px;
+  text-shadow: 0 0 5px black;
+}
+
+@-webkit-keyframes animateTitle
+{
+  from {
+    -webkit-transform: rotate(-5deg);
+    text-shadow: 0 0 15px white;
+  }
+
+  25% {
+    -webkit-transform: rotate(0deg);
+    text-shadow: 0 0 35px white;
+  }
+
+  50% {
+    -webkit-transform: rotate(5deg);
+    text-shadow: 0 0 15px white;
+  }
+
+  75% {
+    -webkit-transform: rotate(0deg);
+    text-shadow: 0 0 35px white;
+  }
+
+  to {
+    -webkit-transform: rotate(-5deg);
+    text-shadow: 0 0 15px white;
+  }
+}
+
+.startView .game-title
+{
+  line-height: 200px;
+  font-size: 50px;
+  font-weight: bold;
+  color: yellow;
+  text-align: center;
+  -webkit-transform: rotate(-5deg);
+  text-shadow: 0 0 25px white;
+  -webkit-animation-duration: 10s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+
+}
+
+
+
+.startView .action-group
+{
+  bottom: 65px;
+}
+
+.startView .game-play
+{
+  border: 25px solid rgba(192,255,128, 0.5);
+  background-color: rgba(192,255,128,0.75);
+  border-left: 0;
+  border-right: 0;
+}
+
+.optionsView .options-actions.action-group
+{
+  bottom: 65px;
+}
+
+.optionsView .control-scheme.action-group
+{
+  top: 65px;
+  font-size: 0;
+}
+
+.optionsView .control-scheme.action-group .button
+{
+  width: 30%;
+  margin: 0;
+  font-size: 25px;
+}
+
+.optionsView .control-scheme.action-group .button.selected
+{
+  border: 25px solid rgba(192,255,128, 0.5);
+  background-color: rgba(192,255,128,0.75);
+  border-left: 0;
+  border-right: 0;
+}
+
+
+.gameView .game-overlay
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* game message and action control */
+.gameView .game-message
+{
+  position: absolute;
+  top: 65px;
+  height: 100px;
+  left: 0;
+  right: 0;
+  background-color: rgba(255,255,255,0.75);
+  font-family: "Courier New", "Arial", sans-serif;
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 50px;
+  border: 25px solid rgba(255, 255, 255, 0.5);
+  border-left: 0;
+  border-right: 0;
+  color: #242424;
+}
+
+.gameView .action-group
+{
+  bottom: 150px;
+  color: #FFFFFF;
+  font-size: 25px;
+}
+
+.gameView .game-action
+{
+  border: 25px solid rgba(192,255,128, 0.5);
+  background-color: rgba(192,255,128,0.75);
+  border-left: 0;
+  border-right: 0;
+}
+
+.gameView .game-back
+{
+  border: 25px solid rgba(255, 64,128, 0.5);
+  background-color: rgba(255, 64,128,0.75);
+  border-left: 0;
+  border-right: 0;
+}
+
+/* game controls */
+.gameView .game-left, .gameView .game-right
+{
+  position: absolute;
+  bottom: 25px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  line-height: 100px;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background-color: rgba(255,255,255, 0.5);
+  color: white;
+  font-size: 50px;
+  font-family: "Courier New", "Arial", sans-serif;
+  font-weight: bold;
+  text-shadow: 0 0 5px black;
+}
+.gameView .game-left
+{
+  left: 25px;
+  box-shadow: 5px 5px 25px 0 rgba(0,0,0,.5);
+}
+.gameView .game-right
+{
+  right: 25px;
+  box-shadow: -5px 5px 25px 0 rgba(0,0,0,.5);
+}
+
+.gameView .game-left.pressed, .gameView .game-right.pressed
+{
+  bottom: 20px;
+  box-shadow: 0 0 20px 0 rgba(0,0,0,.5);
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.gameView .game-left.pressed
+{
+  left: 30px;
+}
+
+.gameView .game-right.pressed
+{
+  right: 30px;
+}
+

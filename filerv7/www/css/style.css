@@ -1,0 +1,563 @@
+/**
+ * Filer v1 Styles
+ */
+
+body
+{
+  background-color: #f1eee5;
+}
+body.android
+{
+  background-color: #000;
+}
+
+.ui-tint-color
+{
+  color: #45bc64; 
+}
+.android .ui-tint-color
+{
+  color: #669900;
+}
+.ui-tint-color:active
+{
+  color: rgba(69,188,100,0.5);
+}
+.android .ui-tint-color:active
+{
+  color: rgba(102,153,0, 0.5);
+}
+
+.ui-background-tint-color
+{
+  background-color: #45bc64; 
+}
+.android .ui-background-tint-color
+{
+  background-color: #669900;
+}
+
+.ui-background-tint-color:active
+{
+  background-color: rgba(69,188,100,0.5);
+}
+.android .ui-background-tint-color:active
+{
+  background-color: rgba(102,153,0, 0.5);
+}
+
+.ui-navigation-bar
+{
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+}
+.android .ui-navigation-bar
+{
+  border-bottom: 2px solid #669900;
+}
+.ui-tool-bar
+{
+  border-top: 1px solid rgba(87, 52, 32, 0.25);
+}
+.android .ui-tool-bar
+{
+  border-top: 2px solid #669900;
+}
+
+.android .ui-container.left-side
+{
+  border-right: 1px solid #669900;  
+}
+
+.ui-back-button::before
+{
+  background-color: #45bc64;
+}
+.android .ui-back-button::before
+{
+  background-color: #669900;
+}
+.android .ui-back-button
+{
+  color: transparent;
+}
+
+
+
+.noteListView, .noteEditView, .staticView
+{
+  background-color: #f1eee5;
+  color: #573920; /*rgba (87, 52, 32)*/
+}
+.android .noteListView, .android .noteEditView, .android .staticView
+{
+  background-color: #000;
+  color: #FFF;
+}
+
+.noteListView .ui-list-item
+{
+  overflow: hidden; /* so we don't have to clear */
+  border-bottom: 1px solid rgba(87,52, 32, 0.25);
+}
+.android .noteListView .ui-list-item
+{
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  z-index: 1;
+}
+
+.noteListView.wide .ui-list-item
+{
+  border-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+  display: inline-block;
+  width: 25%;
+  min-height: 200px;
+  vertical-align: top;
+  padding-left: 0;
+}
+
+.noteListView .ui-list-item-contents
+{
+  background-color: #f1eee5;
+}
+.android .noteListView .ui-list-item-contents
+{
+  background-color: #000;
+}
+
+.noteListView .ui-list-item:active,
+.noteListView .ui-list-item-contents:active
+{
+  background-color: rgba(58, 97, 154, 1);
+}
+.android .noteListView .ui-list-item:active,
+.android .noteListView .ui-list-item-contents:active
+{
+  background-color: #242424;
+}
+
+.noteListView.wide .ui-list-item .note-page
+{
+  background-color: #FFFFFF;
+  margin: 0 auto;
+  width: 100px;
+  height: 130px;
+  border: 1px solid rgba(0,0,0,0.125);
+}
+
+.android .noteListView.wide .ui-list-item .note-page
+{
+  background-color: #242424;
+  border: 1px solid rgba(255,255,255,0.125);
+}
+.android .noteListView.wide .ui-list-item:active .note-page
+{
+  color: #000000;
+}
+
+
+.noteListView .ui-list-item .note-representation
+{
+  background-color: rgba(87,52, 32, 0.5);
+  float: left;
+  height: 30px;
+  width: 30px;
+}
+.android .noteListView .ui-list-item .note-representation
+{
+  background-color: #669900;
+}
+
+.noteListView .ui-list-item:active .note-representation
+{
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.android .noteListView .ui-list-item .note-representation
+{
+  background-color: #669900;
+}
+
+.noteListView.wide .ui-list-item .note-representation,
+.noteListView.wide .ui-list-item:active .note-representation
+{
+  background-color: rgba(87,52,32,0.5);
+}
+.android .noteListView.wide .ui-list-item .note-representation,
+.android .noteListView.wide .ui-list-item:active .note-representation
+{
+  background-color: #808080;
+}
+
+.noteListView.wide .ui-list-item .note-representation
+{
+  float: inherit;
+  height: inherit;
+  width: inherit;
+}
+
+
+.noteListView .ui-list-item .note-name
+{
+  font-size: 25px;
+  line-height: 30px;
+  font-weight: 200;
+  margin-right: 35px;
+  margin-left: 40px;
+}
+.noteListView .ui-list-item:active .note-name,
+.android .noteListView .ui-list-item:active .note-name
+{
+  color: #FFFFFF;
+}
+
+.noteListView.wide .ui-list-item .note-name
+{
+  font-size: 20px;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: center;
+}
+
+.noteListView .ui-list-item .note-modified-date
+{
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 300;
+  color: rgba(87, 52, 32, 0.5);
+  float: left;
+}
+.android .noteListView .ui-list-item .note-modified-date
+{
+  color: rgba(255, 255, 255, 0.5);
+}
+.noteListView .ui-list-item:active .note-modified-date,
+.android .noteListView .ui-list-item:active .note-modified-date,
+.noteListView .ui-list-item:active .note-info,
+.android .noteListView .ui-list-item:active .note-info
+{
+  color: rgba(255,255,255,0.5);
+}
+
+
+
+.noteListView .ui-list-item .note-info
+{
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 300;
+  color: rgba(87, 52, 32, 0.5);
+  float: right;
+}
+.android .noteListView .ui-list-item .note-info
+{
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.noteListView.wide .ui-list-item .note-modified-date,
+.noteListView.wide .ui-list-item .note-info
+{
+  text-align: center;
+  float: inherit;
+}
+
+.noteListView .ui-list-item .ui-indicator
+{
+  background-color: rgba(87,52, 32, 0.5);
+}
+.android .noteListView .ui-list-item .ui-indicator
+{
+  background-color: #669900;
+}
+.noteListView .ui-list-item:active .ui-indicator
+{
+  background-color: #FFFFFF;
+}
+.android .noteListView .ui-list-item:active .ui-indicator
+{
+  background-color: #669900;
+}
+
+.noteListView.wide .ui-list-item .ui-indicator
+{
+  display: none;
+}
+
+.noteListView.wide .ui-list-item .ui-list-action-group
+{
+  display: none;
+}
+
+.noteEditView .ui-navigation-bar .ui-title, .noteEditView .ui-text-box
+{
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+.noteEditView .ui-navigation-bar .ui-title
+{
+  left: 70px;
+  right: 70px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.android .noteEditView .ui-navigation-bar .ui-title
+{
+  left: 20px;
+}
+
+
+.noteEditView .ui-text-box
+{
+  line-height: 1.25em;
+  display:block;
+  border:0;
+  background-color:transparent;
+  padding:10px;
+  margin:0;
+  box-sizing:border-box;
+  width:100%;
+  font-family: -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-Serif;
+  font-size:20px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  color: #573920;
+  line-height: 1.5em;
+  font-weight: 200;
+  height: 100%;
+  border-radius: 0;
+}
+.android .noteEditView .ui-text-box
+{
+  font-family: "Roboto", "DroidSans", Helvetica, Arial, Sans-Serif;
+  color: #FFF;
+}
+.AudioNoteEditView .ui-text-box
+{
+  height: calc(100% - 100px);
+}
+.ImageNoteEditView .ui-text-box, .VideoNoteEditView .ui-text-box
+{
+  height: calc(100% - 200px);
+  -webkit-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  -moz-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  -ms-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  background-color: #f1eee5;
+}
+.android .ImageNoteEditView .ui-text-box,
+.android .VideoNoteEditView .ui-text-box
+{
+  background-color: #000;
+}
+
+
+.ImageNoteEditView .ui-text-box.editing, .VideoNoteEditView .ui-text-box.editing
+{
+  height: 100%;
+  margin-top: -200px;
+}
+
+
+.AudioNoteEditView .audio-container
+{
+  text-align: center;
+  background-color: #FFF;
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+  height: 100px;
+}
+.android .AudioNoteEditView .audio-container
+{
+  background-color: #333;
+  border-bottom: 2px solid #669900;
+}
+.AudioNoteEditView .audio-container div
+{
+  display: inline-block;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.ImageNoteEditView .image-container
+{
+  text-align: center;
+  background-color: #000;
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+  height: 200px;  
+  background-position: center center;
+  background-size: contain;
+  position: relative;
+}
+.android .ImageNoteEditView .image-container
+{
+  background-color: #000;
+  border-bottom: 2px solid #669900;
+}
+
+.ImageNoteEditView .image-container div
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-mask-position-y: 100%;
+  -moz-mask-position-y: 100%;
+  -ms-mask-position-y: 10%;
+  mask-position-y: 100%;
+  background-color: white;
+}
+
+.ImageNoteEditView .image-container div.outline
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-mask-position-y: calc(100% + 1px);
+  -moz-mask-position-y: calc(100% + 1px);
+  -ms-mask-position-y: calc(100% + 1px);
+  mask-position-y: calc(100% + 1px);
+  background-color: black;
+}
+
+div.ui-glyph.ui-background-tint-color.ui-glyph-share.outline,
+div.ui-glyph.ui-background-tint-color.ui-glyph-share.non-outline
+{
+  left:inherit;
+  width:50px;
+  top: inherit;
+  height:50px;
+}
+div.ui-glyph.ui-background-tint-color.ui-glyph-share.outline
+{
+  -webkit-mask-position:15px 16px;
+  -moz-mask-position:15px 16px;
+  -ms-mask-position:15px 16px;
+  mask-position:15px 16px;
+}
+div.ui-glyph.ui-background-tint-color.ui-glyph-share.non-outline
+{
+  -webkit-mask-position:15px 15px;
+  -moz-mask-position:15px 15px;
+  -ms-mask-position:15px 15px;
+  mask-position:15px 15px;
+}
+
+
+
+
+.VideoNoteEditView .video-container
+{
+  text-align: center;
+  background-color: #000;
+  height: 200px;  
+  position: relative;  
+}
+
+.VideoNoteEditView .video-container .video-element
+{
+  height: calc(100% - 44px);
+}
+.android .VideoNoteEditView .video-container .video-element
+{
+  height: calc(100% - 48px);
+}
+
+.VideoNoteEditView .video-container .video-element video
+{
+  width: 100%;
+  height: 100%;
+}
+
+.VideoNoteEditView .video-container .video-actions
+{
+  height: 44px;
+  text-align: center;
+  line-height: 44px;
+  border-top: 1px solid rgba(87, 52, 32, 0.25);
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+}
+
+.android .VideoNoteEditView .video-container .video-actions
+{
+  height: 48px;
+  line-height: 48px;
+  border-top: 2px solid #669900;
+  border-bottom: 2px solid #669900;
+}
+
+
+
+.tablet.portrait .ImageNoteEditView .ui-text-box,
+.tablet.portrait .VideoNoteEditView .ui-text-box
+{
+  height: 50%;
+}
+
+.tablet.landscape .ImageNoteEditView .ui-text-box,
+.tablet.landscape .VideoNoteEditView .ui-text-box
+{
+  height: 100%;
+  width: calc(50% - 10px);
+  display: inline-block;
+}
+
+.tablet.portrait .ImageNoteEditView .ui-text-box.editing,
+.tablet.portrait .VideoNoteEditView .ui-text-box.editing
+{
+  height: 50%;
+  margin-top: 0;
+}
+
+.tablet.landscape .ImageNoteEditView .ui-text-box.editing,
+.tablet.landscape .VideoNoteEditView .ui-text-box.editing
+{
+  height: 100%;
+  margin-top: 0;
+}
+
+.tablet.portrait .ImageNoteEditView .image-container,
+.tablet.portrait .VideoNoteEditView .video-container
+
+{
+  height: 50%;
+}
+
+.tablet.landscape .ImageNoteEditView .image-container,
+.tablet.landscape .VideoNoteEditView .video-container
+{
+  width: 50%;
+  height: 100%;
+  display: inline-block;
+  vertical-align: top;
+}
+.android.tablet.landscape .ImageNoteEditView .image-container,
+.android.tablet.landscape .VideoNoteEditView .video-container
+{
+  border-bottom: 0;
+  border-right: 2px solid #669900;
+}
+.android.tablet.landscape .VideoNoteEditView .video-container .video-actions
+{
+  border-bottom: 0;
+}
+.android .ui-split-view .noteEditView .ui-navigation-bar .ui-title
+{
+  left: 70px;
+}
+
+.ui-navigation-bar .ui-save-button
+{
+  display: none;
+}
+.ui-split-view .ui-navigation-bar .ui-save-button
+{
+  display: inherit;
+}

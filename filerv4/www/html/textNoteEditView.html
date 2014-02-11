@@ -1,0 +1,21 @@
+<html>
+  <!--
+      textNoteEditView.html
+
+      This template generates the code for the textNoteEditView's HTML.
+    -->
+  <body>
+    <div class="ui-navigation-bar">
+      <div class="ui-title" contenteditable="true">%NOTE_NAME%</div>
+      <div class="ui-bar-button-group ui-align-left">
+        <div class="ui-bar-button ui-tint-color ui-back-button">%BACK%</div>
+      </div>
+      <div class="ui-bar-button-group ui-align-right">
+        <div class="ui-bar-button ui-destructive-color">%DELETE_NOTE%</div>
+      </div>
+    </div>
+    <div class="ui-scroll-container ui-avoid-navigation-bar">
+      <textarea class="ui-text-box" >%NOTE_CONTENTS%</textarea>
+    </div>
+  </body>
+</html>

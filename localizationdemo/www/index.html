@@ -56,9 +56,6 @@
         print ( "-.0314159% (2): " + _y.PCT(-.0314159, "2") );
         print ( "&nbsp;" );
 
-        print ( "314159.14159 (d10): " + _y.format(314159.14159, "d10") );
-        print ( "&nbsp;" );
-
         print ( "Today's date, default: " + _y.D( new Date() ) );
         print ( "Today's date, D: " + _y.D( new Date(), "D" ) );
         print ( "Today's date, f: " + _y.D( new Date(), "f" ) );
@@ -67,9 +64,12 @@
         print ( "Today's date, T: " + _y.D( new Date(), "T" ) );
         print ( "Today's date, Y: " + _y.D( new Date(), "Y" ) );
         print ( "Today's date, M: " + _y.D( new Date(), "M" ) );
-        print ( "Today's date, all: " + _y.D( new Date(), "d dd ddd dddd M MM MMM MMMM yy yyyy m mm h hh H HH s SS f ff fff t tt z zz zzz g gg" ) );
-
+        print ( "Today's date, all: " + _y.D( new Date(), "d dd ddd dddd M MM MMM MMMM yy yyyy m mm h hh H HH s ss f ff fff t tt z zz zzz g gg" ) );
         print ( "&nbsp;" );
+
+        print ( "314159.14159 (d10): " + _y.format(314159.14159, "d10") );
+        print ( "&nbsp;" );
+
         print ( "&nbsp;" );
         print ( "&nbsp;" );
 

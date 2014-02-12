@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--
+  -- PhoneGap v3.x HotShot Project
+  -- Localization Demo
+  --
+  -->
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="stylesheet" type="text/css" href="js/lib/yasmf.css" />
+    <title>Localization Demo</title>
+</head>
+<body>
+<div id="output">Results of localizations:</div>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript" src="js/lib/globalize.js"></script>
+<script type="text/javascript" src="js/lib/yasmf.js"></script>
+<script type="text/javascript" src="js/lib/cultures/globalize.culture.en-US.js"></script>
+<script type="text/javascript" src="js/lib/cultures/globalize.culture.es-US.js"></script>
+<script type="text/javascript" src="js/lib/cultures/globalize.culture.en-GB.js"></script>
+<script type="text/javascript" src="js/lib/cultures/globalize.culture.es-ES.js"></script>
+
+<script>
+    function print ( s )
+    {
+        document.getElementById("output").innerHTML += "<p>" + s + "</p>";
+    }
+    function doLocalizationDemos()
+    {
+        print ( "--------------------------------------------------" );
+        print ( "Locale: " + _y.currentUserLocale );
+        print ( "--------------------------------------------------" );
+        print ( "HELLO: " + _y.T("HELLO") );
+        print ( "GOODBYE: " + _y.T("GOODBYE") );
+        print ( "HELLO_%NAME%: " + _y.T("HELLO_%NAME%", { "NAME": "Mary" }) );
+        print ( "ONLY_ONE_KEY: " + _y.T("ONLY_ONE_KEY") );
+        print ( "HIERARCHY: " + _y.T("HIERARCHY") );
+        print ( "MISSING_%KEY%: " + _y.T("MISSING_%KEY%", { "KEY": "Replacement" } ) );
+        print ( "&nbsp;" );
+
+        print ( "314159.14159 (d): " + _y.N(314159.14159) );
+        print ( "314159.14159 (4): " + _y.N(314159.14159, "4") );
+        print ( "-314159.14159 (2): " + _y.N(-314159.14159, "2") );
+        print ( "&nbsp;" );
+
+        print ( "$314159.14159 (d): " + _y.C(314159.14159) );
+        print ( "$314159.14159 (4): " + _y.C(314159.14159, "4") );
+        print ( "-$314159.14159 (2): " + _y.C(-314159.14159, "2") );
+        print ( "&nbsp;" );
+
+        print ( ".0314159% (d): " + _y.PCT(.0314159) );
+        print ( ".0314159% (4): " + _y.PCT(.0314159, "4") );
+        print ( "-.0314159% (2): " + _y.PCT(-.0314159, "2") );
+        print ( "&nbsp;" );
+
+        print ( "314159.14159 (d10): " + _y.format(314159.14159, "d10") );
+        print ( "&nbsp;" );
+
+        print ( "Today's date, default: " + _y.D( new Date() ) );
+        print ( "Today's date, D: " + _y.D( new Date(), "D" ) );
+        print ( "Today's date, f: " + _y.D( new Date(), "f" ) );
+        print ( "Today's date, F: " + _y.D( new Date(), "F" ) );
+        print ( "Today's date, t: " + _y.D( new Date(), "t" ) );
+        print ( "Today's date, T: " + _y.D( new Date(), "T" ) );
+        print ( "Today's date, Y: " + _y.D( new Date(), "Y" ) );
+        print ( "Today's date, M: " + _y.D( new Date(), "M" ) );
+        print ( "Today's date, all: " + _y.D( new Date(), "d dd ddd dddd M MM MMM MMMM yy yyyy m mm h hh H HH s SS f ff fff t tt z zz zzz g gg" ) );
+
+        print ( "&nbsp;" );
+        print ( "&nbsp;" );
+        print ( "&nbsp;" );
+
+    }
+    function startApp ()
+    {
+        _y.addTranslation ( "EN", "HELLO", "Hello" );
+        _y.addTranslation ( "ES", "HELLO", "Hola" );
+        _y.addTranslations ( {
+                               "GOODBYE": { "EN": "Goodbye",
+                                            "ES": "Adios" },
+                               "HELLO_%NAME%": { "EN": "Hello %NAME%",
+                                                 "ES": "Hola %NAME%" },
+                               "ONLY_ONE_KEY": { "EN": "We only have an english translation" },
+                               "HIERARCHY": { "EN": "Generic English",
+                                              "EN-US": "American English",
+                                              "ES": "Generic Spanish",
+                                              "ES-US": "Spanish (United States)" }
+                             } );
+        // use current locale first
+        doLocalizationDemos();
+        _y.currentUserLocale = "en-US";
+        doLocalizationDemos();
+        _y.currentUserLocale = "es-US";
+        doLocalizationDemos();
+        _y.currentUserLocale = "en-GB";
+        doLocalizationDemos();
+        _y.currentUserLocale = "es-ES";
+        doLocalizationDemos();
+    }
+    _y.executeWhenReady ( function () { _y.getDeviceLocale( startApp ); } );
+</script>
+</body>
+</html>

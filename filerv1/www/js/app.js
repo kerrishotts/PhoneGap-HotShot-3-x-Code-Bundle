@@ -80,5 +80,5 @@ require(['yasmf', 'app/main',
   // and the app as well
   window.APP = APP;
   // and GO!
-  APP.start();
+  _y.executeWhenReady ( function () { _y.getDeviceLocale( APP.start ) } );
 });

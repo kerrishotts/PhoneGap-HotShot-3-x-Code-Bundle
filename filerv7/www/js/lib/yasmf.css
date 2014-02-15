@@ -222,19 +222,42 @@ div {
 /*****************************************************************************
  *
  * Tint Colors (used for interactive buttons and icons)
+ *  - Built in affordance: colors transition over .3s to half opacity.
  *
  *****************************************************************************/
 .ui-tint-color {
-  color: #40b0ff; }
+  color: #40b0ff;
+  -webkit-transition: color 0.3s ease-in;
+  -moz-transition: color 0.3s ease-in;
+  -ms-transition: color 0.3s ease-in;
+  -o-transition: color 0.3s ease-in;
+  transition: color 0.3s ease-in; }
+
+.ui-tint-color:active {
+  color: rgba(64, 176, 255, 0.5); }
 
 .android .ui-tint-color {
   color: #33b5e5; }
 
+.android .ui-tint-color:active {
+  color: rgba(51, 181, 229, 0.5); }
+
 .ui-background-tint-color {
-  background-color: #40b0ff; }
+  background-color: #40b0ff;
+  -webkit-transition: background-color 0.3s ease-in;
+  -moz-transition: background-color 0.3s ease-in;
+  -ms-transition: background-color 0.3s ease-in;
+  -o-transition: background-color 0.3s ease-in;
+  transition: background-color 0.3s ease-in; }
+
+.ui-background-tint-color:active {
+  background-color: rgba(64, 176, 255, 0.5); }
 
 .android .ui-background-tint-color {
-  color: #33b5e5; }
+  background-color: #33b5e5; }
+
+.android .ui-background-tint-color:active {
+  background-color: rgba(51, 181, 229, 0.5); }
 
 .ui-destructive-color {
   color: #ff6060; }
@@ -247,22 +270,6 @@ div {
 
 .android .ui-background-destructive-color {
   background-color: #cc0000; }
-
-/* Tint colors can have affordances so that when an interactive element is touched, the
-   color changes using a transition. */
-.ui-tint-color {
-  -webkit-transition: color 0.3s ease-in;
-  -moz-transition: color 0.3s ease-in;
-  -ms-transition: color 0.3s ease-in;
-  -o-transition: color 0.3s ease-in;
-  transition: color 0.3s ease-in; }
-
-.ui-background-tint-color {
-  -webkit-transition: background-color 0.3s ease-in;
-  -moz-transition: background-color 0.3s ease-in;
-  -ms-transition: background-color 0.3s ease-in;
-  -o-transition: background-color 0.3s ease-in;
-  transition: background-color 0.3s ease-in; }
 
 /*****************************************************************************
  *
@@ -673,6 +680,20 @@ div {
   display: table-cell;
   vertical-align: middle;
   padding: 10px; }
+
+/* light enough so that we don't have to override a lot in custom css unless we want to */
+/* List affordances */
+.ui-list-item:active, .ui-list-item-contents:active {
+  background-color: #30619a;
+  color: white; }
+
+.android .ui-list-item:active, .android .ui-list-item-contents:active {
+  background-color: #242424;
+  color: white; }
+
+.ui-list-item:active .ui-glyph, .ui-list-item-contents:active .ui-glyph,
+.ui-list-item:active .ui-indicator, .ui-list-item-contents:active .ui-indicator {
+  background-color: white; }
 
 /*****************************************************************************
  *
@@ -1217,6 +1238,13 @@ div {
   box-shadow: none;
   -webkit-box-shadow: none;
   border-radius: 0px; }
+
+/* affordances for ui-alert */
+.ui-alert-button-container .ui-alert-button:active {
+  background-color: rgba(0, 0, 0, 0.0625); }
+
+.android .ui-alert-button-container .ui-alert-button:active {
+  background-color: rgba(255, 255, 255, 0.0625); }
 
 /**
  * End Alert

@@ -82,8 +82,15 @@ function ( _y, noteStorageSingleton, videoNoteViewHTML,
 
       self.updateVideo = function ()
       {
-        var html = "<video controls src='file://%URL%'></video>";
-        self._videoElementContainer.innerHTML = _y.template ( html, { "URL": self._note.mediaContents } );
+        var fe = cordova.require("org.apache.cordova.file-extras.FileExtras");
+        var html = "<video controls src='file://%ROOT%%URL%?%CACHE%'></video>";
+        fe.getDocumentsDirectory ( function ( documentRoot )
+                                   {
+                                     var cacheBust = Math.floor(Math.random() * 100000);
+                                     self._videoElementContainer.innerHTML = _y.template ( html, { "ROOT": documentRoot.fullPath,
+                                                                                                   "URL": self._note.mediaContents,
+                                                                                                   "CACHE": cacheBust} );
+                                   });
       }
 
       self.onVideoCaptured = function ()

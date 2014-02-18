@@ -50,136 +50,135 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
    var _className = "AudioNoteEditView";
    var AudioNoteEditView = function ()
    {
-      var self = new TextNoteEditView();
-      self.subclass ( _className );
+     var self = new TextNoteEditView();
+     self.subclass(_className);
 
-      /*
-       * Audio buttons in this view
-       */
-      self._recordAudioButton = null;
-      self._playAudioButton = null;
+     /*
+      * Audio buttons in this view
+      */
+     self._recordAudioButton = null;
+     self._playAudioButton = null;
 
-      /**
-       * override the text editor's template with our own
-       */
-      self.overrideSuper ( self.class, "render", self.render );
-      self.render = function ()
-      {
-         // no need to call super; it'd be wrong, anyway.
-         return _y.template ( audioNoteViewHTML, 
-                              {
-                                 "NOTE_NAME": self._note.name,
-                                 "NOTE_CONTENTS": self._note.textContents,
-                                 "BACK": _y.T("BACK"),
-                                 "DELETE_NOTE": _y.T("app.nev.DELETE_NOTE"), 
-                                 "SAVE_NOTE": _y.T("app.nev.SAVE_NOTE")
-                              });
-      }
+     /**
+      * override the text editor's template with our own
+      */
+     self.overrideSuper(self.class, "render", self.render);
+     self.render = function ()
+     {
+       // no need to call super; it'd be wrong, anyway.
+       return _y.template(audioNoteViewHTML,
+                          {
+                            "NOTE_NAME":     self._note.name,
+                            "NOTE_CONTENTS": self._note.textContents,
+                            "BACK":          _y.T("BACK"),
+                            "DELETE_NOTE":   _y.T("app.nev.DELETE_NOTE"),
+                            "SAVE_NOTE":     _y.T("app.nev.SAVE_NOTE")
+                          });
+     };
 
-      /**
-       * Called when any audio stops (recording or playing); Reset our icons and
-       * remove the listeners
-       */
-      self.onAudioStopped = function ()
-      {
-         // either recording or playing stopped -- it doesn't really matter.
-         self._playAudioButton.classList.remove ( "ui-glyph-pause-filled" );
-         self._playAudioButton.classList.add ( "ui-glyph-play-filled" );
-         self._recordAudioButton.classList.remove ( "ui-glyph-pause-filled" );
-         self._recordAudioButton.classList.add ( "ui-glyph-circle-filled" );
-         self._note.media.removeListenerForNotification ( "recordingStopped", self.onAudioStopped );
-         self._note.media.removeListenerForNotification ( "playingStopped", self.onAudioStopped );
-      }
+     /**
+      * Called when any audio stops (recording or playing); Reset our icons and
+      * remove the listeners
+      */
+     self.onAudioStopped = function ()
+     {
+       // either recording or playing stopped -- it doesn't really matter.
+       self._playAudioButton.classList.remove("ui-glyph-pause-filled");
+       self._playAudioButton.classList.add("ui-glyph-play-filled");
+       self._recordAudioButton.classList.remove("ui-glyph-pause-filled");
+       self._recordAudioButton.classList.add("ui-glyph-circle-filled");
+       self._note.media.removeListenerForNotification("recordingStopped", self.onAudioStopped);
+       self._note.media.removeListenerForNotification("playingStopped", self.onAudioStopped);
+     };
 
-      /**
-       * Called when the Record button is tapped. If not recording, start, and if currently recording,
-       * stop. The underlying Media Manager takes care of halting playback if something is playing.
-       * @return {[type]} [description]
-       */
-      self.onRecordAudio = function ()
-      {
-         if (!self._note.media.isRecording)
-         {
-            self._note.media.record();
-            self._recordAudioButton.classList.remove ( "ui-glyph-circle-filled" );
-            self._recordAudioButton.classList.add ( "ui-glyph-pause-filled" );
-            self._note.media.addListenerForNotification ( "recordingStopped", self.onAudioStopped );
-         }
-         else
-         {
-            self._note.media.stop();
-            self._note.media.removeListenerForNotification ( "recordingStopped", self.onAudioStopped );
-            self._recordAudioButton.classList.remove ( "ui-glyph-pause-filled" );
-            self._recordAudioButton.classList.add ( "ui-glyph-circle-filled" );
-         }
-         // and just in case we were playing ('cause we aren't anymore)
-         self._playAudioButton.classList.remove ( "ui-glyph-pause-filled" );
-         self._playAudioButton.classList.add ( "ui-glyph-play-filled" );
-      }
+     /**
+      * Called when the Record button is tapped. If not recording, start, and if currently recording,
+      * stop. The underlying Media Manager takes care of halting playback if something is playing.
+      */
+     self.onRecordAudio = function ()
+     {
+       if (!self._note.media.isRecording)
+       {
+         self._note.media.record();
+         self._recordAudioButton.classList.remove("ui-glyph-circle-filled");
+         self._recordAudioButton.classList.add("ui-glyph-pause-filled");
+         self._note.media.addListenerForNotification("recordingStopped", self.onAudioStopped);
+       }
+       else
+       {
+         self._note.media.stop();
+         self._note.media.removeListenerForNotification("recordingStopped", self.onAudioStopped);
+         self._recordAudioButton.classList.remove("ui-glyph-pause-filled");
+         self._recordAudioButton.classList.add("ui-glyph-circle-filled");
+       }
+       // and just in case we were playing ('cause we aren't anymore)
+       self._playAudioButton.classList.remove("ui-glyph-pause-filled");
+       self._playAudioButton.classList.add("ui-glyph-play-filled");
+     };
 
-      /**
-       * Called when the play button is tapped.
-       */
-      self.onPlayAudio = function ()
-      {
-         if (!self._note.media.isPlaying)
-         {
-            self._note.media.play();
-            self._playAudioButton.classList.remove ( "ui-glyph-play-filled" );
-            self._playAudioButton.classList.add ( "ui-glyph-pause-filled" );
-            self._note.media.addListenerForNotification ( "playingStopped", self.onAudioStopped );
-         }
-         else
-         {
-            self._note.media.stop();
-            self._note.media.removeListenerForNotification ( "playingStopped", self.onAudioStopped );
-            self._playAudioButton.classList.remove ( "ui-glyph-pause-filled" );
-            self._playAudioButton.classList.add ( "ui-glyph-play-filled" );
-         }
-         // and just in case we were recording ('cause we aren't anymore)
-         self._recordAudioButton.classList.remove ( "ui-glyph-pause-filled" );
-         self._recordAudioButton.classList.add ( "ui-glyph-circle-filled" );
-      }
+     /**
+      * Called when the play button is tapped.
+      */
+     self.onPlayAudio = function ()
+     {
+       if (!self._note.media.isPlaying)
+       {
+         self._note.media.play();
+         self._playAudioButton.classList.remove("ui-glyph-play-filled");
+         self._playAudioButton.classList.add("ui-glyph-pause-filled");
+         self._note.media.addListenerForNotification("playingStopped", self.onAudioStopped);
+       }
+       else
+       {
+         self._note.media.stop();
+         self._note.media.removeListenerForNotification("playingStopped", self.onAudioStopped);
+         self._playAudioButton.classList.remove("ui-glyph-pause-filled");
+         self._playAudioButton.classList.add("ui-glyph-play-filled");
+       }
+       // and just in case we were recording ('cause we aren't anymore)
+       self._recordAudioButton.classList.remove("ui-glyph-pause-filled");
+       self._recordAudioButton.classList.add("ui-glyph-circle-filled");
+     };
 
-      /**
-       * we get to use some of the text editor's renderToElement to load
-       * in some of our elements and hook them up, though.
-       */
-      self.overrideSuper ( self.class, "renderToElement", self.renderToElement );
-      self.renderToElement = function ()
-      {
-         // call super, which will also get our HTML into the element,
-         // and hook up the elements it knows are there
-         self.super ( _className, "renderToElement" );
+     /**
+      * we get to use some of the text editor's renderToElement to load
+      * in some of our elements and hook them up, though.
+      */
+     self.overrideSuper(self.class, "renderToElement", self.renderToElement);
+     self.renderToElement = function ()
+     {
+       // call super, which will also get our HTML into the element,
+       // and hook up the elements it knows are there
+       self.super(_className, "renderToElement");
 
-         //look for the audio buttons
-         // and now find and link up any elements we want to keep track of
-         var audioButtons = self.element.querySelectorAll (".audio-container .ui-glyph");
-         self._recordAudioButton = audioButtons [0];
-         self._playAudioButton = audioButtons [1];
+       //look for the audio buttons
+       // and now find and link up any elements we want to keep track of
+       var audioButtons = self.element.querySelectorAll(".audio-container .ui-glyph");
+       self._recordAudioButton = audioButtons [0];
+       self._playAudioButton = audioButtons [1];
 
-         // these should also have listeners
-         Hammer ( self._recordAudioButton ).on("tap", self.onRecordAudio);
-         Hammer ( self._playAudioButton ).on("tap", self.onPlayAudio);         
+       // these should also have listeners
+       Hammer(self._recordAudioButton).on("tap", self.onRecordAudio);
+       Hammer(self._playAudioButton).on("tap", self.onPlayAudio);
 
-      }
+     };
 
-      /**
-       * Clean up after ourselves and stop listening to notifications
-       */
-      self.overrideSuper ( self.class, "destroy", self.destroy );
-      self.destroy = function ()
-      {
-         self._recordAudioButton = null;
-         self._playAudioButton = null;
-         self._note.media.removeListenerForNotification ( "recordingStopped", self.onAudioStopped );
-         self._note.media.removeListenerForNotification ( "playingStopped", self.onAudioStopped );
-         self._note.media.stop(); // no need to continue doing something.
-         self.super ( _className, "destroy" );
-      }
+     /**
+      * Clean up after ourselves and stop listening to notifications
+      */
+     self.overrideSuper(self.class, "destroy", self.destroy);
+     self.destroy = function ()
+     {
+       self._recordAudioButton = null;
+       self._playAudioButton = null;
+       self._note.media.removeListenerForNotification("recordingStopped", self.onAudioStopped);
+       self._note.media.removeListenerForNotification("playingStopped", self.onAudioStopped);
+       self._note.media.stop(); // no need to continue doing something.
+       self.super(_className, "destroy");
+     };
 
-      return self;
-   }
+     return self;
+   };
 
    return AudioNoteEditView;
 });

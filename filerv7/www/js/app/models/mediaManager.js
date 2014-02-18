@@ -278,8 +278,12 @@ define ( ["yasmf"], function ( _y )
          self._releaseMediaObjectIfNecessary();
          if (typeof newSrc !=="undefined")
          {
-          self._src = newSrc.replace("file://localhost", ""); 
-          self._createMediaObjectIfNecessary();
+           var fe = cordova.require("org.apache.cordova.file-extras.FileExtras");
+           fe.getDocumentsDirectory ( function (documentRoot)
+                                      {
+                                        self._src = documentRoot.fullPath + newSrc;
+                                        self._createMediaObjectIfNecessary();
+                                      });
          }
          else
          {
@@ -343,6 +347,7 @@ define ( ["yasmf"], function ( _y )
          if (self.isRecording)
          {
             self._media.stopRecord(); self.notify ( "recordingStopped" );
+            self._media.release(); // Android requires this to actually release the recording resources.
          }
          if (self.isPlaying)
          {

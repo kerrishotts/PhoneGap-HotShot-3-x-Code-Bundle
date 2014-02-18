@@ -48,7 +48,7 @@ cordova plugin add org.apache.cordova.globalization
 
 ### FilerV2
 
-The second version of Filer. The key point is using the File API to write to persistent storage.
+The second version of Filer. The key point is using the File API to write to persistent storage. The File API (as of last check) had a bug on both Android and iOS that prevented intra-filesystem copying. To fix, edit LocalFilesystem.java:487 and CDVLocalFileSystem.m:529 so that the `this.filesystemPathForURL` (or `[this filesystemPathForURL]`) has `srcFs` in place of `this`. Make this change in each project, otherwise it is impossible to create new media in notes.
 
 #### Plugins Required
 ```

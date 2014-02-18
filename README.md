@@ -11,7 +11,7 @@ Furthermore, the code herein is not a complete Cordova project. The build artifa
 |    Chapter | Title                              | Project         |
 |-----------:|:---------------------------------- |:----------------|
 |          1 | Your First Project                 | Not applicable  |
-|          2 | Localization and Globalization     | Not applicable  |
+|          2 | Localization and Globalization     | LocalizationDemo  |
 |          3 | App Design                         | FilerV1         |
 |          4 | The File API                       | FilerV2         |
 |          5 | Working with Audio                 | FilerV3         |
@@ -25,6 +25,148 @@ Furthermore, the code herein is not a complete Cordova project. The build artifa
 |         13 | Adding a Back-end (Parse)          | CaveRunner2     |
 | Appendix A | Quick Design Pattern Reference     | Not Applicable  |
 | Appendix B | Quirks and Gotchas                 | Not Applicable  |
+
+## Additional Project Information
+
+### LocalizationDemo
+
+Introduces you to the various localization functions provided by jQuery/Globalize and YASMF. Nothing fancy: just a list of translated strings, but important to get right from the start.
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+```
+
+### FilerV1
+
+The very first version of our note taking app, Filer. Sets up the typical project structure, data models, and also gets into `localStorage`.
+
+#### Plugins Required 
+```
+cordova plugin add org.apache.cordova.globalization
+```
+
+### FilerV2
+
+The second version of Filer. The key point is using the File API to write to persistent storage.
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+cordova plugin add https://github.com/tlancina/cordova-plugin-file-extras.git
+```
+
+### FilerV3
+
+In the third version of Filer, we extend the app to permit audio memos. 
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+cordova plugin add https://github.com/tlancina/cordova-plugin-file-extras.git
+cordova plugin add org.apache.cordova.media
+```
+
+### FilerV4
+
+In the fourth version of Filer, we extend the app to permit image notes obtained from the camera. 
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+cordova plugin add https://github.com/tlancina/cordova-plugin-file-extras.git
+cordova plugin add org.apache.cordova.media
+cordova plugin add org.apache.cordova.camera
+```
+
+### FilerV5
+
+In the fifth version of Filer, we extend the app to permit video notes obtained from the camera. 
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+cordova plugin add https://github.com/tlancina/cordova-plugin-file-extras.git
+cordova plugin add org.apache.cordova.media
+cordova plugin add org.apache.cordova.camera
+cordova plugin add org.apache.cordova.media-capture
+```
+
+### FilerV6
+
+In the sixth version of Filer, we extend the app to share notes to various social networks. 
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+cordova plugin add https://github.com/tlancina/cordova-plugin-file-extras.git
+cordova plugin add org.apache.cordova.media
+cordova plugin add org.apache.cordova.camera
+cordova plugin add org.apache.cordova.media-capture
+cordova plugin add https://github.com/leecrossley/cordova-plugin-social-message.git
+```
+
+### FilerV7
+
+In the seventh version of Filer, we learn to deal with tablet form factors. 
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+cordova plugin add https://github.com/tlancina/cordova-plugin-file-extras.git
+cordova plugin add org.apache.cordova.media
+cordova plugin add org.apache.cordova.camera
+cordova plugin add org.apache.cordova.media-capture
+cordova plugin add https://github.com/leecrossley/cordova-plugin-social-message.git
+```
+
+### PathRec
+
+PathRec is a simple app that uses the geolocation API to record paths and show them to the user. Uses localStorage for simplicity.
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.geolocation
+```
+
+### PathRecNative
+
+PathRecNative expands on PathRec by using native controls. iOS only.
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.geolocation
+cordova plugin add com.photokandy.nativecontrols 
+```
+
+### Cave Runner
+
+Cave Runner is a simple HTML5 Canvas game that uses the accelerometer as one of its input methods.
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.device-motion
+```
+
+### Cave Runner 2
+
+Cave Runner 2 extends Cave Runner with a Parse back end that provides high score functionality
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.device-motion
+```
+
 
 ## License
 

@@ -167,7 +167,7 @@ define ( ["yasmf", "Q"], function ( _y, Q )
       self.captureVideo = function ()
       {
          var fm = new _y.FileManager();
-         var targetPath = _y.filename.getPathPart (self.src);
+         var targetPath = _y.filename.getPathPart (self.src).substr(1);
          var targetName = _y.filename.getFilePart (self.src);
          var sourcePath;
          return fm.init ( fm.PERSISTENT, 0 )
@@ -185,10 +185,10 @@ define ( ["yasmf", "Q"], function ( _y, Q )
                   })
                   .then ( function (theMediaFileData ) {
                      self._capturedDuration = theMediaFileData.duration;
-                     return fm.resolveLocalFileSystemURI ( sourcePath );
+                     return fm.resolveLocalFileSystemURL ( sourcePath );
                   })
                   .then ( function (theFileEntry ) {
-                     return fm.moveFile ( theFileEntry, targetPath, targetName ) ; 
+                     return fm.moveFile ( theFileEntry, targetPath, targetName ) ; // android wants it blank; was targetPath
                   })
                   .then ( function ( ) { self.notify ("videoCaptured"); return; })
          ;

@@ -318,8 +318,8 @@ define ( ["yasmf",
                      {
                        // the following is applicable only when we're rendering a list view
                        // (not a thumbnail view)
-                       Hammer(contentsElement, {swipe_velocity: 0.1}).on("swipeleft", self.exposeActionForNote);
-                       Hammer(contentsElement, {swipe_velocity: 0.1 }).on("swiperight", self.hideActionForNote);
+                       Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true }).on("dragleft", self.exposeActionForNote);
+                       Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true }).on("dragright", self.hideActionForNote);
                        Hammer(actionElement).on("tap", self.deleteExistingNote);
                      }
                      else

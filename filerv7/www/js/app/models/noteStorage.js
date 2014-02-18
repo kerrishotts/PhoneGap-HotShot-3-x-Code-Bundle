@@ -269,7 +269,7 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
       self._notes [ aNote.uid ] = aNote;
 
       var fm = self.fileManager;
-      var promise = Q.defer();
+      var deferred = Q.defer();
       if (newMediaFileName !== "")
       {
         fm.getFileEntry ( newMediaFileName, {create: true, exclusive: false} )
@@ -277,18 +277,18 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
                   { aNote.mediaContents = theFile.fullPath;
                     self.notify ( "noteCreated", [ aNote.uid ] );
                     self.saveNote ( aNote );
-                    promise.resolve (aNote);
+                    deferred.resolve (aNote);
                   })
-          .catch ( function ( anError ) { promise.reject ( anError ); } )
+          .catch ( function ( anError ) { deferred.reject ( anError ); } )
           .done ();
       }
       else
       {
-        promise.resolve (aNote);
+        deferred.resolve (aNote);
         self.notify ( "noteCreated", [ aNote.uid ] );
         self.saveNote ( aNote );
       }
-      return promise;
+      return deferred.promise;
     };
 
     /**

@@ -5,6 +5,8 @@ prep-yasmf.sh
 */hooks
 */.cordova
 */www/.idea
+*/.idea
+*.swp
 *sublime*
 caverunner2/www/js/app.js
 

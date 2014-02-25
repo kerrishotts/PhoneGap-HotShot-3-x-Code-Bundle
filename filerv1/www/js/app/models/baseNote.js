@@ -1,8 +1,8 @@
 /**
  *
- * Note Model
+ * Base Note Model
  * 
- * note.js
+ * baseNote.js
  * @author Kerri Shotts
  * @version 1.0.0
  *
@@ -43,7 +43,7 @@
 define ( ["yasmf"], function ( _y )
 {
    /**
-    * Model supporting a basic note.
+    * Model supporting a basic note. Extend for enhanced functionality
     *
     * A note needs a UID for unique identification; we'll use the time.
     * The note also stores the date it was created and the date it was last
@@ -62,19 +62,22 @@ define ( ["yasmf"], function ( _y )
     *  nameChanged
     *  contentsChanged
     */
-   var _className = "Note";
-   var Note = function ()
+   var _className = "BaseNote";
+   var BaseNote = function ()
    {
       // We descend from BaseObject
       var self = new _y.BaseObject();
 
-      // subclass the base object so that we look like a "Note"
+      // subclass the base object so that we look like a "BaseNote"
       self.subclass ( _className );
 
       // register the notifications the model can send
       self.registerNotification ( "uidChanged" );
       self.registerNotification ( "nameChanged" );
-      self.registerNotification ( "contentsChanged" );
+      self.registerNotification ( "textContentsChanged" );
+      self.registerNotification ( "mediaContentsChanged" );
+      self.registerNotification ( "unitValueChanged" );
+      self.registerNotification ( "unitLabelsChanged" );
       
       // private properties are prefixed with _
       
@@ -94,8 +97,8 @@ define ( ["yasmf"], function ( _y )
          self._uid = theUID;
          self.notify ( "uidChanged" );
       }
-      Object.defineProperty ( self, "UID", {get: self.getUID, set: self.setUID, configurable: true });
-      Object.defineProperty ( self, "uid", {get: self.getUID, set: self.setUID, configurable: true });
+      Object.defineProperty ( self, "UID", {get: self.getUID, set: self.setUID, configurable: true});
+      Object.defineProperty ( self, "uid", {get: self.getUID, set: self.setUID, configurable: true});
 
       /**
        * The date the note was created. Read-only; the createdDate
@@ -116,14 +119,13 @@ define ( ["yasmf"], function ( _y )
       {
          return self._createdDate;
       }
-      Object.defineProperty ( self, "createdDate", {get: self.getCreatedDate, configurable: true });
+      Object.defineProperty ( self, "createdDate", {get: self.getCreatedDate, configurable: true});
 
       self.getModifiedDate = function ()
       {
          return self._modifiedDate;
       }
-      self.__defineGetter__ ( "modifiedDate", self.getModifiedDate );
-      Object.defineProperty ( self, "modifiedDate", {get: self.getModifiedDate, configurable: true });
+      Object.defineProperty ( self, "modifiedDate", {get: self.getModifiedDate, configurable: true});
 
       /**
        * The visible name of the note. Read-write with setName and
@@ -141,38 +143,96 @@ define ( ["yasmf"], function ( _y )
          self._modifiedDate = new Date();
          self.notify ( "nameChanged" );
       }
-      Object.defineProperty ( self, "name", {get: self.getName, set: self.setName, configurable: true });
+      Object.defineProperty ( self, "name", {get: self.getName, set: self.setName, configurable: true});
+
 
       /**
-       * The linecount is a read-only property readable with getLineCount
-       * or lineCount. Calculated whenever the contents change.
-       * @type {Number}
+       * Instead of the line count, we'll use a generic "unit". For the BaseNote, this
+       * is still a line count, but other note types may use it differently.
+       *
+       * unitValue is the actual value -- in our case the number of lines.
+       * unitLabels stores the labels to use when referencing the value -- in this case,
+       * "lines", "line", lines" for 0, 1, and 2 lines respectively (so we properly handle
+       * pluralization).
        */
-      self._lineCount = 0;
-      self.getLineCount = function ()
+      self._unitValue = 0;
+      self._unitLabels = [ "app.bn.LINES", "app.bn.LINE", "app.bn.LINES" ];
+
+      self.getUnitValue = function ()
       {
-         return self._lineCount;
+        return self._unitValue;
       }
-      Object.defineProperty ( self, "lineCount", {get: self.getLineCount, configurable: true });
+      self.setUnitValue = function ( theValue )
+      {
+        self._unitValue = theValue;
+        self.notify ( "unitValueChanged" );
+      }
+      Object.defineProperty ( self, "unitValue", {get: self.getUnitValue, set: self.setUnitValue, configurable: true});
+
+      self.getUnitLabels = function ()
+      {
+        return self._unitLabels;
+      }
+      self.setUnitLabels = function ( theLabels )
+      {
+        self._unitLabels = theLabels;
+        self.notify ( "unitLabelsChanged" );
+      }
+      Object.defineProperty ( self, "unitLabels", {get: self.getUnitLabels, set: self.setUnitLabels, configurable: true});
+
+      self.getFormattedUnitValue = function ()
+      {
+        return _y.N(self.unitValue) + " " + _y.T(self.unitLabels[Math.min((self.unitLabels.length-1),self.unitValue)]);
+      }
+      Object.defineProperty ( self, "formattedUnitValue", {get: self.getFormattedUnitValue, configurable: true});
 
       /**
-       * For text notes, the contents property contains text. Read/write using
-       * get and setContents, or the contents property.
+       * All notes can have text in the textContents property
        * @type {String}
        */
-      self._contents = "";  
-      self.getContents = function ()
+      self._textContents = "";  
+      self.getTextContents = function ()
       {
-         return self._contents;
+         return self._textContents;
       }
-      self.setContents = function ( theContents )
+      self.setTextContents = function ( theContents )
       {
-         self._contents = theContents;
+         self._textContents = theContents;
          self._modifiedDate = new Date();
-         self._lineCount = self._contents.split("\n").length;
-         self.notify ( "contentsChanged" );
+         if (self.class === "BaseNote")
+         {
+          self.unitValue = self._textContents.split("\n").length;
+         }
+         self.notify ( "textContentsChanged" );
       }
-      Object.defineProperty ( self, "contents", {get: self.getContents, set: self.setContents, configurable: true });
+      Object.defineProperty ( self, "textContents", {get: self.getTextContents, set: self.setTextContents, configurable: true});
+
+      /**
+       * All notes, except text notes, can have additional media contents
+       * Usually a path and filename (such as note1234567.jpg)
+       */
+      self._mediaContents = null;
+      self.getMediaContents = function ()
+      {
+        return self._mediaContents;
+      }
+      self.setMediaContents = function ( theContents )
+      {
+        self._mediaContents = theContents;
+        self._modifiedDate = new Date();
+        self.notify ( "mediaContentsChanged" );
+      }
+      Object.defineProperty ( self, "mediaContents", {get: self.getMediaContents, set: self.setMediaContents, configurable: true});
+
+      /**
+       * All notes have a representation icon (a page of text, a sound wave, etc)
+       */
+      self._representation = "page-text-new";
+      self.getRepresentation = function ()
+      {
+        return self._representation;
+      }
+      Object.defineProperty ( self, "representation", {get: self.getRepresentation, configurable: true});
 
       /**
        * Serializes the object into a JSON string ready
@@ -187,10 +247,14 @@ define ( ["yasmf"], function ( _y )
             "createdDate" : self.createdDate,
             "modifiedDate" : self.modifiedDate,
             "name": self.name,
-            "contents": self.contents
+            "textContents": self.textContents,
+            "mediaContents": self.mediaContents,
+            "unitValue": self.unitValue,
+            "unitLabels": self.unitLabels,
+            "representation": self.representation
          });
       }
-      Object.defineProperty ( self, "JSON", {get: self._serialize, configurable: true });
+      Object.defineProperty ( self, "JSON", {get: self._serialize, configurable: true});
 
       /**
        * Deserializes the JSON String passed in, and returns true if
@@ -208,7 +272,9 @@ define ( ["yasmf"], function ( _y )
             self.uid = aNote.uid;
             self._createdDate = new Date(aNote.createdDate);
             self.name = aNote.name;
-            self.contents = aNote.contents;
+            self.textContents = aNote.textContents;
+            self.mediaContents = aNote.mediaContents;
+            self.unitValue = aNote.unitValue; // so we don't have to recalc it
 
             // but assign this one last so we have the proper modification date
             self._modifiedDate = new Date(aNote.modifiedDate);
@@ -265,7 +331,9 @@ define ( ["yasmf"], function ( _y )
             if ( typeof options.uid !== "undefined" )      { self.uid = options.uid; }
             if ( typeof options.createdDate !== "undefined" ) { self._createdDate = options.createdDate; }
             if ( typeof options.name !== "undefined" )     { self.name = options.name; }
-            if ( typeof options.contents !== "undefined" ) { self.contents = options.contents; }
+            if ( typeof options.textContents !== "undefined" ) { self.textContents = options.textContents; }
+            if ( typeof options.mediaContents !== "undefined" ) { self.mediaContents = options.mediaContents; }
+            if ( typeof options.unitValue !== "undefined" ) { self.unitValue = options.unitValue; }            
             if ( typeof options.modifiedDate !== "undefined" ) { self._modifiedDate = options.modifiedDate; }
          }
       }
@@ -274,5 +342,18 @@ define ( ["yasmf"], function ( _y )
       return self;
    };
 
-   return Note;
+   _y.addTranslations ( {
+      "app.bn.LINE":
+      {
+         "EN": "Line",
+         "ES": "Línea"
+      },
+      "app.bn.LINES":
+      {
+         "EN": "Lines",
+         "ES": "Líneas"
+      }
+   });
+
+   return BaseNote;
 });

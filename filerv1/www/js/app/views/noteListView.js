@@ -41,10 +41,14 @@
  */
 /*global define*/
 
-define ( ["yasmf", "app/models/noteStorageSingleton",
+define ( ["yasmf", 
+          "app/models/noteStorageSingleton",
           "text!html/noteListView.html!strip",
-          "text!html/noteListItem.html!strip", "app/views/noteEditView"], 
-         function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML, NoteEditView )
+          "text!html/noteListItem.html!strip", 
+          "app/factories/noteFactory",
+          "app/factories/noteViewFactory"], 
+function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML, 
+           noteFactory, noteViewFactory )
 {
    var _className = "NoteListView";
    var NoteListView = function ()
@@ -58,20 +62,28 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       self._navigationBar = null;
       self._scrollContainer = null;
       self._listOfNotes = null;
-      self._newButton = null;
-
+      self._newTextNoteButton = null;
+      self._newAudioNoteButton = null;
+      self._newImageNoteButton = null;
+      self._newVideoNoteButton = null;
+      
+             self._createAndEditNote = function (noteType)
+             {
+               // ask storage for a new note
+               var aNewNote = noteStorageSingleton.createNote(noteType);
+                         // create a new editor view
+                         var aNoteEditView = noteViewFactory.createNoteEditView(noteType);
+                         // and tell it about the new note
+                         aNoteEditView.initWithOptions({note: aNewNote, parent: self.parentElement});
+             };
+      
       /**
        * Creates a new note; called when "New" is tapped
        */
-      self.createNewNote = function ()
-      {
-         // ask storage for a new note
-         var aNewNote = noteStorageSingleton.createNote();
-         // create a new editor view
-         var aNoteEditView = new NoteEditView();
-         // and tell it about the new note
-         aNoteEditView.init ( self.parentElement, aNewNote.uid );
-      }
+             self.createNewTextNote = function ()
+             {
+               self._createAndEditNote(noteFactory.TEXTNOTE);
+             };
 
       /**
        * Edit an existing note. Called when a note item is tapped in the list.
@@ -81,10 +93,11 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          var theEvent = _y.UI.event.convert ( this, e ); // this will be the data row
          // get the UID
          var theUID = theEvent.target.getAttribute("data-uid");
-         // create a new editor view
-         var aNoteEditView = new NoteEditView();
-         // and tell it about the note
-         aNoteEditView.init ( self.parentElement, theUID );
+        // create a new editor view
+        var aNote = noteStorageSingleton.getNote(theUID);
+        var aNoteEditView = noteViewFactory.createNoteEditView(aNote.class);
+        // and tell it about the note
+        aNoteEditView.initWithOptions({note: aNote, parent: self.parentElement});
       }
 
       /**
@@ -126,12 +139,19 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
 
          // and now find and link up any elements we want to keep track of
          self._navigationBar = self.element.querySelector ( ".ui-navigation-bar" );
-         self._newButton = self.element.querySelector ( ".ui-navigation-bar .ui-bar-button" );
          self._scrollContainer = self.element.querySelector ( ".ui-scroll-container" );
          self._listOfNotes = self.element.querySelector ( ".ui-list" );
 
+         // all our "new" buttons:
+         var newButtons = self.element.querySelectorAll ( ".ui-tool-bar .ui-bar-button" );
+         self._newTextNoteButton = newButtons[0];
+         self._newAudioNoteButton = newButtons[1];
+         self._newImageNoteButton = newButtons[2];
+         self._newVideoNoteButton = newButtons[3];
+         
+
          // the new Button should have an event listener
-         _y.UI.event.addListener ( self._newButton, "click", self.createNewNote );
+         _y.UI.event.addListener ( self._newTextNoteButton, "click", self.createNewTextNote );
 
          // and make sure we know about the physical back button
          _y.UI.backButton.addListenerForNotification ( "backButtonPressed", self.quitApp );
@@ -166,8 +186,9 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
                                        {
                                           "UID": notes[note].uid,
                                           "NAME": notes[note].name,
+                                          "REPRESENTATION": notes[note].representation,
                                           "MODIFIED": _y.D(notes[note].modifiedDate,"D"),
-                                          "LINECOUNT": "" + _y.N(notes[note].lineCount) + " " + ( notes[note].lineCount == 1 ? _y.T("LINE") : _y.T("LINES") )
+                                          "INFO": "" + _y.N(notes[note].formattedUnitValue)
                                        } );
                   // attach any event handlers
                   _y.UI.event.addListener ( e, "click", self.editExistingNote );
@@ -179,6 +200,18 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          self._listOfNotes.innerHTML = "";
          self._listOfNotes.appendChild ( fragment );
       }
+
+             self.onOrientationChanged = function ()
+             {
+               // fix a iOS bug where rotation may prevent the list from scrolling after rotation
+               if (_y.device.platform() == "ios")
+               {
+                 // this forces the scroll container to be recalc'd. It also flickers a bit.
+                 // no way to avoid it, unfortunately.
+                 self._scrollContainer.style.display = "none";
+                 setTimeout(function () { self._scrollContainer.style.display = ""; }, 0);
+               }
+             };
 
       /**
        * Initialize the view and add listeners for the storage
@@ -194,8 +227,10 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          noteStorageSingleton.addListenerForNotification ( "collectionChanged", self.renderList );
          noteStorageSingleton.addListenerForNotification ( "collectionLoaded", self.renderList );
 
-         // and ask noteStorage to load itself.
-         noteStorageSingleton.loadCollection ();
+         // and ask noteStorage to load itself
+         noteStorageSingleton.loadCollection();
+               // we need to register for orientation changes
+               _y.UI.orientationHandler.addListenerForNotification("orientationChanged", self.onOrientationChanged);
       }
 
       self.overrideSuper ( self.class, "initWithOptions", self.init );
@@ -216,9 +251,15 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       self.overrideSuper ( self.class, "destroy", self.destroy );
       self.destroy = function ()
       {
+               // stop listening for orientation changes
+               _y.UI.orientationHandler.removeListenerForNotification("orientationChanged", self.onOrientationChanged);
+
          // release our objects
          self._navigationBar = null;
-         self._newButton = null;
+         self._newTextNoteButton = null;
+         self._newAudioNoteButton = null;
+         self._newVideoNoteButton = null;
+         self._newImageNoteButton = null;
          self._scrollContainer = null;
          self._listOfNotes = null;
 
@@ -237,20 +278,10 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       {
          "EN": "Filer"
       },
-      "NEW_NOTE":
+      "BACK":
       {
-         "EN": "New",
-         "ES": "Nueva"
-      },
-      "LINE":
-      {
-         "EN": "Line",
-         "ES": "Línea"
-      },
-      "LINES":
-      {
-         "EN": "Lines",
-         "ES": "Líneas"
+         "EN": "Back",
+         "ES": "Volver"
       }
    });
 

@@ -7,9 +7,12 @@
       will be replaced appropriately during rendering.
     -->
   <body>
-    <div class="ui-label note-name">%NAME%</div>
-    <div class="ui-label note-modified-date">%MODIFIED%</div>
-    <div class="ui-label note-line-count">%LINECOUNT%</div>
-    <div class="ui-indicator ui-arrow-direction-right"></div>
+    <div class="ui-list-item-contents" data-uid="%UID%">
+      <div class="ui-glyph note-representation ui-glyph-%REPRESENTATION%"></div>
+      <div class="ui-label note-name">%NAME%</div>
+      <div class="ui-label note-modified-date">%MODIFIED%</div>
+      <div class="ui-label note-info">%INFO%</div>
+      <div class="ui-indicator ui-arrow-direction-right"></div>
+    </div>
   </body>
 </html>

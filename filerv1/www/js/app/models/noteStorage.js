@@ -40,7 +40,7 @@
          onevar:false 
  */
 /*global define*/
-define ( ["yasmf", "app/models/note"], function ( _y, Note )
+define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFactory )
 {
    /**
     * Generate a reasonably unique identifier based on the time
@@ -107,21 +107,21 @@ define ( ["yasmf", "app/models/note"], function ( _y, Note )
                var allNoteIDs = JSON.parse (allNoteIDsJSON );
 
                // loop through each one
-               for ( var i = 0; i < allNoteIDs.length; i++ )
+               allNoteIDs.forEach ( function (theNote)
                {
                   // load each note specifically
-                  var aNoteJSON = localStorage.getItem ( "note" + allNoteIDs[i] );
-                  var aNote = new Note();
+                  var aNoteJSON = localStorage.getItem ( "note" + theNote.UID );
+                  var aNote = noteFactory.createNote ( theNote.type );
                   if ( aNote.initWithJSON ( aNoteJSON ) )
                   {
-                    self._notes [aNote.uid] = aNote;   
+                    self._notes [theNote.UID] = aNote;
                   }
                   else
                   {
                     self.notify ( "collectionFailedLoading" );
                     return;
                   }
-               }
+               });
                // done! Notify everyone
                self.notify ( "collectionLoaded" );
             }
@@ -148,16 +148,18 @@ define ( ["yasmf", "app/models/note"], function ( _y, Note )
          {
             //saving the collection only saves the UIDs -- not the notes themselves.
             var allNoteIDs = [];
+            var aNote;
             for ( var aNoteUID in self._notes )
             {
                // make sure we don't save a prototype entry
                if (self._notes.hasOwnProperty(aNoteUID))
                {
+                  aNote = self._notes[aNoteUID];
                   // nulls mark deleted notes -- don't save those
-                  if ( self._notes[aNoteUID] !== null )
+                  if ( aNote !== null )
                   {
                      // add the UID to the list
-                     allNoteIDs.push ( aNoteUID );                     
+                     allNoteIDs.push ( {UID: aNote.UID, type: aNote.class} );
                   }
                }
             }
@@ -174,18 +176,22 @@ define ( ["yasmf", "app/models/note"], function ( _y, Note )
          }
       }
 
-      self.createNote = function ()
+      self.createNote = function ( noteType )
       {
          // Create a note from the Note object
-         var aNote = new Note();
+         var aNote = noteFactory.createNote ( noteType || noteFactory.TEXTNOTE );
 
-         // init it with a new UID, a set name and contents.
-         aNote.initWithOptions ( { "uid": _generateUID(),
-                                   "name": _y.T("app.ns.A_NEW_NOTE"),
-                                   "contents": _y.T("app.ns.WHATS_ON_YOUR_MIND")
-                                 } );
-         // add it to our collection
-         self._notes [ aNote.uid ] = aNote;
+      var noteUID = _generateUID();
+      var newMediaFileName = noteFactory.createAssociatedMediaFileName ( noteType || noteFactory.TEXTNOTE,
+                                                                         noteUID );
+      // init it with a new UID, a set name and contents.
+      aNote.initWithOptions ( { "uid": noteUID,
+                                "name": _y.T("app.ns.A_NEW_NOTE"),
+                                "textContents": _y.T("app.ns.WHATS_ON_YOUR_MIND"),
+                                "mediaContents": newMediaFileName
+                              } );
+      // add it to our collection
+      self._notes [ aNote.uid ] = aNote;
 
          // tell everyone
          self.notify ( "noteCreated", [ aNote.uid ] );

@@ -2,7 +2,7 @@
  *
  * Note Edit View
  * 
- * noteEditView.js
+ * textNoteEditView.js
  * @author Kerri Shotts
  * @version 1.0.0
  *
@@ -42,12 +42,12 @@
 /*global define*/
 
 define ( ["yasmf", "app/models/noteStorageSingleton",
-          "text!html/noteEditView.html!strip"], 
-         function ( _y, noteStorageSingleton, noteEditViewHTML )
+          "text!html/textNoteEditView.html!strip"],
+         function ( _y, noteStorageSingleton, textNoteEditViewHTML )
 {
    // store our classname for easy overriding later
-   var _className = "NoteEditView";
-   var NoteEditView = function ()
+   var _className = "TextNoteEditView";
+   var TextNoteEditView = function ()
    {
       // This time we descend from a simple ViewContainer
       var self = new _y.UI.ViewContainer ();
@@ -72,7 +72,7 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       self.saveNote = function ()
       {
          self._note.name = self._nameEditor.innerText;
-         self._note.contents = self._contentsEditor.value;
+         self._note.textContents = self._contentsEditor.value;
          noteStorageSingleton.saveNote ( self._note );
       }
 
@@ -83,7 +83,7 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       {
          noteStorageSingleton.removeNote ( self._note.uid );
          // return to the previous view.
-         self.destroy();
+        self.destroy();
       }
 
       /**
@@ -103,10 +103,10 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       self.render = function ()
       {
          // no need to call super; it's abstract
-         return _y.template ( noteEditViewHTML, 
+         return _y.template ( textNoteEditViewHTML, 
                               {
                                  "NOTE_NAME": self._note.name,
-                                 "NOTE_CONTENTS": self._note.contents,
+                                 "NOTE_CONTENTS": self._note.textContents,
                                  "BACK": _y.T("BACK"),
                                  "DELETE_NOTE": _y.T("app.nev.DELETE_NOTE")
                               });
@@ -144,29 +144,38 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
        * theUID is the specific note to edit.
        */
       self.overrideSuper ( self.class, "init", self.init );
-      self.init = function ( theParentElement, theUID )
+      self.init = function ( theParentElement, theNote )
       {
          // get the note
-         self._note = noteStorageSingleton.getNote ( theUID );
+         self._note = theNote;
 
          // call super
          self.super ( _className, "init", [undefined, "div", self.class + " noteEditView ui-container", theParentElement] );
+
+         // listen for our disappearance
+         //self.addListenerForNotification ( "viewWasPopped", self.releaseBackButton );
+         //self.addListenerForNotification ( "viewWasPopped", self.destroy );
       }
 
       self.overrideSuper ( self.class, "initWithOptions", self.init );
       self.initWithOptions = function ( options )
       {
          var theParentElement;
-         var theUID;
+         var theNote;
          if ( typeof options !== "undefined" )
          {
             if ( typeof options.parent !== "undefined" ) { theParentElement = options.parent; }
-            if ( typeof options.uid !== "undefined" ) { theUID = options.uid; }
+            if ( typeof options.note !== "undefined" ) { theNote = options.note; }
          }
 
-         self.init ( theParentElement, theUID );
+         self.init ( theParentElement, theNote );
       }
 
+      self.releaseBackButton = function ()
+      {
+         // and make sure we forget about the physical back button
+         _y.UI.backButton.removeListenerForNotification ( "backButtonPressed", self.goBack );
+      }
       /**
        * When destroy is called, release all our elements and
        * remove our backButton listener.
@@ -175,11 +184,13 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       self.destroy = function ()
       {
 
-         // and make sure we forget about the physical back button
-         _y.UI.backButton.removeListenerForNotification ( "backButtonPressed", self.goBack );
+         self.releaseBackButton ();
+         // Stop listening for our disappearance
+         //self.removeListenerForNotification ( "viewWasPopped", self.releaseBackButton );
+         //self.removeListenerForNotification ( "viewWasPopped", self.destroy );
 
          // release our objects
-         self._navigationBar = null
+         self._navigationBar = null;
          self._backButton = null;
          self._deleteButton = null;
          self._scrollContainer = null;
@@ -197,11 +208,6 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
     */
    _y.addTranslations (
    {
-      "BACK": 
-      {
-         "EN": "Back",
-         "ES": "Volver"
-      },
       "app.nev.DELETE_NOTE":
       {
          "EN": "Delete",
@@ -209,6 +215,6 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       }
    });
 
-   return NoteEditView;
+   return TextNoteEditView;
 
 });

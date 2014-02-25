@@ -223,35 +223,34 @@ define ( ["yasmf", "Q"], function ( _y, Q )
       self._buildCaptureOptions = function ()
       {
          var captureOptions = {};
-         if (self.quality !== null &&
-             typeof self.quality !== "undefined")        { captureOptions.quality = self.quality; }
-         if (self.cameraSource !== null &&
-             typeof self.cameraSource !== "undefined")   { captureOptions.sourceType = self.cameraSource; }
-         if (self.editingAllowed !== null &&
-             typeof self.editingAllowed !== "undefined") { captureOptions.allowEdit = self.editingAllowed; }
-         if (self.encodingType !== null &&
-             typeof self.encodingType !== "undefined")   { captureOptions.encodingType = self.encodingType; }
-         if (self.targetSize !== null && 
-             typeof self.targetSize !== "undefined")
+         if (typeof self.quality !== "undefined" && self.quality !== null)        
+                               { captureOptions.quality = self.quality; }
+         if (typeof self.cameraSource !== "undefined" && self.cameraSource !== null )   
+                               { captureOptions.sourceType = self.cameraSource; }
+         if (typeof self.editingAllowed !== "undefined" && self.editingAllowed !== null ) 
+                               { captureOptions.allowEdit = self.editingAllowed; }
+         if (typeof self.encodingType !== "undefined" && self.encodingType !== null)   
+                               { captureOptions.encodingType = self.encodingType; }
+         if (typeof self.targetSize !== "undefined" && self.targetSize !== null)
          {
-            if (self.targetSize.width !== null && typeof self.targetSize.width !== "undefined" )
+            if (typeof self.targetSize.width !== "undefined" && self.targetSize.width !== null)
             {
                captureOptions.targetWidth = self.targetSize.width;
             }
-            if (self.targetSize.height !== null && typeof self.targetSize.height !== "undefined" )
+            if (typeof self.targetSize.height !== "undefined" && self.targetSize.height !== null)
             {
                captureOptions.targetHeight = self.targetSize.height;
             }
          }
 
-         if (self.mediaFilter !== null &&
-             typeof self.mediaFilter !== "undefined")    { captureOptions.mediaType = self.mediaFilter; }
-         if (self.alsoSaveToPhotoAlbum !== null &&
-             typeof self.alsoSaveToPhotoAlbum !== "undefined") { captureOptions.saveToPhotoAlbum = self.alsoSaveToPhotoAlbum; }
-         if (self.cameraDirection !== null &&
-             typeof self.cameraDirection !== "undefined") { captureOptions.cameraDirection = self.cameraDirection; }
-         if (self.useCorrectOrientation !== null &&
-             typeof self.useCorrectOrientation !== "undefined") { captureOptions.correctOrientation = self.useCorrectOrientation; }
+         if (typeof self.mediaFilter !== "undefined" && self.mediaFilter !== null)
+                               { captureOptions.mediaType = self.mediaFilter; }
+         if (typeof self.alsoSaveToPhotoAlbum !== "undefined" && self.alsoSaveToPhotoAlbum !== null )
+                               { captureOptions.saveToPhotoAlbum = self.alsoSaveToPhotoAlbum; }
+         if (typeof self.cameraDirection !== "undefined" && self.cameraDirection !== null )
+                               { captureOptions.cameraDirection = self.cameraDirection; }
+         if (typeof self.useCorrectOrientation !== "undefined" && self.useCorrectOrientation !== null )
+                               { captureOptions.correctOrientation = self.useCorrectOrientation; }
          captureOptions.destinationType = Camera.DestinationType.FILE_URI;
          return captureOptions;
       }
@@ -283,24 +282,23 @@ define ( ["yasmf", "Q"], function ( _y, Q )
        */
       self.takePicture = function ()
       {
-         var fm = new _y.FileManager();
-         var targetPath = _y.filename.getPathPart (self.src);
-         var targetName = _y.filename.getFilePart (self.src);
-         return fm.init ( fm.PERSISTENT, 0 )
-                  .then ( function () { return self._captureImage(); })
-                  .then ( function (theURI ) { 
-                     theURI = theURI.replace ( "file://", "");
-                     if (_y.device.platform() == "ios")
-                     {
-                        // the file will be in ../tmp, but the full path fails (!)
-                        // so we need to build a relative URI -- which works (!)
-                        theURI = "../tmp/" + _y.filename.getFilePart ( theURI );
-                     }
-                     return fm.moveFile ( theURI, targetPath, targetName ); 
-                  })
-                  .then ( function ( ) { self.notify ("photoCaptured"); return; })
-         ;
-      }
+        var fm = new _y.FileManager();
+        var targetPath = _y.filename.getPathPart(self.src).substr(1);
+        var targetName = _y.filename.getFilePart(self.src);
+        return fm.init(fm.PERSISTENT, 0)
+          .then(function () { return self._captureImage(); })
+          .then(function (theURI)
+                {
+                  return fm.resolveLocalFileSystemURL(theURI);
+                })
+          .then(function (fileEntry) { fm.moveFile(fileEntry, targetPath, targetName); })
+          .then(function ()
+                {
+                  self.notify("photoCaptured");
+                  return;
+                })
+          ;
+      };
 
       /** 
        * returns a promise which resolves to the file entry if the photo exists

@@ -69,16 +69,20 @@ function ( _y, noteStorageSingleton, imageNoteViewHTML,
       self.overrideSuper ( self.class, "shareNote", self.shareNote );
       self.shareNote = function ()
       {
-        self.saveNote();
-        var message = {
-          subject: self._note.name,
-          text: self._note.textContents
-        };
-        if (self._note.unitValue > 0)
-        {
-          message.image = "file://" + self._note.mediaContents;
-        }
-        window.socialmessage.send ( message );
+        var fe = cordova.require("org.apache.cordova.file-extras.FileExtras");
+        fe.getDocumentsDirectory(function (documentRoot)
+                                 {
+                                   self.saveNote();
+                                   var message = {
+                                     subject: self._note.name,
+                                     text: self._note.textContents
+                                   };
+                                   if (self._note.unitValue > 0)
+                                   {
+                                     message.image = "file://" + documentRoot.fullPath + self._note.mediaContents;
+                                   }
+                                   window.socialmessage.send ( message );
+                                 });
       }
 
       /**
@@ -99,11 +103,22 @@ function ( _y, noteStorageSingleton, imageNoteViewHTML,
 
       self.updatePhoto = function ()
       {
-        _y.UI.styleElement ( self._imageContainer, "background-image", "inherit" );
-        setTimeout ( function () {
-          _y.UI.styleElement ( self._imageContainer, "background-image", "url(" + self._note.camera.src + ")" );
-        }, 100 );
-      }
+        _y.UI.styleElement(self._imageContainer, "background-image", "inherit");
+        var fe = cordova.require("org.apache.cordova.file-extras.FileExtras");
+        var template = "url(file://%ROOT%%URL%?%CACHE%)";
+        fe.getDocumentsDirectory(function (documentRoot)
+                                 {
+                                   setTimeout(function ()
+                                              {
+                                                var cacheBust = Math.floor(Math.random() * 100000);
+                                                var newBackground = _y.template ( template, { "ROOT": documentRoot.fullPath,
+                                                                                              "URL": self._note.mediaContents,
+                                                                                              "CACHE": cacheBust} );
+                                                _y.UI.styleElement(self._imageContainer, "background-image",
+                                                                                         newBackground);
+                                              }, 100);
+                                 });
+      };
 
       self.onPhotoCaptured = function ()
       {

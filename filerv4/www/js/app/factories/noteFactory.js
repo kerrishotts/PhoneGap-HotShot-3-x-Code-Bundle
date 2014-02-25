@@ -40,8 +40,8 @@
          onevar:false 
  */
 /*global define*/
-define ( ["app/models/baseNote", "app/models/audioNote", "app/models/imageNote"], 
-function ( BaseNote, AudioNote, ImageNote )
+define ( ["yasmf", "app/models/baseNote", "app/models/audioNote", "app/models/imageNote"], 
+function ( _y, BaseNote, AudioNote, ImageNote )
 {
    var noteFactory = {};
 
@@ -62,16 +62,51 @@ function ( BaseNote, AudioNote, ImageNote )
       switch ( noteType.toUpperCase().trim() )
       {
          case noteFactory.BASENOTE:
+         case noteFactory.TEXTNOTE:
             return new BaseNote();
          case noteFactory.AUDIONOTE:
             return new AudioNote();
          case noteFactory.IMAGENOTE:
             return new ImageNote();
-         case noteFactory.VIDEONOTE:
-            //return new VideoNote();
          default:
             throw new Error ( "Note Factory doesn't understand a " + noteType );
       }
-   }
-   return noteFactory;
+    };
+
+           /**
+            * Creates a new media file, consistent with the note type
+            */
+           noteFactory.createAssociatedMediaFileName = function (noteType, uid)
+           {
+             var newFileName;
+             var extension = {};
+             switch (noteType.toUpperCase().trim())
+             {
+               case noteFactory.BASENOTE:
+               case noteFactory.TEXTNOTE:
+                 newFileName = ""; // baseNote has no associated media file
+                 break;
+               case noteFactory.AUDIONOTE:
+                 extension = { "ios": "wav", "android": "3gp", "default": "mp3" };
+                 newFileName = "audio";
+                 break;
+               case noteFactory.IMAGENOTE:
+                 extension = { "default": "jpg" };
+                 newFileName = "image";
+                 break;
+               default:
+                 throw new Error("Note Factory doesn't understand a " + noteType);
+             }
+
+             if (newFileName !== "")
+             {
+               var newFileExtension = (typeof extension[_y.device.platform()] !== "undefined")
+                 ? extension[_y.device.platform()]
+                 : extension["default"];
+               newFileName = newFileName + uid + "." + newFileExtension;
+             }
+
+             return newFileName;
+           };
+           return noteFactory;
 });

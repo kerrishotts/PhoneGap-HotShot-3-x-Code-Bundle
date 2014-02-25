@@ -282,24 +282,23 @@ define ( ["yasmf", "Q"], function ( _y, Q )
        */
       self.takePicture = function ()
       {
-         var fm = new _y.FileManager();
-         var targetPath = _y.filename.getPathPart (self.src);
-         var targetName = _y.filename.getFilePart (self.src);
-         return fm.init ( fm.PERSISTENT, 0 )
-                  .then ( function () { return self._captureImage(); })
-                  .then ( function (theURI ) { 
-                     theURI = theURI.replace ( "file://", "");
-                     if (_y.device.platform() == "ios")
-                     {
-                        // the file will be in ../tmp, but the full path fails (!)
-                        // so we need to build a relative URI -- which works (!)
-                        theURI = "../tmp/" + _y.filename.getFilePart ( theURI );
-                     }
-                     return fm.moveFile ( theURI, targetPath, targetName ); 
-                  })
-                  .then ( function ( ) { self.notify ("photoCaptured"); return; })
-         ;
-      }
+        var fm = new _y.FileManager();
+        var targetPath = _y.filename.getPathPart(self.src).substr(1);
+        var targetName = _y.filename.getFilePart(self.src);
+        return fm.init(fm.PERSISTENT, 0)
+          .then(function () { return self._captureImage(); })
+          .then(function (theURI)
+                {
+                  return fm.resolveLocalFileSystemURL(theURI);
+                })
+          .then(function (fileEntry) { fm.moveFile(fileEntry, targetPath, targetName); })
+          .then(function ()
+                {
+                  self.notify("photoCaptured");
+                  return;
+                })
+          ;
+      };
 
       /** 
        * returns a promise which resolves to the file entry if the photo exists

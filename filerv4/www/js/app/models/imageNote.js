@@ -108,6 +108,15 @@ define ( ["yasmf","app/models/baseNote", "app/models/cameraManager"], function (
       }
       Object.defineProperty ( self, "formattedUnitValue", {get: self.getFormattedUnitValue, configurable: true});
 
+
+      /**
+       * Called to update the modified date (after capture)
+       */
+      self._updateModificationDate = function ()
+      {
+         self._modifiedDate = new Date();
+      }
+
       /**
        * Override setting the media contents so that we can create a new camera notification
        */
@@ -124,6 +133,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/cameraManager"], function (
          self._camera.init ( theMediaContents );
          self.notify ( "mediaContentsChanged" );
          self._camera.addListenerForNotification ( "photoCaptured", self._updateUnit );
+         self._camera.addListenerForNotification ( "photoCaptured", self._updateModificationDate );
       }
       Object.defineProperty ( self, "mediaContents", {get: self.getMediaContents, set: self.setMediaContents, configurable: true});
 

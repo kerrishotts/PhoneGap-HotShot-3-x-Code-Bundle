@@ -1,5 +1,5 @@
 /**
- * Filer v1 Styles
+ * Filer v3 Styles
  */
 
 body
@@ -19,6 +19,14 @@ body.android
 {
   color: #669900;
 }
+.ui-tint-color:active
+{
+  color: rgba(69,188,100,0.5);
+}
+.android .ui-tint-color:active
+{
+  color: rgba(102,153,0, 0.5);
+}
 
 .ui-background-tint-color
 {
@@ -29,6 +37,15 @@ body.android
   background-color: #669900;
 }
 
+.ui-background-tint-color:active
+{
+  background-color: rgba(69,188,100,0.5);
+}
+.android .ui-background-tint-color:active
+{
+  background-color: rgba(102,153,0, 0.5);
+}
+
 .ui-navigation-bar
 {
   border-bottom: 1px solid rgba(87, 52, 32, 0.25);
@@ -36,6 +53,19 @@ body.android
 .android .ui-navigation-bar
 {
   border-bottom: 2px solid #669900;
+}
+.ui-tool-bar
+{
+  border-top: 1px solid rgba(87, 52, 32, 0.25);
+}
+.android .ui-tool-bar
+{
+  border-top: 2px solid #669900;
+}
+
+.android .ui-container.left-side
+{
+  border-right: 1px solid #669900;  
 }
 
 .ui-back-button::before
@@ -83,6 +113,20 @@ body.android
   background-color: #000;
 }
 
+.noteListView .ui-list-item:active,
+.noteListView .ui-list-item-contents:active
+{
+  background-color: rgba(58, 97, 154, 1);
+}
+.android .noteListView .ui-list-item:active,
+.android .noteListView .ui-list-item-contents:active
+{
+  background-color: #242424;
+}
+
+
+
+
 .noteListView .ui-list-item .note-representation
 {
   background-color: rgba(87,52, 32, 0.5);
@@ -94,6 +138,18 @@ body.android
 {
   background-color: #669900;
 }
+
+.noteListView .ui-list-item:active .note-representation
+{
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.android .noteListView .ui-list-item .note-representation
+{
+  background-color: #669900;
+}
+
+
+
 .noteListView .ui-list-item .note-name
 {
   font-size: 25px;
@@ -101,6 +157,11 @@ body.android
   font-weight: 200;
   margin-right: 35px;
   margin-left: 40px;
+}
+.noteListView .ui-list-item:active .note-name,
+.android .noteListView .ui-list-item:active .note-name
+{
+  color: #FFFFFF;
 }
 
 .noteListView .ui-list-item .note-modified-date
@@ -115,6 +176,15 @@ body.android
 {
   color: rgba(255, 255, 255, 0.5);
 }
+.noteListView .ui-list-item:active .note-modified-date,
+.android .noteListView .ui-list-item:active .note-modified-date,
+.noteListView .ui-list-item:active .note-info,
+.android .noteListView .ui-list-item:active .note-info
+{
+  color: rgba(255,255,255,0.5);
+}
+
+
 
 .noteListView .ui-list-item .note-info
 {
@@ -134,6 +204,14 @@ body.android
   background-color: rgba(87,52, 32, 0.5);
 }
 .android .noteListView .ui-list-item .ui-indicator
+{
+  background-color: #669900;
+}
+.noteListView .ui-list-item:active .ui-indicator
+{
+  background-color: #FFFFFF;
+}
+.android .noteListView .ui-list-item:active .ui-indicator
 {
   background-color: #669900;
 }

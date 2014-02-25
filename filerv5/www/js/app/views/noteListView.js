@@ -51,10 +51,6 @@ define ( ["yasmf",
 function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML, 
            noteFactory, noteViewFactory, Hammer )
 {
-   var _generateUID = function ()
-   {
-      return _y.datetime.getUnixTime();
-   };
    var _className = "NoteListView";
    var NoteListView = function ()
    {
@@ -72,77 +68,43 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
       self._newImageNoteButton = null;
       self._newVideoNoteButton = null;
       
+             self._createAndEditNote = function (noteType)
+             {
+               // ask storage for a new note
+               noteStorageSingleton.createNote(noteType)
+                 .then(function (aNewNote)
+                       {
+                         // create a new editor view
+                         var aNoteEditView = noteViewFactory.createNoteEditView(noteType);
+                         // and tell it about the new note
+                         aNoteEditView.initWithOptions({note: aNewNote});
+                         self.navigationController.pushView ( aNoteEditView );
+                       })
+                 .catch(function (anError) { console.log(anError) })
+                 .done();
+      
       /**
        * Creates a new note; called when "New" is tapped
        */
-      self.createNewTextNote = function ()
-      {
-         // ask storage for a new note
-         var aNewNote = noteStorageSingleton.createNote( noteFactory.TEXTNOTE );
-         // create a new editor view
-         var aNoteEditView = noteViewFactory.createNoteEditView ( noteFactory.TEXTNOTE );
-         // and tell it about the new note
-         aNoteEditView.initWithOptions ( {note: aNewNote} );
+             self.createNewTextNote = function ()
+             {
+               self._createAndEditNote(noteFactory.TEXTNOTE);
+             };
 
-         // and push it on the navigation controller
-         self.navigationController.pushView ( aNoteEditView );
-      }
+             self.createNewAudioNote = function ()
+             {
+               self._createAndEditNote(noteFactory.AUDIONOTE);
+             };
 
-      self.createNewAudioNote = function ()
-      {
-        var aNewNote = noteStorageSingleton.createNote ( noteFactory.AUDIONOTE );
-        var aNoteEditView = noteViewFactory.createNoteEditView ( noteFactory.AUDIONOTE );
+             self.createNewImageNote = function ()
+             {
+               self._createAndEditNote(noteFactory.IMAGENOTE);
+             };
 
-        // now we need to get a unique filename for the audio, and get a URL for it
-        var extension = ".wav"; // iOS records to WAV
-        if (_y.device.platform() == "android") { extension = ".amr"} // Android records to AMR
-        var fm = noteStorageSingleton.fileManager;
-        fm.getFileEntry ( "audio" + _generateUID() + extension, {create: true, exclusive: false} )
-          .then ( function gotFile ( theFile ) 
-            { aNewNote.mediaContents = theFile.fullPath; // this initializes the media object
-              aNoteEditView.initWithOptions ( {note: aNewNote} );
-              self.navigationController.pushView ( aNoteEditView );
-            })
-          .catch ( function ( anError ) { console.log ( anError ); } )
-          .done ();
-      }
-
-      self.createNewImageNote = function ()
-      {
-        var aNewNote = noteStorageSingleton.createNote ( noteFactory.IMAGENOTE );
-        var aNoteEditView = noteViewFactory.createNoteEditView ( noteFactory.IMAGENOTE );
-
-        // now we need to get a unique filename for the image
-        var extension = ".jpg";
-        var fm = noteStorageSingleton.fileManager;
-        fm.getFileEntry ( "image" + _generateUID() + extension, {create: true, exclusive: false} )
-          .then ( function gotFile ( theFile ) 
-            { aNewNote.mediaContents = theFile.fullPath; // this initializes the media object
-              aNoteEditView.initWithOptions ( {note: aNewNote} );
-              self.navigationController.pushView ( aNoteEditView );
-            })
-          .catch ( function ( anError ) { console.log ( anError ); } )
-          .done ();
-      }
-
-      self.createNewVideoNote = function ()
-      {
-        var aNewNote = noteStorageSingleton.createNote ( noteFactory.VIDEONOTE );
-        var aNoteEditView = noteViewFactory.createNoteEditView ( noteFactory.VIDEONOTE );
-
-        // now we need to get a unique filename for the image
-        var extension = ".mov";
-        if (_y.device.platform() == "android") { extension = ".3gp"} // Android records to 3gp
-        var fm = noteStorageSingleton.fileManager;
-        fm.getFileEntry ( "movie" + _generateUID() + extension, {create: true, exclusive: false} )
-          .then ( function gotFile ( theFile ) 
-            { aNewNote.mediaContents = theFile.fullPath; // this initializes the media object
-              aNoteEditView.initWithOptions ( {note: aNewNote} );
-              self.navigationController.pushView ( aNoteEditView );
-            })
-          .catch ( function ( anError ) { console.log ( anError ); } )
-          .done ();
-      }
+             self.createNewVideoNote = function ()
+             {
+               self._createAndEditNote(noteFactory.VIDEONOTE);
+             };
 
 
       /**
@@ -150,7 +112,6 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
        */
       self.editExistingNote = function ( e )
       {
-         var theEvent = e;
          // get the UID
          var theUID = this.getAttribute("data-uid");
          // create a new editor view
@@ -173,10 +134,7 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
       self.exposeActionForNote = function ( e )
       {
         e.gesture.preventDefault();
-        _y.UI.styleElement ( this, "transition", "-webkit-transform 0.3s ease-in-out" );
-        _y.UI.styleElement ( this, "transition", "-moz-transform 0.3s ease-in-out" );
-        _y.UI.styleElement ( this, "transition", "-ms-transform 0.3s ease-in-out" );
-        _y.UI.styleElement ( this, "transition", "transform 0.3s ease-in-out" );
+               _y.UI.styleElement(this, "transition", "%PREFIX%transform 0.3s ease-in-out");
         // how far do we have to go?
         var amountToTranslate = getComputedStyle ( self._listOfNotes.querySelector ( ".ui-list-action" ) ).getPropertyValue ( "width" );
         _y.UI.styleElement ( this, "transform", "translateX(-"+ amountToTranslate +")" );
@@ -185,10 +143,7 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
       self.hideActionForNote = function ( e )
       {
         e.gesture.preventDefault();
-        _y.UI.styleElement ( this, "transition", "-webkit-transform 0.3s ease-in-out" );
-        _y.UI.styleElement ( this, "transition", "-moz-transform 0.3s ease-in-out" );
-        _y.UI.styleElement ( this, "transition", "-ms-transform 0.3s ease-in-out" );
-        _y.UI.styleElement ( this, "transition", "transform 0.3s ease-in-out" );
+               _y.UI.styleElement(this, "transition", "%PREFIX%transform 0.3s ease-in-out");
         _y.UI.styleElement ( this, "transform", "translateX(0px)" );
       }
       /**
@@ -291,8 +246,8 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
                       actionElement  = e.querySelector ( ".ui-list-action" );
 
                   Hammer ( contentsElement ).on ("tap", self.editExistingNote );
-                  Hammer ( contentsElement, {swipe_velocity:0.1} ).on ("swipeleft", self.exposeActionForNote );
-                  Hammer ( contentsElement, {swipe_velocity:0.1 } ).on ("swiperight", self.hideActionForNote );
+                       Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true }).on("dragleft", self.exposeActionForNote);
+                       Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true }).on("dragright", self.hideActionForNote);
                   Hammer ( actionElement   ).on ("tap", self.deleteExistingNote );
 
                   // append the element to our list
@@ -303,6 +258,18 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
          self._listOfNotes.innerHTML = "";
          self._listOfNotes.appendChild ( fragment );
       }
+
+             self.onOrientationChanged = function ()
+             {
+               // fix a iOS bug where rotation may prevent the list from scrolling after rotation
+               if (_y.device.platform() == "ios")
+               {
+                 // this forces the scroll container to be recalc'd. It also flickers a bit.
+                 // no way to avoid it, unfortunately.
+                 self._scrollContainer.style.display = "none";
+                 setTimeout(function () { self._scrollContainer.style.display = ""; }, 0);
+               }
+             };
 
       /**
        * Initialize the view and add listeners for the storage
@@ -320,6 +287,8 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
 
          // and ask noteStorage to load itself
          noteStorageSingleton.loadCollection();
+               // we need to register for orientation changes
+               _y.UI.orientationHandler.addListenerForNotification("orientationChanged", self.onOrientationChanged);
       }
 
       self.overrideSuper ( self.class, "initWithOptions", self.init );
@@ -340,6 +309,9 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
       self.overrideSuper ( self.class, "destroy", self.destroy );
       self.destroy = function ()
       {
+               // stop listening for orientation changes
+               _y.UI.orientationHandler.removeListenerForNotification("orientationChanged", self.onOrientationChanged);
+
          // release our objects
          self._navigationBar = null;
          self._newTextNoteButton = null;

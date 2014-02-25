@@ -58,8 +58,6 @@ function ( TextNoteEditView, AudioNoteEditView, ImageNoteEditView, noteFactory )
             return new AudioNoteEditView();
          case noteFactory.IMAGENOTE:
             return new ImageNoteEditView();
-         case noteFactory.VIDEONOTE:
-            //return new VideoNoteEditView();
          default:
             throw new Error ( "Note View Factory doesn't understand a " + noteType );
       }

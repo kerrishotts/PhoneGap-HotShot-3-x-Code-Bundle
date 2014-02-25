@@ -40,7 +40,8 @@
          onevar:false 
  */
 /*global define*/
-define ( ["app/models/baseNote", "app/models/audioNote"], function ( BaseNote, AudioNote )
+define ( ["yasmf", "app/models/baseNote", "app/models/audioNote"], 
+function ( _y, BaseNote, AudioNote )
 {
    var noteFactory = {};
 
@@ -61,16 +62,45 @@ define ( ["app/models/baseNote", "app/models/audioNote"], function ( BaseNote, A
       switch ( noteType.toUpperCase().trim() )
       {
          case noteFactory.BASENOTE:
+         case noteFactory.TEXTNOTE:
             return new BaseNote();
          case noteFactory.AUDIONOTE:
             return new AudioNote();
-         case noteFactory.IMAGENOTE:
-            //return new ImageNote();
-         case noteFactory.VIDEONOTE:
-            //return new VideoNote();
          default:
             throw new Error ( "Note Factory doesn't understand a " + noteType );
       }
    }
+           /**
+            * Creates a new media file, consistent with the note type
+            */
+           noteFactory.createAssociatedMediaFileName = function (noteType, uid)
+           {
+             var newFileName;
+             var extension = {};
+             switch (noteType.toUpperCase().trim())
+             {
+               case noteFactory.BASENOTE:
+               case noteFactory.TEXTNOTE:
+                 newFileName = ""; // baseNote has no associated media file
+                 break;
+               case noteFactory.AUDIONOTE:
+                 extension = { "ios": "wav", "android": "3gp", "default": "mp3" };
+                 newFileName = "audio";
+                 break;
+               default:
+                 throw new Error("Note Factory doesn't understand a " + noteType);
+             }
+
+             if (newFileName !== "")
+             {
+               var newFileExtension = (typeof extension[_y.device.platform()] !== "undefined")
+                 ? extension[_y.device.platform()]
+                 : extension["default"];
+               newFileName = newFileName + uid + "." + newFileExtension;
+             }
+
+             return newFileName;
+           };
+
    return noteFactory;
 });

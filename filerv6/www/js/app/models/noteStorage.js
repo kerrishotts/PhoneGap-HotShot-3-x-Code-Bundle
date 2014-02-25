@@ -252,28 +252,44 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
          }
       }
 
-      self.createNote = function ( noteType )
+    self.createNote = function ( noteType )
+    {
+      // Create a note from the Note object
+      var aNote = noteFactory.createNote ( noteType || noteFactory.TEXTNOTE );
+
+      var noteUID = _generateUID();
+      var newMediaFileName = noteFactory.createAssociatedMediaFileName ( noteType || noteFactory.TEXTNOTE,
+                                                                         noteUID );
+      // init it with a new UID, a set name and contents.
+      aNote.initWithOptions ( { "uid": noteUID,
+                                "name": _y.T("app.ns.A_NEW_NOTE"),
+                                "textContents": _y.T("app.ns.WHATS_ON_YOUR_MIND")
+                              } );
+      // add it to our collection
+      self._notes [ aNote.uid ] = aNote;
+
+      var fm = self.fileManager;
+      var deferred = Q.defer();
+      if (newMediaFileName !== "")
       {
-         // Create a note from the Note object
-         var aNote = noteFactory.createNote ( noteType || noteFactory.TEXTNOTE );
-
-         // init it with a new UID, a set name and contents.
-         aNote.initWithOptions ( { "uid": _generateUID(),
-                                   "name": _y.T("app.ns.A_NEW_NOTE"),
-                                   "textContents": _y.T("app.ns.WHATS_ON_YOUR_MIND")
-                                 } );
-         // add it to our collection
-         self._notes [ aNote.uid ] = aNote;
-
-         // tell everyone
-         self.notify ( "noteCreated", [ aNote.uid ] );
-
-         // and save the note (which also changes the collection)
-         self.saveNote ( aNote );
-
-         // return it for use
-         return aNote;
-      };
+        fm.getFileEntry ( newMediaFileName, {create: true, exclusive: false} )
+          .then ( function gotFile ( theFile )
+                  { aNote.mediaContents = theFile.fullPath;
+                    self.notify ( "noteCreated", [ aNote.uid ] );
+                    self.saveNote ( aNote );
+                    deferred.resolve (aNote);
+                  })
+          .catch ( function ( anError ) { deferred.reject ( anError ); } )
+          .done ();
+      }
+      else
+      {
+        deferred.resolve (aNote);
+        self.notify ( "noteCreated", [ aNote.uid ] );
+        self.saveNote ( aNote );
+      }
+      return deferred.promise;
+    };
 
       /**
        * Return a specific note

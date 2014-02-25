@@ -1,8 +1,8 @@
 /**
  *
- * Kickstarter for the Filer App.
+ * Note Factory
  * 
- * app.js
+ * noteFactory.js
  * @author Kerri Shotts
  * @version 1.0.0
  *
@@ -26,7 +26,6 @@
          asi:true,
          bitwise:true,
          browser:true,
-         camelcase:true,
          curly:true,
          eqeqeq:false,
          forin:true,
@@ -40,45 +39,24 @@
          white:false,
          onevar:false 
  */
-/*global require, requirejs*/
+/*global define*/
+define ( ["app/views/textNoteEditView", "app/factories/noteFactory"], 
+function ( TextNoteEditView, noteFactory )
+{
+   var noteViewFactory = {};
 
-/**
- * requirejs configuration -- by default our libraries are in js/lib
- * but the app code is in /app, and the app's view are in /html. 
- *
- * The urlArgs is there to bust the cache -- can disable in a production
- * environment
- *
- * The ship ensures that the cultures below rely on the globalize script
- * so they don't load out-of-order
- */
-requirejs.config({
-  baseUrl: './js/lib',
-  paths: {
-    'app': '../app',
-    'html': '../../html',
-    'Q': 'q'
-  },
-  urlArgs: "bust=" + (new Date()).getTime(),
-  shim: {
-    "cultures/globalize.culture.en-US": ["globalize"],
-    "cultures/globalize.culture.es-US": ["globalize"],
-    "Q": { exports: "Q" },
-    "yasmf": ["Q"]
-  }
-});
-
-/**
- * Start the app once all the dependencies are met
- */
-require(['yasmf', 'app/main',
-         'Q', 
-         'cultures/globalize.culture.en-US',
-         'cultures/globalize.culture.es-US'], function ( _y, APP, Q) {
-  // for future reference, add _y to the global object
-  window._y = _y;
-  // and the app as well
-  window.APP = APP;
-  // and GO!
-  _y.executeWhenReady ( function () { _y.getDeviceLocale( APP.start ) } );
+   /**
+    * Creates a new note view, given the type (one of the constants in noteFactory).
+    */
+   noteViewFactory.createNoteEditView = function ( noteType )
+   {
+      switch ( noteType.toUpperCase().trim() )
+      {
+         case noteFactory.BASENOTE:
+            return new TextNoteEditView();
+         default:
+            throw new Error ( "Note View Factory doesn't understand a " + noteType );
+      }
+   }
+   return noteViewFactory;
 });

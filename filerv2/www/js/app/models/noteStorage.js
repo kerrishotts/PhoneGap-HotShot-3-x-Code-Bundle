@@ -40,7 +40,7 @@
          onevar:false 
  */
 /*global define*/
-define ( ["yasmf", "Q", "app/models/note"], function ( _y, Q, Note )
+define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFactory )
 {
    /**
     * Generate a reasonably unique identifier based on the time
@@ -76,6 +76,11 @@ define ( ["yasmf", "Q", "app/models/note"], function ( _y, Q, Note )
 
       // the file manager
       self._fileManager = null;
+      self.getFileManager = function ()
+      {
+        return self._fileManager;
+      }
+      Object.defineProperty ( self, "fileManager", {get: self.getFileManager, configurable: true});
       self._initializeFileManager = function ()
       {
          if (self._fileManager === null)
@@ -118,9 +123,9 @@ define ( ["yasmf", "Q", "app/models/note"], function ( _y, Q, Note )
       /**
        * Parse the contents of a note
        */
-      self._parseNoteContents = function ( aNoteJSON )
+      self._parseNoteContents = function ( theNoteType, aNoteJSON )
       {
-         var aNote = new Note();
+         var aNote = noteFactory.createNote ( theNoteType );
          if ( aNote.initWithJSON ( aNoteJSON ) )
          {
           self._notes [aNote.uid] = aNote;
@@ -147,11 +152,12 @@ define ( ["yasmf", "Q", "app/models/note"], function ( _y, Q, Note )
             {
                var allNoteIDs = JSON.parse (allNoteIDsJSON );
                var allNotePromises = [];
-               allNoteIDs.forEach ( function (theNoteUID)
+               allNoteIDs.forEach ( function (theNote)
                {
                   allNotePromises.push ( 
-                     fm.readFileContents ( "note" + theNoteUID + ".txt", {}, fm.FILETYPE.TEXT)
-                       .then ( self._parseNoteContents )
+                     fm.readFileContents ( "note" + theNote.UID + ".txt", {}, fm.FILETYPE.TEXT)
+                       .then ( function ( theNoteJSON ) { return [ theNote.type, theNoteJSON ]; } )
+                       .spread ( self._parseNoteContents )
                      );
                });
                return Q.all(allNotePromises);
@@ -203,16 +209,18 @@ define ( ["yasmf", "Q", "app/models/note"], function ( _y, Q, Note )
          {
             //saving the collection only saves the UIDs -- not the notes themselves.
             var allNoteIDs = [];
+            var aNote;
             for ( var aNoteUID in self._notes )
             {
                // make sure we don't save a prototype entry
                if (self._notes.hasOwnProperty(aNoteUID))
                {
+                  aNote = self._notes[aNoteUID];
                   // nulls mark deleted notes -- don't save those
-                  if ( self._notes[aNoteUID] !== null )
+                  if ( aNote !== null )
                   {
                      // add the UID to the list
-                     allNoteIDs.push ( aNoteUID );                     
+                     allNoteIDs.push ( {UID: aNote.UID, type: aNote.class} );
                   }
                }
             }
@@ -244,28 +252,45 @@ define ( ["yasmf", "Q", "app/models/note"], function ( _y, Q, Note )
          }
       }
 
-      self.createNote = function ()
+      self.createNote = function ( noteType )
       {
          // Create a note from the Note object
-         var aNote = new Note();
+         var aNote = noteFactory.createNote ( noteType || noteFactory.TEXTNOTE );
 
-         // init it with a new UID, a set name and contents.
-         aNote.initWithOptions ( { "uid": _generateUID(),
-                                   "name": _y.T("app.ns.A_NEW_NOTE"),
-                                   "contents": _y.T("app.ns.WHATS_ON_YOUR_MIND")
-                                 } );
-         // add it to our collection
-         self._notes [ aNote.uid ] = aNote;
+      var noteUID = _generateUID();
+      var newMediaFileName = noteFactory.createAssociatedMediaFileName ( noteType || noteFactory.TEXTNOTE,
+                                                                         noteUID );
+      // init it with a new UID, a set name and contents.
+      aNote.initWithOptions ( { "uid": noteUID,
+                                "name": _y.T("app.ns.A_NEW_NOTE"),
+                                "textContents": _y.T("app.ns.WHATS_ON_YOUR_MIND"),
+                                "mediaContents": newMediaFileName
+                              } );
+      // add it to our collection
+      self._notes [ aNote.uid ] = aNote;
 
-         // tell everyone
-         self.notify ( "noteCreated", [ aNote.uid ] );
-
-         // and save the note (which also changes the collection)
-         self.saveNote ( aNote );
-
-         // return it for use
-         return aNote;
-      };
+      var fm = self.fileManager;
+      var deferred = Q.defer();
+      if (newMediaFileName !== "")
+      {
+        fm.getFileEntry ( newMediaFileName, {create: true, exclusive: false} )
+          .then ( function gotFile ( theFile )
+                  { aNote.mediaContents = theFile.fullPath;
+                    self.notify ( "noteCreated", [ aNote.uid ] );
+                    self.saveNote ( aNote );
+                    deferred.resolve (aNote);
+                  })
+          .catch ( function ( anError ) { deferred.reject ( anError ); } )
+          .done ();
+      }
+      else
+      {
+        deferred.resolve (aNote);
+        self.notify ( "noteCreated", [ aNote.uid ] );
+        self.saveNote ( aNote );
+      }
+      return deferred.promise;
+    };
 
       /**
        * Return a specific note
@@ -327,9 +352,17 @@ define ( ["yasmf", "Q", "app/models/note"], function ( _y, Q, Note )
                         })
                 .then ( function fileDeleted()
                         {
+                           var fm = self._fileManager;
+                           var aNote = self.getNote ( theUID );
                            self._notes [ theUID ] = null;
                            self.notify ( "noteRemoved", [ theUID ] );
                            self.notify ( "collectionChanged" );
+
+                           // the note has been removed -- but what about the media?
+                           if (aNote.mediaContents !== null )
+                           {
+                            return fm.deleteFile ( aNote.mediaContents );
+                           }
                            return;
                         } )
                 .catch ( function anErrorHappened ( anError ) 

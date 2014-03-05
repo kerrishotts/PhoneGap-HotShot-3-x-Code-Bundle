@@ -82,20 +82,14 @@ function ( _y, noteStorageSingleton, imageNoteViewHTML,
       self.updatePhoto = function ()
       {
         _y.UI.styleElement(self._imageContainer, "background-image", "inherit");
-        var fe = cordova.require("org.apache.cordova.file-extras.FileExtras");
-        var template = "url(file://%ROOT%%URL%?%CACHE%)";
-        fe.getDocumentsDirectory(function (documentRoot)
-                                 {
-                                   setTimeout(function ()
-                                              {
-                                                var cacheBust = Math.floor(Math.random() * 100000);
-                                                var newBackground = _y.template ( template, { "ROOT": documentRoot.fullPath,
-                                                                                              "URL": self._note.mediaContents,
-                                                                                              "CACHE": cacheBust} );
-                                                _y.UI.styleElement(self._imageContainer, "background-image",
-                                                                                         newBackground);
-                                              }, 100);
-                                 });
+        var template = "url(cdvfile://localhost/persistent%URL%?%CACHE%)";
+        setTimeout(function ()
+                   {
+                     var cacheBust = Math.floor(Math.random() * 100000);
+                     var newBackground = _y.template ( template, { "URL": self._note.mediaContents,
+                                                                   "CACHE": cacheBust} );
+                     _y.UI.styleElement(self._imageContainer, "background-image", newBackground);
+                   }, 100);
       };
 
       self.onPhotoCaptured = function ()

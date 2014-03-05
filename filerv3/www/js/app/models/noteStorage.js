@@ -263,7 +263,8 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
       // init it with a new UID, a set name and contents.
       aNote.initWithOptions ( { "uid": noteUID,
                                 "name": _y.T("app.ns.A_NEW_NOTE"),
-                                "textContents": _y.T("app.ns.WHATS_ON_YOUR_MIND")
+                                "textContents": _y.T("app.ns.WHATS_ON_YOUR_MIND"),
+                                "mediaContents": newMediaFileName
                               } );
       // add it to our collection
       self._notes [ aNote.uid ] = aNote;

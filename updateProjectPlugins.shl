@@ -1,0 +1,196 @@
+#!/bin/sh
+#
+# Updates all subprojects with the correct (and most recent) plugins
+# and also updates the platforms; run after a cordova update and/or
+# plugin update. TEST AFTER: things are almost certainly to break.
+#
+echo "Updating all subprojects with updated platforms and plugins..."
+cd localizationdemo
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.globalization
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ../filerv1
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.globalization
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ../filerv2
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.file
+cordova plugin rm org.apache.cordova.file-extras
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ../filerv3
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.file
+cordova plugin rm org.apache.cordova.media
+cordova plugin rm org.apache.cordova.file-extras
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+cordova plugin add org.apache.cordova.media
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ../filerv4
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.file
+cordova plugin rm org.apache.cordova.media
+cordova plugin rm org.apache.cordova.camera
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+cordova plugin add org.apache.cordova.media
+cordova plugin add org.apache.cordova.camera
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ../filerv5
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.file
+cordova plugin rm org.apache.cordova.media
+cordova plugin rm org.apache.cordova.camera
+cordova plugin rm org.apache.cordova.media-capture
+cordova plugin rm org.apache.cordova.file-extras
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+cordova plugin add org.apache.cordova.media
+cordova plugin add org.apache.cordova.camera
+cordova plugin add org.apache.cordova.media-capture
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ../filerv6
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.file
+cordova plugin rm org.apache.cordova.media
+cordova plugin rm org.apache.cordova.camera
+cordova plugin rm org.apache.cordova.media-capture
+cordova plugin rm org.apache.cordova.file-extras
+cordova plugin rm socialmessage
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+cordova plugin add org.apache.cordova.media
+cordova plugin add org.apache.cordova.camera
+cordova plugin add org.apache.cordova.media-capture
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ../filerv7
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.file
+cordova plugin rm org.apache.cordova.media
+cordova plugin rm org.apache.cordova.camera
+cordova plugin rm org.apache.cordova.media-capture
+cordova plugin rm socialmessage
+cordova plugin rm org.apache.cordova.file-extras
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.file
+cordova plugin add org.apache.cordova.media
+cordova plugin add org.apache.cordova.camera
+cordova plugin add org.apache.cordova.media-capture
+cordova plugin add https://github.com/leecrossley/cordova-plugin-social-message.git
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ../pathrec
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.geolocation
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.geolocation
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ../pathrecnative
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.geolocation
+cordova plugin rm com.photokandy.nativecontrols 
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.geolocation
+cordova plugin add com.photokandy.nativecontrols 
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ../caverunner
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.device-motion
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.device-motion
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ../caverunner2
+echo "... ${PWD##*/}"
+echo "... ... updating platforms..."
+cordova platform update ios
+cordova platform update android
+echo "... ... updating plugins..."
+cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.device-motion
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.device-motion
+echo "... ... preparing platforms..."
+cordova prepare
+
+cd ..
+echo "Update complete."
+

@@ -278,12 +278,8 @@ define ( ["yasmf"], function ( _y )
          self._releaseMediaObjectIfNecessary();
          if (typeof newSrc !=="undefined")
          {
-           var fe = cordova.require("org.apache.cordova.file-extras.FileExtras");
-           fe.getDocumentsDirectory ( function (documentRoot)
-                                      {
-                                        self._src = documentRoot.fullPath + newSrc;
-                                        self._createMediaObjectIfNecessary();
-                                      });
+           self._src = newSrc.replace("file://", "");
+           self._createMediaObjectIfNecessary();
          }
          else
          {

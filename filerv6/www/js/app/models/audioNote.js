@@ -98,8 +98,10 @@ define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( 
             self._media.destroy();
             self._media = null;
          }
-         self._media = new MediaManager(); 
-         self._media.init ( theMediaContents );
+         self._media = new MediaManager();
+         var noteStorageSingleton = require("app/models/noteStorageSingleton");
+         var nativePath = noteStorageSingleton.fileManager.getNativeURL ( theMediaContents );
+         self._media.init ( nativePath );
          self.notify ( "mediaContentsChanged" );
          self._media.addListenerForNotification ( "durationUpdated", self._updateUnit );
          self._media.addListenerForNotification ( "recordingStopped", self._updateModificationDate );

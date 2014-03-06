@@ -107,7 +107,6 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
        */
       self.editExistingNote = function ( e )
       {
-         var theEvent = e;
          // get the UID
          var theUID = this.getAttribute("data-uid");
          // create a new editor view

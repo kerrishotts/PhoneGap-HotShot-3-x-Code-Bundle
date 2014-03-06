@@ -127,7 +127,14 @@ define ( ["yasmf", "Q"], function ( _y, Q )
       }
       self.setTargetSize = function ( targetWidth, targetHeight )
       {
-         self._targetSize = { width: targetWidth, height: targetHeight };
+        if (typeof targetWidth === "object")
+        {
+          self._targetSize = targetWidth;
+        }
+        else
+        {
+          self._targetSize = { width: targetWidth, height: targetHeight };
+        }
       }
       Object.defineProperty ( self, "targetSize", { get: self.getTargetSize, set: self.setTargetSize, configurable: true });
 

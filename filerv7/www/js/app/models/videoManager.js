@@ -188,7 +188,7 @@ define ( ["yasmf", "Q"], function ( _y, Q )
                      return fm.resolveLocalFileSystemURL ( sourcePath );
                   })
                   .then ( function (theFileEntry ) {
-                     return fm.moveFile ( theFileEntry, targetPath, targetName ) ; // android wants it blank; was targetPath
+                     return fm.moveFile ( theFileEntry, targetPath, targetName ) ;
                   })
                   .then ( function ( ) { self.notify ("videoCaptured"); return; })
          ;

@@ -334,7 +334,7 @@ body.android
   bottom: 0;
   -webkit-mask-position-y: 100%;
   -moz-mask-position-y: 100%;
-  -ms-mask-position-y: 10%;
+  -ms-mask-position-y: 100%;
   mask-position-y: 100%;
   background-color: white;
 }

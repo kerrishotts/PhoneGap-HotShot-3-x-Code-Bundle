@@ -1064,6 +1064,20 @@ div {
   -o-mask-image: url("./yasmf-assets/gps-locate@2x.png");
   mask-image: url("./yasmf-assets/gps-locate@2x.png"); }
 
+.ui-glyph-square-filled {
+  -webkit-mask-image: url("./yasmf-assets/square-filled@2x.png");
+  -moz-mask-image: url("./yasmf-assets/square-filled@2x.png");
+  -ms-mask-image: url("./yasmf-assets/square-filled@2x.png");
+  -o-mask-image: url("./yasmf-assets/square-filled@2x.png");
+  mask-image: url("./yasmf-assets/square-filled@2x.png"); }
+
+.ui-glyph-square-hollow {
+  -webkit-mask-image: url("./yasmf-assets/square-hollow@2x.png");
+  -moz-mask-image: url("./yasmf-assets/square-hollow@2x.png");
+  -ms-mask-image: url("./yasmf-assets/square-hollow@2x.png");
+  -o-mask-image: url("./yasmf-assets/square-hollow@2x.png");
+  mask-image: url("./yasmf-assets/square-hollow@2x.png"); }
+
 /*****************************************************************************
  *
  * Alert Styles

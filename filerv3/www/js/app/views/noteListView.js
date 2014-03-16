@@ -190,16 +190,31 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
          Hammer ( self._newTextNoteButton ).on ("tap", self.createNewTextNote );
          Hammer ( self._newAudioNoteButton ).on ("tap", self.createNewAudioNote );
 
-         // and make sure we know about the physical back button
-         _y.UI.backButton.addListenerForNotification ( "backButtonPressed", self.quitApp );
-      }
+               // and make sure we know about the physical back button
+               _y.UI.backButton.addListenerForNotification("backButtonPressed", self.quitApp);
+             };
 
-      /**
-       * Render the note list; called whenever the storage collection changes
-       */
-      self.renderList = function ()
-      {
-         var notes = noteStorageSingleton.collection;
+             self._hideActions = function (e)
+             {
+               e.gesture.preventDefault();
+               var allListItems = self._listOfNotes.querySelectorAll(".ui-list-item-contents");
+               for (var i=0; i<allListItems.length; i++)
+               {
+                 var el = allListItems[i];
+                 if (el.getAttribute("data-swiped") == "true")
+                 {
+                   el.setAttribute("data-swiped", "false");
+                   self.hideActionForNote.apply(el);
+                 }
+                 Hammer(el).off("touch", self._hideActions);
+               }
+             };
+             /**
+              * Render the note list; called whenever the storage collection changes
+              */
+             self.renderList = function ()
+             {
+               var notes = noteStorageSingleton.collection;
 
          var fragment = document.createDocumentFragment();
 
@@ -232,10 +247,22 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
                   var contentsElement = e.querySelector ( ".ui-list-item-contents"),
                       actionElement  = e.querySelector ( ".ui-list-action" );
 
-                  Hammer ( contentsElement ).on ("tap", self.editExistingNote );
-                       Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true }).on("dragleft", self.exposeActionForNote);
-                       Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true }).on("dragright", self.hideActionForNote);
-                  Hammer ( actionElement   ).on ("tap", self.deleteExistingNote );
+                     Hammer(contentsElement).on("tap", self.editExistingNote);
+
+                       Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true }).on("dragleft", function (e) {
+                         var row = this;
+                         e.gesture.preventDefault();
+                         e.gesture.stopDetect();
+                         row.setAttribute("data-swiped", "true");
+                         self.exposeActionForNote.apply(row);
+                         var allListItems = self._listOfNotes.querySelectorAll(".ui-list-item-contents");
+                         for (var i=0; i<allListItems.length; i++)
+                         {
+                           var el = allListItems[i];
+                           Hammer(el).on("touch", self._hideActions);
+                         }
+                       } );
+                       Hammer(actionElement).on("tap", self.deleteExistingNote);
 
                   // append the element to our list
                   fragment.appendChild ( e );

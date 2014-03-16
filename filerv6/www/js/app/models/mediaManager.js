@@ -77,7 +77,7 @@ define ( ["yasmf"], function ( _y )
       self.getPosition = function ()
       {
          // assumes _position is being updated by an interval calling _media.getCurrentPosition
-         return self._position;
+         return self._position >= 0 ? self._position : 0;
       }
       self.setPosition = function ( thePosition )
       {
@@ -102,18 +102,25 @@ define ( ["yasmf"], function ( _y )
       self.getDuration = function ()
       {
          // assumes the duration has been updated by _media.getDuration()
-         return self._duration;
+         return self._duration >= 0 ? self._duration : 0;
       }
       Object.defineProperty ( self, "duration", { get: self.getDuration, configurable: true} );
+
+
+      self._state = MediaManager.STATE_NONE;
+      self.getState = function ()
+      {
+        return self._state;
+      }
+      Object.defineProperty ( self, "state", { get: self.getState, configurable: true } );
 
       /**
        * Determines if media is playing (true), or not (false)
        * @type {Boolean}
        */
-      self._playing = false;
       self.getIsPlaying = function ()
       {
-         return self._playing;
+         return self._state === MediaManager.STATE_PLAYING;
       }
       Object.defineProperty ( self, "isPlaying", { get: self.getIsPlaying, configurable: true } );
 
@@ -121,10 +128,9 @@ define ( ["yasmf"], function ( _y )
        * Determines if media is recording (true), or not (false)
        * @type {Boolean}
        */
-      self._recording = false;
       self.getIsRecording = function ()
       {
-         return self._recording;
+         return self._state === MediaManager.STATE_RECORDING;
       }
       Object.defineProperty ( self, "isRecording", { get: self.getIsRecording, configurable: true } );
       
@@ -132,12 +138,21 @@ define ( ["yasmf"], function ( _y )
        * Determines if media is paused (true), or not (false)
        * @type {Boolean}
        */
-      self._paused = false;
       self.getIsPaused = function ()
       {
-         return self._paused;
+         return self._state === MediaManager.STATE_PAUSED;
       }
       Object.defineProperty ( self, "isPaused", { get: self.getIsPaused, configurable: true } );
+
+     /**
+      * Determines if media is stopped (true), or not (false)
+      * @type {Boolean}
+      */
+     self.getIsStopped = function ()
+     {
+       return self._state === MediaManager.STATE_STOPPED;
+     }
+     Object.defineProperty ( self, "isStopped", { get: self.getIsStopped, configurable: true } );
 
       /**
        * The position and duration are updated very frequently (1 time a second).
@@ -147,9 +162,8 @@ define ( ["yasmf"], function ( _y )
       {
          if (self._media !== null)
          {
-            // only update the position automatically while playing or recording,
-            // and we aren't paused (as then there is no need)
-            if ( (self.isPlaying || self.isRecording) && !self.isPaused )
+            // only update the position automatically while playing.
+            if ( self.isPlaying )
             {
                self._media.getCurrentPosition ( function ( position )
                                                 {
@@ -157,9 +171,9 @@ define ( ["yasmf"], function ( _y )
                                                    self.notify ( "positionUpdated" );
                                                 } );
             }
-            // only update the duration if we're recording, or have yet to
-            // give up calculating it (20 seconds)
-            if ( ( self._duration > -20 && self._duration < 0 ) || self.isRecording )
+            // only update the duration and have yet to
+            // give up calculating it (up to 100 seconds)
+            if ( self._duration > -100 && self._duration < 0 )
             {
                var d = self._media.getDuration();
                if (d > -1)
@@ -169,11 +183,18 @@ define ( ["yasmf"], function ( _y )
                }
                else
                {
-                  if (self._duration > -1 ) 
+                  if (self._duration > -100 )
                   { 
                      self._duration--; // this will eventually give up
                   }
                }
+            }
+            if ( self.isRecording )
+            {
+              self._duration += 1000; // add a second for recording. This isn't exact, and will be reset after the
+                                // recording is complete, but it gives us a way to update our UI about our
+                                // recording progress.
+              self.notify ( "durationUpdated");
             }
          }
       }
@@ -184,12 +205,11 @@ define ( ["yasmf"], function ( _y )
        */
       self._mediaSuccess = function ()
       {
-         // since everything is done, we need to set these properly.
+         self._position = 0;
+         self.notify ( "positionUpdated" );
          if (self.isPlaying) { self.notify ( "playingStopped" ); }
          if (self.isRecording) { self.notify ( "recordingStopped" ); }
-         self._playing = false;
-         self._recording = false;
-         self._paused = false;
+         self._state = MediaManager.STATE_STOPPED;
       }
 
       /**
@@ -206,7 +226,7 @@ define ( ["yasmf"], function ( _y )
       /**
        * Called whenever an error occurs on the _media object
        */
-      self._mediaError = function ( anError )
+      self._updateMediaError = function ( anError )
       {
          self._lastError = anError;
          console.log ( "Media Error: encountered " + anError.code + ". Current status is " + self.status);
@@ -217,17 +237,17 @@ define ( ["yasmf"], function ( _y )
        * The status of the media object; as described in the cordova docs.
        * @type {Number}
        */
-      self._status = -1;
-      self.getStatus = function ()
+      self._mediaStatus = -1;
+      self.getMediaStatus = function ()
       {
-         return self._status;
+         return self._mediaStatus;
       }
-      Object.defineProperty ( self, "status", {get: self.getStatus, configurable: true});
+      Object.defineProperty ( self, "mediaStatus", {get: self.getMediaStatus, configurable: true});
 
       /**
        * Called when the status of the media object changes.
        */
-      self._mediaStatus = function ( aStatus )
+      self._updateMediaStatus = function ( aStatus )
       {
          self._status = aStatus;
          self.notify ( "statusUpdated" );
@@ -241,15 +261,16 @@ define ( ["yasmf"], function ( _y )
       {
          if (self._media === null)
          {
-            self._media = new Media ( self.src, self._mediaSuccess, self._mediaError, self._mediaStatus );
+            self._media = new Media ( self.src, self._mediaSuccess, self._updateMediaError, self._updateMediaStatus );
             self._intervalId = setInterval ( self._updateStatus, 1000 );
             self.notify ( "mediaAllocated");
+            self._state = MediaManager.STATE_STOPPED;
          }
       }
       /**
        * Releases the underlying media object and destroys the recurring status updates.
        */
-      self._releaseMediaObjectIfNecessary = function ()
+      self._destroyMediaObjectIfNecessary = function ()
       {
          if (self._media !== null)
          {
@@ -262,6 +283,7 @@ define ( ["yasmf"], function ( _y )
          }
          self._media = null;
          self.notify ("mediaDestroyed");
+         self._state = MediaManager.STATE_NONE;
       }
 
       /*
@@ -275,7 +297,7 @@ define ( ["yasmf"], function ( _y )
       }
       self.setSrc = function ( newSrc )
       {
-         self._releaseMediaObjectIfNecessary();
+         self._destroyMediaObjectIfNecessary();
          if (typeof newSrc !=="undefined")
          {
            self._src = newSrc.replace("file://", "");
@@ -298,10 +320,9 @@ define ( ["yasmf"], function ( _y )
          {
             self.stop();
          }
-         self._media.play(); self.notify ( "playingStarted" );
-         self._paused = false;
-         self._playing = true;
-         self._recording = false;
+         self._media.play();
+         self.notify ( "playingStarted" );
+         self._state = MediaManager.STATE_PLAYING;
       }
 
       /**
@@ -312,9 +333,13 @@ define ( ["yasmf"], function ( _y )
          self._createMediaObjectIfNecessary();
          if (self.isPlaying)
          {
-            self._media.pause(); self.notify ( "playingPaused" );
-            self._paused = true;
-            self._playing = false;
+            self._media.pause();
+            self.notify ( "playingPaused" );
+            self._state = MediaManager.STATE_PAUSED;
+         }
+         else if (self.isRecording)
+         {
+           console.log ( "Media Error: can't pause during recording.")
          }
       }
 
@@ -328,10 +353,13 @@ define ( ["yasmf"], function ( _y )
         {
           self.stop();
         }
-        self._media.startRecord(); self.notify ( "recordingStarted" );
-        self._playing = false;
-        self._recording = true;
-        self._paused = false;
+        self._media.startRecord();
+        self._position = 0; // recording overwrites anything else
+        self._duration = 0; // we will update this value each updateStatus
+        self.notify ( "recordingStarted" );
+        self.notify ( "durationUpdated" );
+        self.notify ( "positionUpdated" );
+        self._state = MediaManager.STATE_RECORDING;
       }
 
       /**
@@ -342,16 +370,23 @@ define ( ["yasmf"], function ( _y )
          self._createMediaObjectIfNecessary();
          if (self.isRecording)
          {
-            self._media.stopRecord(); self.notify ( "recordingStopped" );
+            self._media.stopRecord();
+            self.notify ( "recordingStopped" );
             self._media.release(); // Android requires this to actually release the recording resources.
+            self._duration = -1;   // we no longer know the duration...
+            self._media.play();    // apparently the duration is only calculated for playing, not recording
+            self._media.stop();    // but there's no sense in actually /playing/ anything, so stop immediately
+            self._media.release(); // and release the new resource. The duration will be updated at next update
          }
          if (self.isPlaying)
          {
-            self._media.stop(); self.notify ( "playingStopped" );
+            self._media.stop();
+            self._position = 0;
+            self.notify ( "positionUpdated" );
+            self.notify ( "playingStopped" );
+            self._media.release();
          }
-         self._playing = false;
-         self._recording = false;
-         self._paused = false;
+         self._state = MediaManager.STATE_STOPPED;
       }
 
       /**
@@ -370,11 +405,22 @@ define ( ["yasmf"], function ( _y )
       self.overrideSuper ( self.class, "destroy", self.destroy );
       self.destroy = function ()
       {
-         self._releaseMediaObjectIfNecessary();
+         self._destroyMediaObjectIfNecessary();
          self.super ( _className, "destroy" );
       }
 
       return self;
    };
+
+  /**
+   *  Some useful constants for play state
+   * @type {number}
+   */
+   MediaManager.STATE_NONE = 0;
+   MediaManager.STATE_PAUSED = 1;
+   MediaManager.STATE_STOPPED = 2;
+   MediaManager.STATE_PLAYING = 3;
+   MediaManager.STATE_RECORDING = 4;
+
    return MediaManager;
 });

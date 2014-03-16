@@ -195,7 +195,6 @@ define ( ["yasmf",
 
              self.exposeActionForNote = function (e)
              {
-               e.gesture.preventDefault();
                _y.UI.styleElement(this, "transition", "%PREFIX%transform 0.3s ease-in-out");
                // how far do we have to go?
                var amountToTranslate = getComputedStyle(self._listOfNotes.querySelector(".ui-list-action")).getPropertyValue("width");
@@ -204,7 +203,6 @@ define ( ["yasmf",
 
              self.hideActionForNote = function (e)
              {
-               e.gesture.preventDefault();
                _y.UI.styleElement(this, "transition", "%PREFIX%transform 0.3s ease-in-out");
                _y.UI.styleElement(this, "transform", "translateX(0px)");
              };
@@ -257,9 +255,7 @@ define ( ["yasmf",
                self._newImageNoteButton = newButtons[2];
                self._newVideoNoteButton = newButtons[3];
 
-
                // the new Button should have an event listener
-               //_y.UI.event.addListener ( self._newButton, "click", self.createNewNote );
                Hammer(self._newTextNoteButton).on("tap", self.createNewTextNote);
                Hammer(self._newAudioNoteButton).on("tap", self.createNewAudioNote);
                Hammer(self._newImageNoteButton).on("tap", self.createNewImageNote);
@@ -269,6 +265,21 @@ define ( ["yasmf",
                _y.UI.backButton.addListenerForNotification("backButtonPressed", self.quitApp);
              };
 
+             self._hideActions = function (e)
+             {
+               e.gesture.preventDefault();
+               var allListItems = self._listOfNotes.querySelectorAll(".ui-list-item-contents");
+               for (var i=0; i<allListItems.length; i++)
+               {
+                 var el = allListItems[i];
+                 if (el.getAttribute("data-swiped") == "true")
+                 {
+                   el.setAttribute("data-swiped", "false");
+                   self.hideActionForNote.apply(el);
+                 }
+                 Hammer(el).off("touch", self._hideActions);
+               }
+             };
              /**
               * Render the note list; called whenever the storage collection changes
               */
@@ -318,8 +329,19 @@ define ( ["yasmf",
                      {
                        // the following is applicable only when we're rendering a list view
                        // (not a thumbnail view)
-                       Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true }).on("dragleft", self.exposeActionForNote);
-                       Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true }).on("dragright", self.hideActionForNote);
+                       Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true }).on("dragleft", function (e) {
+                         var row = this;
+                         e.gesture.preventDefault();
+                         e.gesture.stopDetect();
+                         row.setAttribute("data-swiped", "true");
+                         self.exposeActionForNote.apply(row);
+                         var allListItems = self._listOfNotes.querySelectorAll(".ui-list-item-contents");
+                         for (var i=0; i<allListItems.length; i++)
+                         {
+                           var el = allListItems[i];
+                           Hammer(el).on("touch", self._hideActions);
+                         }
+                       } );
                        Hammer(actionElement).on("tap", self.deleteExistingNote);
                      }
                      else
@@ -333,8 +355,10 @@ define ( ["yasmf",
                    }
                  }
                }
+               self._listOfNotes.style.display = "none";
                self._listOfNotes.innerHTML = "";
                self._listOfNotes.appendChild(fragment);
+               self._listOfNotes.style.display = "block";
              };
 
              self.onOrientationChanged = function ()

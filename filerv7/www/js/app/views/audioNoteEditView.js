@@ -58,6 +58,7 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
       */
      self._recordAudioButton = null;
      self._playAudioButton = null;
+     self._audioInformation = null;
 
      /**
       * override the text editor's template with our own
@@ -83,9 +84,9 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
      self.onAudioStopped = function ()
      {
        // either recording or playing stopped -- it doesn't really matter.
-       self._playAudioButton.classList.remove("ui-glyph-pause-filled");
+       self._playAudioButton.classList.remove("ui-glyph-square-filled");
        self._playAudioButton.classList.add("ui-glyph-play-filled");
-       self._recordAudioButton.classList.remove("ui-glyph-pause-filled");
+       self._recordAudioButton.classList.remove("ui-glyph-square-filled");
        self._recordAudioButton.classList.add("ui-glyph-circle-filled");
        self._note.media.removeListenerForNotification("recordingStopped", self.onAudioStopped);
        self._note.media.removeListenerForNotification("playingStopped", self.onAudioStopped);
@@ -101,18 +102,18 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
        {
          self._note.media.record();
          self._recordAudioButton.classList.remove("ui-glyph-circle-filled");
-         self._recordAudioButton.classList.add("ui-glyph-pause-filled");
+         self._recordAudioButton.classList.add("ui-glyph-square-filled");
          self._note.media.addListenerForNotification("recordingStopped", self.onAudioStopped);
        }
        else
        {
          self._note.media.stop();
          self._note.media.removeListenerForNotification("recordingStopped", self.onAudioStopped);
-         self._recordAudioButton.classList.remove("ui-glyph-pause-filled");
+         self._recordAudioButton.classList.remove("ui-glyph-square-filled");
          self._recordAudioButton.classList.add("ui-glyph-circle-filled");
        }
        // and just in case we were playing ('cause we aren't anymore)
-       self._playAudioButton.classList.remove("ui-glyph-pause-filled");
+       self._playAudioButton.classList.remove("ui-glyph-square-filled");
        self._playAudioButton.classList.add("ui-glyph-play-filled");
      };
 
@@ -125,20 +126,37 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
        {
          self._note.media.play();
          self._playAudioButton.classList.remove("ui-glyph-play-filled");
-         self._playAudioButton.classList.add("ui-glyph-pause-filled");
+         self._playAudioButton.classList.add("ui-glyph-square-filled");
          self._note.media.addListenerForNotification("playingStopped", self.onAudioStopped);
+         self._note.media.addListenerForNotification("positionUpdated", self.updateAudioInformation);
        }
        else
        {
          self._note.media.stop();
          self._note.media.removeListenerForNotification("playingStopped", self.onAudioStopped);
-         self._playAudioButton.classList.remove("ui-glyph-pause-filled");
+         self._note.media.removeListenerForNotification("positionUpdated", self.updateAudioInformation);
+         self._playAudioButton.classList.remove("ui-glyph-square-filled");
          self._playAudioButton.classList.add("ui-glyph-play-filled");
        }
        // and just in case we were recording ('cause we aren't anymore)
-       self._recordAudioButton.classList.remove("ui-glyph-pause-filled");
+       self._recordAudioButton.classList.remove("ui-glyph-square-filled");
        self._recordAudioButton.classList.add("ui-glyph-circle-filled");
      };
+
+     /**
+      * Update audio information while playing or recording
+      */
+     self.updateAudioInformation = function ()
+     {
+       var durationParts = _y.datetime.getPartsFromSeconds( self._note.media.duration == 0 ? self._note.unitValue : self._note.media.duration/1000, _y.datetime.PRECISION_MINUTES),
+           positionParts = _y.datetime.getPartsFromSeconds( self._note.media.position/1000, _y.datetime.PRECISION_MINUTES);
+
+       self._audioInformation.innerHTML = _y.template ( "%MM1%:%SS1% / %MM2%:%SS2%",
+                                                        { "SS1": _y.format(positionParts.seconds, "d2"),
+                                                          "MM1": _y.format(positionParts.minutes, "d2"),
+                                                          "SS2": _y.format(durationParts.seconds, "d2"),
+                                                          "MM2": _y.format(durationParts.minutes, "d2") });
+     }
 
      /**
       * we get to use some of the text editor's renderToElement to load
@@ -157,12 +175,30 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
        self._recordAudioButton = audioButtons [0];
        self._playAudioButton = audioButtons [1];
 
+       self._audioInformation = self.element.querySelector(".audio-information");
+
        // these should also have listeners
        Hammer(self._recordAudioButton).on("tap", self.onRecordAudio);
        Hammer(self._playAudioButton).on("tap", self.onPlayAudio);
 
      };
 
+     self.overrideSuper(self.class, "init", self.init);
+     self.init = function ( theParentElement, theNote )
+     {
+       self.super(_className, "init", [theParentElement, theNote]);
+
+       self.addListenerForNotification ( "viewWasPushed", function ()
+       {
+         self._note.media.addListenerForNotification("durationUpdated", self.updateAudioInformation);
+         self.updateAudioInformation();
+       });
+       self.addListenerForNotification ( "viewWasPopped", function ()
+       {
+         self._note.media.removeListenerForNotification("durationUpdated", self.updateAudioInformation);
+       });
+
+     }
      /**
       * Clean up after ourselves and stop listening to notifications
       */
@@ -171,8 +207,11 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
      {
        self._recordAudioButton = null;
        self._playAudioButton = null;
+       self._audioInformation = null;
        self._note.media.removeListenerForNotification("recordingStopped", self.onAudioStopped);
        self._note.media.removeListenerForNotification("playingStopped", self.onAudioStopped);
+       self._note.media.removeListenerForNotification("positionUpdated", self.updateAudioInformation);
+       self._note.media.removeListenerForNotification("durationUpdated", self.updateAudioInformation);
        self._note.media.stop(); // no need to continue doing something.
        self.super(_className, "destroy");
      };

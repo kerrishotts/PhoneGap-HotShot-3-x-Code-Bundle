@@ -382,6 +382,14 @@ body.android
   min-width: 44px;
   min-height: 44px;
 }
+.AudioNoteEditView .audio-information
+{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    min-height: 0 !important;
+    opacity: 0.5;
+}
 
 .ImageNoteEditView .image-container
 {

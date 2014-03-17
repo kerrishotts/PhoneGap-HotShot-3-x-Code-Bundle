@@ -44,12 +44,13 @@
 define ( ["yasmf", 
           "app/models/noteStorageSingleton",
           "text!html/noteListView.html!strip",
-          "text!html/noteListItem.html!strip", 
+          "text!html/noteListView_android.html!strip",
+          "text!html/noteListItem.html!strip",
           "app/factories/noteFactory",
           "app/factories/noteViewFactory",
           "hammer"], 
-function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML, 
-           noteFactory, noteViewFactory, Hammer )
+function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,  
+           noteListItemHTML, noteFactory, noteViewFactory, Hammer )
 {
    var _className = "NoteListView";
    var NoteListView = function ()
@@ -82,7 +83,7 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
                        })
                  .catch(function (anError) { console.log(anError) })
                  .done();
-      
+             } 
       /**
        * Creates a new note; called when "New" is tapped
        */
@@ -133,7 +134,6 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
 
       self.exposeActionForNote = function ( e )
       {
-        e.gesture.preventDefault();
                _y.UI.styleElement(this, "transition", "%PREFIX%transform 0.3s ease-in-out");
         // how far do we have to go?
         var amountToTranslate = getComputedStyle ( self._listOfNotes.querySelector ( ".ui-list-action" ) ).getPropertyValue ( "width" );
@@ -142,7 +142,6 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
 
       self.hideActionForNote = function ( e )
       {
-        e.gesture.preventDefault();
                _y.UI.styleElement(this, "transition", "%PREFIX%transform 0.3s ease-in-out");
         _y.UI.styleElement ( this, "transform", "translateX(0px)" );
       }
@@ -158,19 +157,18 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
          navigator.app.exitApp();
       }
 
-      /**
-       * Render the template, passing the app title and translated text
-       */
-      self.overrideSuper ( self.class, "render", self.render );
-      self.render = function ()
-      {
-         // no need to call super; it's abstract
-         return _y.template ( noteListViewHTML, 
-                              {
-                                 "APP_TITLE": _y.T("APP_TITLE"),
-                                 "NEW_NOTE": _y.T("NEW_NOTE")
-                              });
-      }
+             /**
+              * Render the template, passing the app title and translated text
+              */
+             self.overrideSuper ( self.class, "render", self.render );
+             self.render = function ()
+             {
+               // no need to call super; it's abstract
+               return _y.template(_y.device.platform()==="android" ? noteListViewAndroidHTML : noteListViewHTML,
+                                  {
+                                    "APP_TITLE": _y.T("APP_TITLE")
+                                  });
+             };
 
       /**
        * RenderToElement renders the HTML, finds all the elements we want to 
@@ -189,7 +187,7 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListItemHTML,
          self._listOfNotes = self.element.querySelector ( ".ui-list" );
 
                // all our "new" buttons:
-               var newButtons = self.element.querySelectorAll(".ui-tool-bar .ui-bar-button");
+               var newButtons = self.element.querySelectorAll(".ui-bar-button");
                self._newTextNoteButton = newButtons[0];
                self._newAudioNoteButton = newButtons[1];
                self._newImageNoteButton = newButtons[2];

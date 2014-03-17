@@ -44,14 +44,14 @@
 define ( ["yasmf",
           "app/models/noteStorageSingleton",
           "text!html/noteListView.html!strip",
+          "text!html/noteListView_android.html!strip",
           "text!html/noteListItem.html!strip",
           "app/factories/noteFactory",
           "app/factories/noteViewFactory",
           "app/views/staticView",
           "hammer"],
-         function ( _y, noteStorageSingleton, noteListViewHTML,
-                    noteListItemHTML,
-                    noteFactory, noteViewFactory, StaticView, Hammer )
+         function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
+                    noteListItemHTML, noteFactory, noteViewFactory, StaticView, Hammer )
          {
            var _className = "NoteListView";
            var NoteListView = function ()
@@ -225,10 +225,9 @@ define ( ["yasmf",
              self.render = function ()
              {
                // no need to call super; it's abstract
-               return _y.template(noteListViewHTML,
+               return _y.template(_y.device.platform()==="android" ? noteListViewAndroidHTML : noteListViewHTML,
                                   {
-                                    "APP_TITLE": _y.T("APP_TITLE"),
-                                    "NEW_NOTE":  _y.T("NEW_NOTE")
+                                    "APP_TITLE": _y.T("APP_TITLE")
                                   });
              };
 
@@ -249,7 +248,7 @@ define ( ["yasmf",
                self._listOfNotes = self.element.querySelector(".ui-list");
 
                // all our "new" buttons:
-               var newButtons = self.element.querySelectorAll(".ui-tool-bar .ui-bar-button");
+               var newButtons = self.element.querySelectorAll(".ui-bar-button");
                self._newTextNoteButton = newButtons[0];
                self._newAudioNoteButton = newButtons[1];
                self._newImageNoteButton = newButtons[2];

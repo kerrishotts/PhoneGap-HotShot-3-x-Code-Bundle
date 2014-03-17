@@ -8,7 +8,7 @@ body
 }
 body.android
 {
-  background-color: #000;
+  background-color: #e7ece6;
 }
 
 .ui-tint-color
@@ -17,7 +17,7 @@ body.android
 }
 .android .ui-tint-color
 {
-  color: #669900;
+  color: #484848;
 }
 .ui-tint-color:active
 {
@@ -25,7 +25,7 @@ body.android
 }
 .android .ui-tint-color:active
 {
-  color: rgba(102,153,0, 0.5);
+  color: rgba(72,72,72, 0.5);
 }
 
 .ui-background-tint-color
@@ -34,7 +34,7 @@ body.android
 }
 .android .ui-background-tint-color
 {
-  background-color: #669900;
+  background-color: #484848;
 }
 
 .ui-background-tint-color:active
@@ -43,7 +43,7 @@ body.android
 }
 .android .ui-background-tint-color:active
 {
-  background-color: rgba(102,153,0, 0.5);
+  background-color: rgba(72,72,72, 0.5);
 }
 
 .ui-navigation-bar
@@ -52,7 +52,12 @@ body.android
 }
 .android .ui-navigation-bar
 {
-  border-bottom: 2px solid #669900;
+  -webkit-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+  -ms-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+  border-bottom: 0;
+  background-color: #d7dcd6;
 }
 .ui-tool-bar
 {
@@ -60,12 +65,17 @@ body.android
 }
 .android .ui-tool-bar
 {
-  border-top: 2px solid #669900;
+  border-top: 0;
+  -webkit-box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
+  -ms-box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
+  background-color: #d7dcd6;
 }
 
 .android .ui-container.left-side
 {
-  border-right: 1px solid #669900;  
+  border-right: 1px solid #484848;
 }
 
 .ui-back-button::before
@@ -74,7 +84,7 @@ body.android
 }
 .android .ui-back-button::before
 {
-  background-color: #669900;
+  background-color: #484848;
 }
 .android .ui-back-button
 {
@@ -90,8 +100,8 @@ body.android
 }
 .android .noteListView, .android .noteEditView
 {
-  background-color: #000;
-  color: #FFF;
+  background-color: #e7ece6;
+  color: #484848;
 }
 
 .noteListView .ui-list-item
@@ -101,7 +111,7 @@ body.android
 }
 .android .noteListView .ui-list-item
 {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid rgba(72, 72, 72, 0.25);
   z-index: 1;
 }
 .noteListView .ui-list-item-contents
@@ -110,7 +120,7 @@ body.android
 }
 .android .noteListView .ui-list-item-contents
 {
-  background-color: #000;
+  background-color: #e7ece6;
 }
 
 .noteListView .ui-list-item:active,
@@ -121,7 +131,7 @@ body.android
 .android .noteListView .ui-list-item:active,
 .android .noteListView .ui-list-item-contents:active
 {
-  background-color: #242424;
+  background-color: #f7fcf6;
 }
 
 
@@ -136,7 +146,7 @@ body.android
 }
 .android .noteListView .ui-list-item .note-representation
 {
-  background-color: #669900;
+  background-color: #484848;
 }
 
 .noteListView .ui-list-item:active .note-representation
@@ -145,7 +155,23 @@ body.android
 }
 .android .noteListView .ui-list-item .note-representation
 {
-  background-color: #669900;
+  background-color: #484848;
+}
+.android .noteListView .ui-list-item .note-representation.ui-glyph-page-text-new
+{
+  background-color: #33B5E5;
+}
+.android .noteListView .ui-list-item .note-representation.ui-glyph-sound-wave
+{
+    background-color: #AA66CC;
+}
+.android .noteListView .ui-list-item .note-representation.ui-glyph-photo
+{
+    background-color: #FFBB33;
+}
+.android .noteListView .ui-list-item .note-representation.ui-glyph-film
+{
+    background-color: #99CC00;
 }
 
 
@@ -158,11 +184,16 @@ body.android
   margin-right: 35px;
   margin-left: 40px;
 }
-.noteListView .ui-list-item:active .note-name,
+.noteListView .ui-list-item:active .note-name
+{
+    color: #FFFFFF;
+}
+
 .android .noteListView .ui-list-item:active .note-name
 {
-  color: #FFFFFF;
+  color: #242424;
 }
+
 
 .noteListView .ui-list-item .note-modified-date
 {
@@ -174,14 +205,17 @@ body.android
 }
 .android .noteListView .ui-list-item .note-modified-date
 {
-  color: rgba(255, 255, 255, 0.5);
+  color: #606060;
 }
 .noteListView .ui-list-item:active .note-modified-date,
+.noteListView .ui-list-item:active .note-info
+{
+    color: rgba(255,255,255,0.5);
+}
 .android .noteListView .ui-list-item:active .note-modified-date,
-.noteListView .ui-list-item:active .note-info,
 .android .noteListView .ui-list-item:active .note-info
 {
-  color: rgba(255,255,255,0.5);
+  color: #242424;
 }
 
 
@@ -196,7 +230,7 @@ body.android
 }
 .android .noteListView .ui-list-item .note-info
 {
-  color: rgba(255, 255, 255, 0.5);
+  color: #606060;
 }
 
 .noteListView .ui-list-item .ui-indicator
@@ -205,7 +239,7 @@ body.android
 }
 .android .noteListView .ui-list-item .ui-indicator
 {
-  background-color: #669900;
+  background-color: #484848;
 }
 .noteListView .ui-list-item:active .ui-indicator
 {
@@ -213,7 +247,7 @@ body.android
 }
 .android .noteListView .ui-list-item:active .ui-indicator
 {
-  background-color: #669900;
+  background-color: #242424;
 }
 
 .noteEditView .ui-navigation-bar .ui-title, .noteEditView .ui-text-box
@@ -264,7 +298,7 @@ body.android
 .android .noteEditView .ui-text-box
 {
   font-family: "Roboto", "DroidSans", Helvetica, Arial, Sans-Serif;
-  color: #FFF;
+  color: #484848;
 }
 .AudioNoteEditView .ui-text-box
 {
@@ -280,8 +314,8 @@ body.android
 }
 .android .AudioNoteEditView .audio-container
 {
-  background-color: #333;
-  border-bottom: 2px solid #669900;
+  background-color: #e7ece6;
+  border-bottom: 2px solid #484848;
 }
 .AudioNoteEditView .audio-container div
 {

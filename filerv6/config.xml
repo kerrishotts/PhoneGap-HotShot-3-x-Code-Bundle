@@ -14,5 +14,6 @@
     <preference name="DisallowOverscroll" value="true"/>
     <preference name="HideKeyboardFormAccessoryBar" value="false"/>
     <preference name="Orientation" value="default" />
+    <preference name="KeyboardShrinksView" value="true"/>
     <preference name="BackgroundColor" value="0xfff1eee5" />
 </widget>

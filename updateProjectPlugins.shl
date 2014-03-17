@@ -12,7 +12,9 @@ cordova platform update ios
 cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -23,7 +25,9 @@ cordova platform update ios
 cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -36,8 +40,10 @@ echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.file-extras
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.file
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -51,9 +57,11 @@ cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.media
 cordova plugin rm org.apache.cordova.file-extras
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -67,10 +75,12 @@ cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.media
 cordova plugin rm org.apache.cordova.camera
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -86,11 +96,13 @@ cordova plugin rm org.apache.cordova.media
 cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.media-capture
 cordova plugin rm org.apache.cordova.file-extras
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
 cordova plugin add org.apache.cordova.media-capture
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -107,11 +119,13 @@ cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.media-capture
 cordova plugin rm org.apache.cordova.file-extras
 cordova plugin rm socialmessage
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
 cordova plugin add org.apache.cordova.media-capture
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -128,12 +142,14 @@ cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.media-capture
 cordova plugin rm socialmessage
 cordova plugin rm org.apache.cordova.file-extras
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
 cordova plugin add org.apache.cordova.media-capture
 cordova plugin add https://github.com/leecrossley/cordova-plugin-social-message.git
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -145,8 +161,10 @@ cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.geolocation
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -159,9 +177,11 @@ echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.geolocation
 cordova plugin rm com.photokandy.nativecontrols 
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
 cordova plugin add com.photokandy.nativecontrols 
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -173,8 +193,10 @@ cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.device-motion
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.device-motion
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -186,8 +208,10 @@ cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.device-motion
+cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.device-motion
+cordova plugin add org.apache.cordova.keyboard
 echo "... ... preparing platforms..."
 cordova prepare
 

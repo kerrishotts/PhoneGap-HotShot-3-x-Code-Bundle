@@ -13,6 +13,7 @@
     <preference name="webviewbounce" value="false" />
     <preference name="DisallowOverscroll" value="true"/>
     <preference name="HideKeyboardFormAccessoryBar" value="false"/>
+    <preference name="KeyboardShrinksView" value="true"/>
     <preference name="Orientation" value="default" />
     <preference name="BackgroundColor" value="0xfff1eee5" />
 </widget>

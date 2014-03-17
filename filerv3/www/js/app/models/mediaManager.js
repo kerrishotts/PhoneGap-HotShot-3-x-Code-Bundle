@@ -209,6 +209,7 @@ define ( ["yasmf"], function ( _y )
          self.notify ( "positionUpdated" );
          if (self.isPlaying) { self.notify ( "playingStopped" ); }
          if (self.isRecording) { self.notify ( "recordingStopped" ); }
+         self._media.release();
          self._state = MediaManager.STATE_STOPPED;
       }
 

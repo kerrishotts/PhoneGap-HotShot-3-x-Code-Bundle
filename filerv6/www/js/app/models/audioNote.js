@@ -69,6 +69,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( 
        */
       self.unitLabels = [ "app.an.SECONDS", "app.an.SECOND", "app.an.SECONDS" ];
 
+
       /**
        * Called to update the duration
        */
@@ -99,9 +100,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( 
             self._media = null;
          }
          self._media = new MediaManager();
-         var noteStorageSingleton = require("app/models/noteStorageSingleton");
-         var nativePath = noteStorageSingleton.fileManager.getNativeURL ( theMediaContents );
-         self._media.init ( nativePath );
+         self._media.init ( "cdvfile://localhost/persistent/" + theMediaContents );
          self.notify ( "mediaContentsChanged" );
          self._media.addListenerForNotification ( "durationUpdated", self._updateUnit );
          self._media.addListenerForNotification ( "recordingStopped", self._updateModificationDate );

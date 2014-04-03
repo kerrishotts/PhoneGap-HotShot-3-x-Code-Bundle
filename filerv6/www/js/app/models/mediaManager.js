@@ -173,7 +173,8 @@ define ( ["yasmf"], function ( _y )
             }
             // only update the duration and have yet to
             // give up calculating it (up to 100 seconds)
-            if ( self._duration > -100 && self._duration < 0 )
+            var minDurationAllowed = -100;
+            if ( self._duration > minDurationAllowed && self._duration < 0 )
             {
                var d = self._media.getDuration();
                if (d > -1)
@@ -183,7 +184,7 @@ define ( ["yasmf"], function ( _y )
                }
                else
                {
-                  if (self._duration > -100 )
+                  if (self._duration > minDurationAllowed )
                   { 
                      self._duration--; // this will eventually give up
                   }
@@ -205,11 +206,12 @@ define ( ["yasmf"], function ( _y )
        */
       self._mediaSuccess = function ()
       {
+         self._state = MediaManager.STATE_STOPPED;
          self._position = 0;
          self.notify ( "positionUpdated" );
          if (self.isPlaying) { self.notify ( "playingStopped" ); }
          if (self.isRecording) { self.notify ( "recordingStopped" ); }
-         self._state = MediaManager.STATE_STOPPED;
+         self._media.release();
       }
 
       /**
@@ -263,8 +265,8 @@ define ( ["yasmf"], function ( _y )
          {
             self._media = new Media ( self.src, self._mediaSuccess, self._updateMediaError, self._updateMediaStatus );
             self._intervalId = setInterval ( self._updateStatus, 1000 );
-            self.notify ( "mediaAllocated");
             self._state = MediaManager.STATE_STOPPED;
+            self.notify ( "mediaAllocated");
          }
       }
       /**
@@ -282,8 +284,8 @@ define ( ["yasmf"], function ( _y )
             self._intervalId = null;
          }
          self._media = null;
-         self.notify ("mediaDestroyed");
          self._state = MediaManager.STATE_NONE;
+         self.notify ("mediaDestroyed");
       }
 
       /*
@@ -300,7 +302,7 @@ define ( ["yasmf"], function ( _y )
          self._destroyMediaObjectIfNecessary();
          if (typeof newSrc !=="undefined")
          {
-           self._src = newSrc.replace("file://", "");
+           self._src = newSrc;
            self._createMediaObjectIfNecessary();
          }
          else
@@ -320,8 +322,8 @@ define ( ["yasmf"], function ( _y )
          {
             self.stop();
          }
-         self._media.play();
          self.notify ( "playingStarted" );
+         self._media.play();
          self._state = MediaManager.STATE_PLAYING;
       }
 
@@ -334,8 +336,8 @@ define ( ["yasmf"], function ( _y )
          if (self.isPlaying)
          {
             self._media.pause();
-            self.notify ( "playingPaused" );
             self._state = MediaManager.STATE_PAUSED;
+            self.notify ( "playingPaused" );
          }
          else if (self.isRecording)
          {
@@ -356,10 +358,10 @@ define ( ["yasmf"], function ( _y )
         self._media.startRecord();
         self._position = 0; // recording overwrites anything else
         self._duration = 0; // we will update this value each updateStatus
+        self._state = MediaManager.STATE_RECORDING;
         self.notify ( "recordingStarted" );
         self.notify ( "durationUpdated" );
         self.notify ( "positionUpdated" );
-        self._state = MediaManager.STATE_RECORDING;
       }
 
       /**
@@ -370,6 +372,7 @@ define ( ["yasmf"], function ( _y )
          self._createMediaObjectIfNecessary();
          if (self.isRecording)
          {
+            self._state = MediaManager.STATE_STOPPED;
             self._media.stopRecord();
             self.notify ( "recordingStopped" );
             self._media.release(); // Android requires this to actually release the recording resources.
@@ -378,15 +381,15 @@ define ( ["yasmf"], function ( _y )
             self._media.stop();    // but there's no sense in actually /playing/ anything, so stop immediately
             self._media.release(); // and release the new resource. The duration will be updated at next update
          }
-         if (self.isPlaying)
+         else if (self.isPlaying || self.isPaused )
          {
+            self._state = MediaManager.STATE_STOPPED;
             self._media.stop();
             self._position = 0;
             self.notify ( "positionUpdated" );
             self.notify ( "playingStopped" );
             self._media.release();
          }
-         self._state = MediaManager.STATE_STOPPED;
       }
 
       /**

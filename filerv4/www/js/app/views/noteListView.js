@@ -366,7 +366,7 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
       "TRASH":
       {
         "EN": "Trash",
-        "ES": "Basura"
+        "ES": "Borrar"
       }
    });
 

@@ -40,7 +40,7 @@
          onevar:false 
  */
 /*global define*/
-define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( _y, BaseNote, MediaManager)
+define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( _y, BaseNote, MediaManager )
 {
    var _className = "AudioNote";
    var AudioNote = function ()
@@ -68,6 +68,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( 
        * New unit labels -- in seconds
        */
       self.unitLabels = [ "app.an.SECONDS", "app.an.SECOND", "app.an.SECONDS" ];
+
 
       /**
        * Called to update the duration
@@ -99,9 +100,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( 
             self._media = null;
          }
          self._media = new MediaManager();
-         var noteStorageSingleton = require("app/models/noteStorageSingleton");
-         var nativePath = noteStorageSingleton.fileManager.getNativeURL ( theMediaContents );
-         self._media.init ( nativePath );
+         self._media.init ( "cdvfile://localhost/persistent/" + theMediaContents );
          self.notify ( "mediaContentsChanged" );
          self._media.addListenerForNotification ( "durationUpdated", self._updateUnit );
          self._media.addListenerForNotification ( "recordingStopped", self._updateModificationDate );

@@ -454,7 +454,7 @@ define ( ["yasmf",
                "TRASH":
                {
                  "EN": "Trash",
-                 "ES": "Basura"
+                 "ES": "Borrar"
                },
                "CANCEL":
                {

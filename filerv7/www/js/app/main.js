@@ -62,13 +62,13 @@ define ( ["yasmf", "app/views/noteListView", "app/views/staticView"], function (
    APP.onConnectionStatusChanged = function (sender, notification)
    {
       var friendlyMessage = "";
-      if (APP._lastConnectionStatus == "onApplicationOffline" &&
-          notification == "onApplicationOnline")
+      if (APP._lastConnectionStatus == "applicationOffline" &&
+          notification == "applicationOnline")
       {
          friendlyMessage = _y.T("Your Internet Connection has been restored.");
       }
-      if (APP._lastConnectionStatus !== "onApplicationOffline" &&
-          notification == "onApplicationOffline")
+      if (APP._lastConnectionStatus !== "applicationOffline" &&
+          notification == "applicationOffline")
       {
          friendlyMessage = _y.T("Your Internet Connection is offline.");
       }
@@ -98,10 +98,10 @@ define ( ["yasmf", "app/views/noteListView", "app/views/staticView"], function (
 
    APP.onBatteryStatusChanged = function (sender, notification, data)
    {
-      console.log ( "Battery status: " + data[0] + "; is plugged in? " + data[1] );
+      console.log ( "Battery status: " + data[0].level + "; is plugged in? " + data[0].isPlugged );
    }
 
-   APP.onMenuButton = function ()
+   APP.onMenuButtonPressed = function ()
    {
       if (typeof APP.navigationController !== "undefined")
       {
@@ -112,7 +112,7 @@ define ( ["yasmf", "app/views/noteListView", "app/views/staticView"], function (
       }
    }
 
-   APP.onSearchButton = function ()
+   APP.onSearchButtonPressed = function ()
    {
       if (typeof APP.navigationController !== "undefined")
       {
@@ -126,37 +126,35 @@ define ( ["yasmf", "app/views/noteListView", "app/views/staticView"], function (
    APP.start = function ()
    {
       // start listening for resume/pause events
-      var gN = _y.UI.globalNotifications;
-      gN.registerNotification ( "onApplicationPause" );
-      gN.registerNotification ( "onApplicationResume" );
-      gN.registerNotification ( "onApplicationOnline" );
-      gN.registerNotification ( "onApplicationOffline" );
-      gN.registerNotification ( "onApplicationBatteryCritical" );
-      gN.registerNotification ( "onApplicationBatteryLow" );
-      gN.registerNotification ( "onApplicationBatteryStatus" );
-      gN.registerNotification ( "onApplicationMenuButton" );
-      gN.registerNotification ( "onApplicationSearchButton" );
+     var gN = _y.UI.globalNotifications;
+     var notifications = { "pause":            { notification: "applicationPause",   handler: APP.onPause },
+       "resume":          { notification: "applicationResume",  handler: APP.onResume },
+       "online":          { notification: "applicationOnline",  handler: APP.onConnectionStatusChanged },
+       "offline":         { notification: "applicationOffline", handler: APP.onConnectionStatusChanged },
+       "batterycritical": { notification: "batteryCritical",    handler: APP.onBatteryStatusChanged },
+       "batterylow":      { notification: "batteryLow",         handler: APP.onBatteryStatusChanged },
+       "batterystatus":   { notification: "batteryStatus",      handler: APP.onBatteryStatusChanged },
+       "menubutton":      { notification: "menuButtonPressed",  handler: APP.onMenuButtonPressed },
+       "searchbutton":    { notification: "searchButtonPressed",handler: APP.onSearchButtonPressed }
+     };
 
-      gN.addListenerForNotification ( "onApplicationPause", APP.onPause );
-      gN.addListenerForNotification ( "onApplicationResume", APP.onResume );
-      gN.addListenerForNotification ( "onApplicationOnline", APP.onConnectionStatusChanged );
-      gN.addListenerForNotification ( "onApplicationOffline", APP.onConnectionStatusChanged );
-      gN.addListenerForNotification ( "onApplicationBatteryCritical", APP.onBatteryStatusChanged );
-      gN.addListenerForNotification ( "onApplicationBatteryLow", APP.onBatteryStatusChanged );
-      gN.addListenerForNotification ( "onApplicationBatteryStatus", APP.onBatteryStatusChanged );
-      gN.addListenerForNotification ( "onApplicationMenuButton", APP.onMenuButton );
-      gN.addListenerForNotification ( "onApplicationSearchButton", APP.onSearchButton );
-
-      window.addEventListener ( "pause", function () { gN.notify ("onApplicationPause"); }, false );
-      window.addEventListener ( "resume", function () { gN.notify ("onApplicationResume"); }, false );
-      window.addEventListener ( "online", function () { gN.notify ("onApplicationOnline"); }, false );
-      window.addEventListener ( "offline", function () { gN.notify ("onApplicationOffline"); }, false );
-      window.addEventListener ( "batterycritical", function ( level, isPlugged ) { gN.notify ("onApplicationBatteryCritical", [level, isPlugged]); }, false );
-      window.addEventListener ( "batterylow", function ( level, isPlugged ) { gN.notify ("onApplicationBatteryLow", [level, isPlugged]); }, false );
-      window.addEventListener ( "batterystatus", function ( level, isPlugged ) { gN.notify ("onApplicationBatteryStatus", [level, isPlugged]); }, false );
-      window.addEventListener ( "menubutton", function () { gN.notify ("onApplicationMenuButton"); }, false );
-      window.addEventListener ( "searchbutton", function () { gN.notify ("onApplicationSearchButton"); }, false );
-
+     for ( var DOMEvent in notifications )
+     {
+       if ( notifications.hasOwnProperty ( DOMEvent ) )
+       {
+         var notification = notifications[DOMEvent];
+         gN.registerNotification( notification.notification );
+         gN.addListenerForNotification( notification.notification, notification.handler );
+         (function (notification)
+         {
+           window.addEventListener( DOMEvent, function ()
+           {
+             var args = Array.prototype.slice.call(arguments);
+             gN.notify(notification, args);
+           }, false);
+         })(notification.notification);
+       }
+     }
 
       // find the rootContainer DOM element
       var rootContainer = _y.ge("rootContainer");

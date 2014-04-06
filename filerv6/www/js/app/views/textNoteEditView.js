@@ -261,11 +261,12 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       },
       "app.nev.action.DELETE_NOTE":
       {
-        "EN": "Delete Note"
+        "EN": "Delete Note", "ES": "Eliminar Nota"
       },
       "app.nev.action.ARE_YOU_SURE_THIS_ACTION_CANT_BE_UNDONE":
       {
-        "EN": "Are you sure? This action can't be undone."
+        "EN": "Are you sure? This action can't be undone.",
+        "ES": "¿Está seguro? Esta acción no se puede deshacer."
       }
    });
 

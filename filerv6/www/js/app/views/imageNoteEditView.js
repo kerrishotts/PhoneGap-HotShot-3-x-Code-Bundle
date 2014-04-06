@@ -69,20 +69,18 @@ function ( _y, noteStorageSingleton, imageNoteViewHTML,
       self.overrideSuper ( self.class, "shareNote", self.shareNote );
       self.shareNote = function ()
       {
-        var fe = cordova.require("org.apache.cordova.file-extras.FileExtras");
-        fe.getDocumentsDirectory(function (documentRoot)
-                                 {
-                                   self.saveNote();
-                                   var message = {
-                                     subject: self._note.name,
-                                     text: self._note.textContents
-                                   };
-                                   if (self._note.unitValue > 0)
-                                   {
-                                     message.image = "file://" + documentRoot.fullPath + self._note.mediaContents;
-                                   }
-                                   window.socialmessage.send ( message );
-                                 });
+        var fm = noteStorageSingleton.fileManager;
+        var nativePath = fm.getNativeURL ( self._note.mediaContents );
+        self.saveNote();
+        var message = {
+          subject: self._note.name,
+          text: self._note.textContents
+        };
+        if (self._note.unitValue > 0)
+        {
+          message.image = nativePath;
+        }
+        window.socialmessage.send ( message );
       }
 
       /**

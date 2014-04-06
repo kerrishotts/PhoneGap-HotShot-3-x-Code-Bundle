@@ -182,7 +182,7 @@ define ( ["yasmf"], function ( _y )
 
       self.getFormattedUnitValue = function ()
       {
-        return _y.N(self.unitValue) + " " + _y.T(self.unitLabels[Math.min((self.unitLabels.length-1),self.unitValue)]);
+        return _y.N(self.unitValue) + " " + _y.T(self.unitLabels[Math.min((self.unitLabels.length-1),Math.round(self.unitValue))]);
       }
       Object.defineProperty ( self, "formattedUnitValue", {get: self.getFormattedUnitValue, configurable: true});
 

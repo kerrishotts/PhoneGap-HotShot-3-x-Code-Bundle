@@ -75,7 +75,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/videoManager"], function ( 
        */
       self._updateUnit = function ()
       {
-         self.unitValue = self._video.capturedDuration; 
+         self.unitValue = Math.round(self._video.capturedDuration);
       }
 
       /**

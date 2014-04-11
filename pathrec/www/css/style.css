@@ -1,5 +1,5 @@
 /**
- * Filer v1 Styles
+ * PathRec Styles
  */
 
 body
@@ -8,73 +8,73 @@ body
 }
 body.android
 {
-  background-color: #000;
+  background-color: #e7ece6;
 }
 
-.ui-tint-color
-{
-  color: #45bc64; 
-}
+.ui-tint-color,
 .android .ui-tint-color
 {
-  color: #669900;
+  color: white;
 }
-.ui-tint-color:active
-{
-  color: rgba(69,188,100,0.5);
-}
+.ui-tint-color:active,
 .android .ui-tint-color:active
 {
-  color: rgba(102,153,0, 0.5);
+  color: rgba(255,255,255, 0.5);
 }
 
-.ui-background-tint-color
-{
-  background-color: #45bc64; 
-}
+.ui-background-tint-color,
 .android .ui-background-tint-color
 {
-  background-color: #669900;
+  background-color: white;
 }
-
-.ui-background-tint-color:active
-{
-  background-color: rgba(69,188,100,0.5);
-}
+.ui-background-tint-color:active,
 .android .ui-background-tint-color:active
 {
-  background-color: rgba(102,153,0, 0.5);
+  background-color: rgba(255,255,255, 0.5);
 }
 
 .ui-navigation-bar
 {
-  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+  background-image: -webkit-linear-gradient(top, rgb(32, 164, 0) 50%, rgba(32, 164, 0, 0.75) 100%);
+  background-image: -moz-linear-gradient(top, rgb(32, 164, 0) 50%, rgba(32, 164, 0, 0.75) 100%);
+  background-image: -ms-linear-gradient(top, rgb(32, 164, 0) 50%, rgba(32, 164, 0, 0.75) 100%);
+  background-image: -o-linear-gradient(top, rgb(32, 164, 0) 50%, rgba(32, 164, 0, 0.75) 100%);
+  background-image: linear-gradient(top, rgb(32, 164, 0) 50%, rgba(32, 164, 0, 0.75) 100%);
+  border-bottom: 1px solid rgba(16, 82, 0, 0.5);
+  color: white;
 }
 .android .ui-navigation-bar
 {
-  border-bottom: 2px solid #669900;
+  -webkit-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+  -ms-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
+  border-bottom: 0;
+  background-color: rgba(32,164,0,1);
 }
 .ui-tool-bar
 {
-  border-top: 1px solid rgba(87, 52, 32, 0.25);
+  border-top: 1px solid rgba(16, 82, 0, 0.5);
 }
 .android .ui-tool-bar
 {
-  border-top: 2px solid #669900;
+  border-top: 0;
+  -webkit-box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
+  -ms-box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
+  background-color: #d7dcd6;
 }
 
 .android .ui-container.left-side
 {
-  border-right: 1px solid #669900;  
+  border-right: 1px solid rgba(0,0,0,.125);
 }
 
-.ui-back-button::before
-{
-  background-color: #45bc64;
-}
+.ui-back-button::before,
 .android .ui-back-button::before
 {
-  background-color: #669900;
+  background-color: white;
 }
 .android .ui-back-button
 {
@@ -90,8 +90,8 @@ body.android
 }
 .android .pathListView, .android .pathEditView, .android .staticView
 {
-  background-color: #000;
-  color: #FFF;
+  background-color: #e7ece6;
+  color: #484848;
 }
 
 .pathListView .ui-list-item
@@ -101,7 +101,7 @@ body.android
 }
 .android .pathListView .ui-list-item
 {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid #C0C0C0;
   z-index: 1;
 }
 
@@ -123,7 +123,7 @@ body.android
 }
 .android .pathListView .ui-list-item-contents
 {
-  background-color: #000;
+  background-color: #e7ece6;
 }
 
 .pathListView .ui-list-item:active,
@@ -134,7 +134,7 @@ body.android
 .android .pathListView .ui-list-item:active,
 .android .pathListView .ui-list-item-contents:active
 {
-  background-color: #242424;
+  background-color: #f7fcf6;
 }
 
 
@@ -170,12 +170,15 @@ body.android
 }
 .android .pathListView .ui-list-item .path-modified-date
 {
-  color: rgba(255, 255, 255, 0.5);
+  color: #606060;
 }
-.pathListView .ui-list-item:active .path-modified-date,
-.android .pathListView .ui-list-item:active .path-modified-date
+.pathListView .ui-list-item:active .path-modified-date
 {
   color: rgba(255,255,255,0.5);
+}
+.android .pathListView .ui-list-item:active .path-modified-date
+{
+  color: #242424;
 }
 
 .pathListView.wide .ui-list-item .path-modified-date
@@ -190,7 +193,7 @@ body.android
 }
 .android .pathListView .ui-list-item .ui-indicator
 {
-  background-color: #669900;
+  background-color: #484848;
 }
 .pathListView .ui-list-item:active .ui-indicator
 {
@@ -198,7 +201,7 @@ body.android
 }
 .android .pathListView .ui-list-item:active .ui-indicator
 {
-  background-color: #669900;
+  background-color: #242424;
 }
 
 .pathListView.wide .ui-list-item .ui-indicator

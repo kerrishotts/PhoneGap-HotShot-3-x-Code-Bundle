@@ -413,12 +413,22 @@ define ( ["yasmf/util/device", "yasmf/util/object"], function ( theDevice, BaseO
         curConvenience = "droid-phone";
       }
 
-      document.body.setAttribute("class", curDevice + " " + curFormFactor + " " + curOrientation + " " + curScale + " " + curConvenience);
+      if (typeof document.body !== "undefined" && document.body !== null)
+      {
+        document.body.setAttribute("class", curDevice + " " + curFormFactor + " " + curOrientation + " " + curScale + " " + curConvenience);
+      }
 
       self.notify("orientationChanged");
     };
     window.addEventListener('orientationchange', self.handleOrientationChange, false);
-    self.handleOrientationChange();
+    if (typeof document.body !== "undefined" && document.body !== null)
+    {
+      self.handleOrientationChange();
+    }
+    else
+    {
+      setTimeout ( self.handleOrientationChange, 0);
+    }
     return self;
   };
   /**
@@ -443,8 +453,14 @@ define ( ["yasmf/util/device", "yasmf/util/object"], function ( theDevice, BaseO
   /**
    * Create the root container
    */
-  UI._createRootContainer();
-
+  if (typeof document.body !== "undefined" && document.body !== null)
+  {
+    UI._createRootContainer();
+  }
+  else
+  {
+    setTimeout ( UI._createRootContainer, 0);
+  }
 
   return UI;
 });

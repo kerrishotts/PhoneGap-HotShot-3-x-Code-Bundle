@@ -214,6 +214,8 @@ define ( ["yasmf/ui/core", "yasmf/ui/viewContainer"], function ( UI, ViewContain
          // now add the left and right views
          self.leftView = theLeftView;
          self.rightView = theRightView;
+
+        return self;
       }
 
       self.overrideSuper ( self.class, "initWithOptions", self.initWithOptions );
@@ -235,10 +237,11 @@ define ( ["yasmf/ui/core", "yasmf/ui/viewContainer"], function ( UI, ViewContain
             if ( typeof options.viewType !== "undefined" ) { self.viewType = options.viewType; }
             if ( typeof options.leftViewStatus !== "undefined" ) { self.leftViewStatus = options.leftViewStatus; }
          }
+
+        return self;
       }
 
-
-
+     self._autoInit.apply (self, arguments);
       return self;
    }
    return SplitViewController;

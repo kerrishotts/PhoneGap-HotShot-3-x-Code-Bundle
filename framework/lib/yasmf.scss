@@ -165,6 +165,31 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
           mask-repeat: $value;
 }
 
+@mixin flex-box
+{
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin order ( $value... )
+{
+  -webkit-box-ordinal-group: $value;
+  -moz-box-ordinal-group: $value;
+  -ms-flex-order: $value;
+  -webkit-order: $value;
+  order: $value;
+}
+@mixin flex ( $value... )
+{
+  -webkit-box-flex: $value;
+  -moz-box-flex: $value;
+  -webkit-flex: $value;
+  -ms-flex: $value;
+  flex: $value;
+}
 //****************************************************************************
 //
 // mixins (convenience)
@@ -427,6 +452,7 @@ $android-destructive-color: #CC0000;
   right: 0;
   font: 18px/44px $font-stack;
   font-weight: 300;
+  @include flex-box();
 }
 /* iOS 7's navbar needs to account for the status bar. Apparently the status bar
    can be different sizes, and yet based on testing with a double-height status
@@ -458,19 +484,24 @@ $android-destructive-color: #CC0000;
    TODO: account for bar button groups and back button */
 .ui-navigation-bar .ui-title
 {
-  position: absolute;
-  left: 0;
-  right: 0;
+  //position: absolute;
+  //left: 0;
+  //right: 0;
   text-align: center;
   font-weight: bold;
   height: 44px;
+  @include flex(1);
+  @include order(1);
+  position: initial;
 }
 /* Android left-aligns the title */
 .android .ui-navigation-bar .ui-title
 {
-  left: 10px;
-  right: 10px;
+  //left: 10px;
+  //right: 10px;
   text-align: left;
+  padding-left: 10px;
+  padding-right: 10px;
   height: 48px;
 }
 
@@ -494,6 +525,7 @@ $android-destructive-color: #CC0000;
   right: 0;
   font: 18px/44px $font-stack;
   font-weight: 300;
+  @include flex-box();
 }
 .android .ui-tool-bar
 {
@@ -609,8 +641,10 @@ $android-destructive-color: #CC0000;
 .ui-tool-bar .ui-bar-button-group,
 .ui-tab-bar .ui-bar-button-group
 {
-  position: absolute;
+//  position: absolute;
+  position: initial;
   height: 100%;
+  @include flex(none);
 }
 .ios7 .ui-navigation-bar .ui-bar-button-group
 {
@@ -623,23 +657,26 @@ $android-destructive-color: #CC0000;
 .ui-tool-bar .ui-bar-button-group.ui-align-right,
 .ui-tab-bar .ui-bar-button-group.ui-align-right
 {
-  right: 0;
-  margin-right: 10px;
+  //right: 0;
+  @include order(2);
+  text-align: right;
 }
 .ui-navigation-bar .ui-bar-button-group.ui-align-left,
 .ui-tool-bar .ui-bar-button-group.ui-align-left,
 .ui-tab-bar .ui-bar-button-group.ui-align-left
 {
-  left: 0;
-  margin-left: 10px;
+  //left: 0
+  @include order(0);
+  text-align: left;
 }
 .ui-navigation-bar .ui-bar-button-group.ui-align-center,
 .ui-tool-bar .ui-bar-button-group.ui-align-center,
 .ui-tab-bar .ui-bar-button-group.ui-align-center
 {
-  left: 0;
-  right: 0;
+  //left: 0;
+  //right: 0;
   text-align: center;
+  @include order(1);
 }
 
 /* Any bar button within a group inherits the group's alignment */
@@ -648,14 +685,14 @@ $android-destructive-color: #CC0000;
 .ui-tab-bar .ui-bar-button-group.ui-align-right .ui-bar-button
 {
   text-align: right;
-  padding-left: 10px;
+  padding-right: 10px;
 }
 .ui-navigation-bar .ui-bar-button-group.ui-align-left .ui-bar-button,
 .ui-tool-bar .ui-bar-button-group.ui-align-left .ui-bar-button,
 .ui-tab-bar .ui-bar-button-group.ui-align-left .ui-bar-button
 {
   text-align: left;
-  padding-right: 10px;
+  padding-left: 10px;
 }
 .ui-navigation-bar .ui-bar-button-group.ui-align-center .ui-bar-button,
 .ui-tool-bar .ui-bar-button-group.ui-align-center .ui-bar-button,
@@ -893,6 +930,7 @@ $android-selection-color: rgba(36, 36, 36, 1);
   @include mask-size(30px 30px);
   @include mask-repeat(no-repeat);
   height: 100%;
+  @include box-sizing(border-box);
 }
 
 /*****************************************************************************
@@ -910,6 +948,7 @@ $android-selection-color: rgba(36, 36, 36, 1);
   vertical-align: middle;
   @include mask-image(url("./yasmf-assets/chevron-left-thick@2x.png"));
   @include mask-size(30px 30px);
+  @include mask-repeat(no-repeat);
   margin-left: -10px;
   margin-right: -5px;
   content: "";
@@ -917,14 +956,16 @@ $android-selection-color: rgba(36, 36, 36, 1);
 .android .ui-back-button::before
 {
   width: 15px;
-  height: 30px;
+  height: 48px;
   @include mask-size(15px 30px);
+  @include mask-position(left 5px);
   margin-right: -10px;
   margin-left: -7px;
 }
 .android .ui-back-button
 {
   color: transparent;
+  font-size: 0;
   min-width: 15px;
   width: 15px;
   height: 48px;

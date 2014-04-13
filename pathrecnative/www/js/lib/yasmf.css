@@ -297,7 +297,12 @@ div {
   left: 0;
   right: 0;
   font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-serif;
-  font-weight: 300; }
+  font-weight: 300;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex; }
 
 /* iOS 7's navbar needs to account for the status bar. Apparently the status bar
    can be different sizes, and yet based on testing with a double-height status
@@ -324,18 +329,26 @@ div {
    however, and should be modified.
    TODO: account for bar button groups and back button */
 .ui-navigation-bar .ui-title {
-  position: absolute;
-  left: 0;
-  right: 0;
   text-align: center;
   font-weight: bold;
-  height: 44px; }
+  height: 44px;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  -webkit-box-ordinal-group: 1;
+  -moz-box-ordinal-group: 1;
+  -ms-flex-order: 1;
+  -webkit-order: 1;
+  order: 1;
+  position: initial; }
 
 /* Android left-aligns the title */
 .android .ui-navigation-bar .ui-title {
-  left: 10px;
-  right: 10px;
   text-align: left;
+  padding-left: 10px;
+  padding-right: 10px;
   height: 48px; }
 
 /*****************************************************************************
@@ -364,7 +377,12 @@ div {
   left: 0;
   right: 0;
   font: 18px/44px -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-serif;
-  font-weight: 300; }
+  font-weight: 300;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex; }
 
 .android .ui-tool-bar {
   height: 48px;
@@ -468,8 +486,13 @@ div {
 .ui-navigation-bar .ui-bar-button-group,
 .ui-tool-bar .ui-bar-button-group,
 .ui-tab-bar .ui-bar-button-group {
-  position: absolute;
-  height: 100%; }
+  position: initial;
+  height: 100%;
+  -webkit-box-flex: none;
+  -moz-box-flex: none;
+  -webkit-flex: none;
+  -ms-flex: none;
+  flex: none; }
 
 .ios7 .ui-navigation-bar .ui-bar-button-group {
   height: 44px; }
@@ -479,34 +502,45 @@ div {
 .ui-navigation-bar .ui-bar-button-group.ui-align-right,
 .ui-tool-bar .ui-bar-button-group.ui-align-right,
 .ui-tab-bar .ui-bar-button-group.ui-align-right {
-  right: 0;
-  margin-right: 10px; }
+  -webkit-box-ordinal-group: 2;
+  -moz-box-ordinal-group: 2;
+  -ms-flex-order: 2;
+  -webkit-order: 2;
+  order: 2;
+  text-align: right; }
 
 .ui-navigation-bar .ui-bar-button-group.ui-align-left,
 .ui-tool-bar .ui-bar-button-group.ui-align-left,
 .ui-tab-bar .ui-bar-button-group.ui-align-left {
-  left: 0;
-  margin-left: 10px; }
+  -webkit-box-ordinal-group: 0;
+  -moz-box-ordinal-group: 0;
+  -ms-flex-order: 0;
+  -webkit-order: 0;
+  order: 0;
+  text-align: left; }
 
 .ui-navigation-bar .ui-bar-button-group.ui-align-center,
 .ui-tool-bar .ui-bar-button-group.ui-align-center,
 .ui-tab-bar .ui-bar-button-group.ui-align-center {
-  left: 0;
-  right: 0;
-  text-align: center; }
+  text-align: center;
+  -webkit-box-ordinal-group: 1;
+  -moz-box-ordinal-group: 1;
+  -ms-flex-order: 1;
+  -webkit-order: 1;
+  order: 1; }
 
 /* Any bar button within a group inherits the group's alignment */
 .ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button,
 .ui-tool-bar .ui-bar-button-group.ui-align-right .ui-bar-button,
 .ui-tab-bar .ui-bar-button-group.ui-align-right .ui-bar-button {
   text-align: right;
-  padding-left: 10px; }
+  padding-right: 10px; }
 
 .ui-navigation-bar .ui-bar-button-group.ui-align-left .ui-bar-button,
 .ui-tool-bar .ui-bar-button-group.ui-align-left .ui-bar-button,
 .ui-tab-bar .ui-bar-button-group.ui-align-left .ui-bar-button {
   text-align: left;
-  padding-right: 10px; }
+  padding-left: 10px; }
 
 .ui-navigation-bar .ui-bar-button-group.ui-align-center .ui-bar-button,
 .ui-tool-bar .ui-bar-button-group.ui-align-center .ui-bar-button,
@@ -716,7 +750,12 @@ div {
   -ms-mask-repeat: no-repeat;
   -o-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  height: 100%; }
+  height: 100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box; }
 
 /*****************************************************************************
  *
@@ -740,23 +779,34 @@ div {
   -ms-mask-size: 30px 30px;
   -o-mask-size: 30px 30px;
   mask-size: 30px 30px;
+  -webkit-mask-repeat: no-repeat;
+  -moz-mask-repeat: no-repeat;
+  -ms-mask-repeat: no-repeat;
+  -o-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   margin-left: -10px;
   margin-right: -5px;
   content: ""; }
 
 .android .ui-back-button::before {
   width: 15px;
-  height: 30px;
+  height: 48px;
   -webkit-mask-size: 15px 30px;
   -moz-mask-size: 15px 30px;
   -ms-mask-size: 15px 30px;
   -o-mask-size: 15px 30px;
   mask-size: 15px 30px;
+  -webkit-mask-position: left 5px;
+  -moz-mask-position: left 5px;
+  -ms-mask-position: left 5px;
+  -o-mask-position: left 5px;
+  mask-position: left 5px;
   margin-right: -10px;
   margin-left: -7px; }
 
 .android .ui-back-button {
   color: transparent;
+  font-size: 0;
   min-width: 15px;
   width: 15px;
   height: 48px; }

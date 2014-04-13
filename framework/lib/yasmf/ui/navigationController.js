@@ -347,6 +347,8 @@ define ( ["yasmf/ui/core", "yasmf/ui/viewContainer"], function ( UI, ViewContain
 
          // now add the root view
          self.rootView = theRootView;
+
+         return self;
       }
 
       self.overrideSuper ( self.class, "initWithOptions", self.initWithOptions );
@@ -361,9 +363,10 @@ define ( ["yasmf/ui/core", "yasmf/ui/viewContainer"], function ( UI, ViewContain
             if ( typeof options.parent !== "undefined") { theParentElement = options.parent; }
             if ( typeof options.rootView !== "undefined") { theRootView = options.rootView; }
          }
-         self.init ( theRootView, theElementId, theElementTag, theElementClass, theParentElement );
+         return self.init ( theRootView, theElementId, theElementTag, theElementClass, theParentElement );
       }
 
+     self._autoInit.apply (self, arguments);
       return self;
    }
    return NavigationController;

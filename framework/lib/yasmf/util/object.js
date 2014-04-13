@@ -260,6 +260,7 @@ define (
       self.init = function ()
       {
         // since we're at the top of the hierarchy, we don't do anything.
+        return self;
       };
 
       /*
@@ -864,6 +865,33 @@ define (
                               defPropOptions);
       };
 
+      self._autoInit = function ( )
+      {
+        if (arguments.length > 0)
+        {
+          if (arguments.length == 1)
+          {
+            // chances are this is an initWithOptions, but make sure the incoming parameter is an object
+            if (typeof arguments[0] === "object") {
+              if (typeof self.initWithOptions !== "undefined" )
+              {
+                return self.initWithOptions.apply(self, arguments);
+              }
+              else
+              {
+                self.init.apply (self, arguments);
+              }
+            }
+            else {
+              return self.init.apply (self,arguments);
+            }
+          }
+          else {
+            return self.init.apply (self,arguments);
+          }
+        }
+      };
+
       /**
        *
        * Readies an object to be destroyed. The base object only clears the notifications and
@@ -878,7 +906,7 @@ define (
 
         // ready to be destroyed
       };
-
+      self._autoInit.apply (self, arguments);
       return self;
 
     };

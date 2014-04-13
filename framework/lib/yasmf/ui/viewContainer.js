@@ -190,6 +190,8 @@ define ( ["yasmf/util/object"], function ( BaseObject )
 
          // add ourselves to our parent.
          if ( typeof theParentElement !== "undefined" ) { self.parentElement = theParentElement; }
+
+        return self;
       }
 
       self.initWithOptions = function ( options )
@@ -207,6 +209,8 @@ define ( ["yasmf/util/object"], function ( BaseObject )
          {
             if ( typeof options.title !== "undefined" ) { self.title = options.title; }
          }
+
+        return self;
       }
 
       self.overrideSuper ( self.class, "destroy", self.destroy );
@@ -225,6 +229,7 @@ define ( ["yasmf/util/object"], function ( BaseObject )
          self.super ( _className, "destroy" );
 
       }
+      self._autoInit.apply (self, arguments);
       return self;
    }
 

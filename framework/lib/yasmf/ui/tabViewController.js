@@ -229,7 +229,7 @@ define ( ["yasmf/ui/core", "yasmf/ui/viewContainer",
             {
               // do what a normal view container does
               self.super ( _className, "init", [ theElementId, theElementTag, theElementClass, theParentElement ] );
-
+              return self;
             }
 
             self.overrideSuper ( self.class, "initWithOptions", self.initWithOptions );
@@ -249,8 +249,10 @@ define ( ["yasmf/ui/core", "yasmf/ui/viewContainer",
                 if ( typeof options.barPosition !== "undefined" ) { self.barPosition = options.barPosition; }
                 if ( typeof options.barAlignment !== "undefined" ) { self.barAlignment = options.barAlignment; }
               }
+              return self;
             }
 
+            self._autoInit.apply (self, arguments);
             return self;
           }
 

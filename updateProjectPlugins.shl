@@ -170,9 +170,11 @@ echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.geolocation
 cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.statusbar
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
 cordova plugin add org.apache.cordova.keyboard
+cordova plugin add org.apache.cordova.statusbar
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -186,10 +188,12 @@ cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.geolocation
 cordova plugin rm com.photokandy.nativecontrols 
 cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.statusbar
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
 cordova plugin add com.photokandy.nativecontrols 
 cordova plugin add org.apache.cordova.keyboard
+cordova plugin add org.apache.cordova.statusbar
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -202,9 +206,11 @@ echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.device-motion
 cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.statusbar
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.device-motion
 cordova plugin add org.apache.cordova.keyboard
+cordova plugin add org.apache.cordova.statusbar
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -217,9 +223,11 @@ echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.device-motion
 cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.statusbar
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.device-motion
 cordova plugin add org.apache.cordova.keyboard
+cordova plugin add org.apache.cordova.statusbar
 echo "... ... preparing platforms..."
 cordova prepare
 

@@ -4,11 +4,15 @@
 
 body
 {
-  background-color: #f1eee5;
+  background-color: #404040;
+}
+body.ios
+{
+    background-color: #404040;
 }
 body.android
 {
-  background-color: #e7ece6;
+  background-color: #404040;
 }
 
 .ui-tint-color,
@@ -35,12 +39,12 @@ body.android
 
 .ui-navigation-bar
 {
-  background-image: -webkit-linear-gradient(top, rgb(32, 164, 0) 50%, rgba(32, 164, 0, 0.75) 100%);
-  background-image: -moz-linear-gradient(top, rgb(32, 164, 0) 50%, rgba(32, 164, 0, 0.75) 100%);
-  background-image: -ms-linear-gradient(top, rgb(32, 164, 0) 50%, rgba(32, 164, 0, 0.75) 100%);
-  background-image: -o-linear-gradient(top, rgb(32, 164, 0) 50%, rgba(32, 164, 0, 0.75) 100%);
-  background-image: linear-gradient(top, rgb(32, 164, 0) 50%, rgba(32, 164, 0, 0.75) 100%);
-  border-bottom: 1px solid rgba(16, 82, 0, 0.5);
+  background-image: -webkit-linear-gradient(top, rgb(96, 224, 32) 0%, rgba(96, 224, 32, 0.75) 100%);
+  background-image: -moz-linear-gradient(top, rgb(96, 224, 32) 0%, rgba(96, 224, 32, 0.75) 100%);
+  background-image: -ms-linear-gradient(top, rgb(96, 224, 32) 0%, rgba(96, 224, 32, 0.75) 100%);
+  background-image: -o-linear-gradient(top, rgb(96, 224, 32) 0%, rgba(96, 224, 32, 0.75) 100%);
+  background-image: linear-gradient(top, rgb(96, 224, 32) 0%, rgba(96, 224, 32, 0.75) 100%);
+  border-bottom: 1px solid rgba(48, 112, 16, 0.75);
   color: white;
 }
 .android .ui-navigation-bar
@@ -50,25 +54,20 @@ body.android
   -ms-box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
   box-shadow: 0px 2px 5px rgba(0,0,0,0.2);
   border-bottom: 0;
-  background-color: rgba(32,164,0,1);
-}
-.ui-tool-bar
-{
-  border-top: 1px solid rgba(16, 82, 0, 0.5);
-}
-.android .ui-tool-bar
-{
-  border-top: 0;
-  -webkit-box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
-  -moz-box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
-  -ms-box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
-  box-shadow: 0px -2px 5px rgba(0,0,0,0.2);
-  background-color: #d7dcd6;
+  background-color: rgba(96,224,32,1);
 }
 
+.ui-container.left-side
+{
+    border-right: 1px solid rgba(48, 112, 16,0.75);
+}
 .android .ui-container.left-side
 {
-  border-right: 1px solid rgba(0,0,0,.125);
+  -webkit-box-shadow: 2px 0px 5px rgba(0,0,0,0.2);
+  -moz-box-shadow: 2px 0px 5px rgba(0,0,0,0.2);
+  -ms-box-shadow: 2px 0px 5px rgba(0,0,0,0.2);
+  box-shadow: 2px 0px 5px rgba(0,0,0,0.2);
+  zborder-right: 1px solid rgba(48, 112, 16,0.75);
 }
 
 .ui-back-button::before,
@@ -85,23 +84,23 @@ body.android
 
 .pathListView, .pathEditView, .staticView
 {
-  background-color: #f1eee5;
-  color: #573920; /*rgba (87, 52, 32)*/
+  background-color: #404040;
+  color: #FFFFFF;
 }
 .android .pathListView, .android .pathEditView, .android .staticView
 {
-  background-color: #e7ece6;
-  color: #484848;
+  background-color: #404040;
+  color: #FFFFFF;
 }
 
 .pathListView .ui-list-item
 {
   overflow: hidden; /* so we don't have to clear */
-  border-bottom: 1px solid rgba(87,52, 32, 0.25);
+  border-bottom: 1px solid #606060;
 }
 .android .pathListView .ui-list-item
 {
-  border-bottom: 1px solid #C0C0C0;
+  border-bottom: 1px solid #606060;
   z-index: 1;
 }
 
@@ -119,22 +118,22 @@ body.android
 
 .pathListView .ui-list-item-contents
 {
-  background-color: #f1eee5;
+  background-color: #404040;
 }
 .android .pathListView .ui-list-item-contents
 {
-  background-color: #e7ece6;
+  background-color: #404040;
 }
 
 .pathListView .ui-list-item:active,
 .pathListView .ui-list-item-contents:active
 {
-  background-color: rgba(58, 97, 154, 1);
+  background-color: #000000;
 }
 .android .pathListView .ui-list-item:active,
 .android .pathListView .ui-list-item-contents:active
 {
-  background-color: #f7fcf6;
+  background-color: #000000;
 }
 
 
@@ -160,40 +159,13 @@ body.android
   text-align: center;
 }
 
-.pathListView .ui-list-item .path-modified-date
-{
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 300;
-  color: rgba(87, 52, 32, 0.5);
-  float: left;
-}
-.android .pathListView .ui-list-item .path-modified-date
-{
-  color: #606060;
-}
-.pathListView .ui-list-item:active .path-modified-date
-{
-  color: rgba(255,255,255,0.5);
-}
-.android .pathListView .ui-list-item:active .path-modified-date
-{
-  color: #242424;
-}
-
-.pathListView.wide .ui-list-item .path-modified-date
-{
-  text-align: center;
-  float: inherit;
-}
-
 .pathListView .ui-list-item .ui-indicator
 {
-  background-color: rgba(87,52, 32, 0.5);
+  background-color: rgba(255,255,255, 0.5);
 }
 .android .pathListView .ui-list-item .ui-indicator
 {
-  background-color: #484848;
+  background-color: #808080;
 }
 .pathListView .ui-list-item:active .ui-indicator
 {
@@ -201,7 +173,7 @@ body.android
 }
 .android .pathListView .ui-list-item:active .ui-indicator
 {
-  background-color: #242424;
+  background-color: #FFFFFF;
 }
 
 .pathListView.wide .ui-list-item .ui-indicator
@@ -253,5 +225,5 @@ body.android
 
 .ui-split-view .ui-navigation-bar .ui-save-button
 {
-  display: inherit;
+  display: initial;
 }

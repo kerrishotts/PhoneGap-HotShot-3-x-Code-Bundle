@@ -261,8 +261,7 @@ function ( _y, pathStorageSingleton, pathListViewHTML,
                                    {
                                       "UID": path.uid,
                                       "TRASH": _y.T("TRASH"),
-                                      "NAME": path.name,
-                                      "MODIFIED": _y.D(path.modifiedDate,"D")
+                                      "NAME": path.name
                                    } );
               // attach any event handlers
               var contentsElement = e.querySelector ( ".ui-list-item-contents"),

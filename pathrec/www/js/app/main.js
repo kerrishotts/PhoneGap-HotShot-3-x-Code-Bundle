@@ -125,6 +125,11 @@ define ( ["yasmf", "app/views/pathListView", "app/views/staticView"], function (
    // APP.start will load the first view and kick us off
    APP.start = function ()
    {
+     // update the iOS 7 status bar
+     if (_y.device.platform() == "ios")
+     {
+       StatusBar.styleLightContent();
+     }
       // start listening for resume/pause events
       var gN = _y.UI.globalNotifications;
       gN.registerNotification ( "onApplicationPause" );

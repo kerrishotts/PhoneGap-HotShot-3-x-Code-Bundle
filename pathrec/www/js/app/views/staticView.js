@@ -54,6 +54,8 @@ function ( _y, staticViewHTML, Hammer )
       // always subclass
       self.subclass ( _className );
 
+      self._menuButton = null;
+
       self.overrideSuper ( self.class, "render", self.render );
       self.render = function ()
       {
@@ -62,6 +64,14 @@ function ( _y, staticViewHTML, Hammer )
                               {
                                  "PICK_A_PATH": _y.T("PICK_A_PATH")
                               });
+      }
+
+      self.overrideSuper ( self.class, "renderToElement", self.renderToElement );
+      self.renderToElement = function ()
+      {
+        self.super ( _className, "renderToElement" );
+        self._menuButton = self.element.querySelector ( ".ui-navigation-bar .ui-glyph-menu" );
+        Hammer(self._menuButton,{prevent_default:true}).on("tap", function () { self.navigationController.splitViewController.toggleLeftView() });
       }
 
       /**
@@ -86,6 +96,13 @@ function ( _y, staticViewHTML, Hammer )
 
          self.init ( theParentElement );
       }
+
+     self.overrideSuper ( self.class, "destroy", self.destroy );
+     self.destroy = function ()
+     {
+       self._menuButton = null;
+       self.super ( _className, "destroy" );
+     }
 
       return self;
    };

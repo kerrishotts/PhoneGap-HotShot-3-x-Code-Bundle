@@ -6589,7 +6589,7 @@ define ( 'yasmf/ui/splitViewController',["yasmf/ui/core", "yasmf/ui/viewContaine
 
       self.registerNotification ( "viewsChanged" );
 
-      self._viewType = "split"; // other valid: off-canvas
+      self._viewType = "split"; // other valid: off-canvas, split-overlay
       self.getViewType = function ()
       {
          return self._viewType;
@@ -6605,7 +6605,7 @@ define ( 'yasmf/ui/splitViewController',["yasmf/ui/core", "yasmf/ui/viewContaine
                               { get: self.getViewType, set: self.setViewType,
                                 configurable: true } );
 
-      self._leftViewStatus = "invisible";
+      self._leftViewStatus = "invisible"; // options: visible, invisible
       self.getLeftViewStatus = function ()
       {
          return self._leftViewStatus;
@@ -6620,6 +6620,17 @@ define ( 'yasmf/ui/splitViewController',["yasmf/ui/core", "yasmf/ui/viewContaine
                               { get: self.getLeftViewStatus, set: self.setLeftViewStatus,
                                 configurable: true } );
 
+      self.toggleLeftView = function ()
+      {
+        if (self.leftViewStatus === "visible")
+        {
+          self.leftViewStatus = "invisible";
+        }
+        else
+        {
+          self.leftViewStatus = "visible";
+        }
+      }
       /**
        * The array of views that this split view controller manages.
        * @type {Array}

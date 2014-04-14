@@ -325,12 +325,28 @@ div {
   @include transitionWPR(transform 0.3s ease-in-out);
 }
 
-.ui-off-canvas-view.ui-left-side-invisible
+.phone .ui-off-canvas-view
+{
+  width: calc(100% + 280px);
+  @include transform(translateX(-280px));
+}
+
+.ui-split-overlay-view
+{
+  width: 100%;
+}
+
+.ui-off-canvas-view.ui-left-side-invisible,
 {
   @include transform(translateX(-320px));
 }
 
-.ui-off-canvas-view.ui-left-side-visible
+.phone .ui-off-canvas-view.ui-left-side-invisible
+{
+  @include transform(translateX(-280px));
+}
+
+.ui-off-canvas-view.ui-left-side-visible,
 {
   @include transform(translateX(0));
 }
@@ -339,6 +355,12 @@ div {
 {
   width: 320px;
   border-right:1px solid rgba(0,0,0,0.25);
+  z-index:3;
+  @include transform(translateZ(3px));
+}
+.phone .ui-off-canvas-view .ui-container.left-side
+{
+  width: 280px;
 }
 .android .ui-container.left-side
 {
@@ -349,6 +371,11 @@ div {
 {
   width: calc(100% - 320px);
   left: 320px;
+}
+.phone .ui-off-canvas-view .ui-container.right-side
+{
+  width: calc(100% - 280px);
+  left: 280px;
 }
 
 .ui-split-view.ui-left-side-invisible .ui-container.left-side
@@ -364,6 +391,23 @@ div {
 .ui-split-view.ui-left-side-visible .ui-container.left-side
 {
   display: block;
+}
+
+.ui-split-overlay-view.ui-left-side-invisible .ui-container.left-side
+{
+  @include transform(translateX(-320px));
+  @include transitionWPR(transform 0.3s ease-in-out);
+}
+.ui-split-overlay-view.ui-left-side-visible .ui-container.left-side
+{
+  @include transform(translateX(0px));
+  @include transitionWPR(transform 0.3s ease-in-out);
+}
+
+.ui-split-overlay-view .ui-container.right-side
+{
+  width: 100%;
+  left: 0;
 }
 
 /*****************************************************************************
@@ -990,7 +1034,8 @@ $glyphs: arror-corners-inward, arrow-corners-outward, bookmark, books,
          play-filled, play-hollow, clock, delete, gear, list, magnifying-glass,
          page-text-new, pencil, plus, tag, trash, sound-wave, circle-filled-checked,
          photo, photo-add, film, chat-bubble, chat-bubble-dots, share, download,
-         circle-info, more, circle-outlined, gps-locate, square-filled, square-hollow;
+         circle-info, more, circle-outlined, gps-locate, square-filled, square-hollow,
+         menu;
 
 @each $glyph in $glyphs
 {

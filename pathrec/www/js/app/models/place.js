@@ -63,23 +63,23 @@ define ( ["yasmf", "gmaps"], function ( _y, gmaps )
     self.setPosition = function ( position )
     {
       var tempPosition = {};
+      var properties = [ "latitude", "longitude", "altitude", "heading", "speed" ];
+      var setProperty = function ( property )
+      {
+        if ( typeof position.coords !== "undefined" ) {
+          if ( typeof position.coords[property] !== "undefined" ) { tempPosition.coords[property] = position.coords[property]; }
+        }
+        if ( typeof position[property] !== "undefined" ) { tempPosition[property] = position[property]; }
+      }
+
       if ( typeof position !== "undefined" )
       {
         if ( typeof position.timestamp !== "undefined" ) { tempPosition.timestamp = position.timestamp; }
         if ( typeof position.coords !== "undefined" )
         {
           tempPosition.coords = {};
-          if ( typeof position.coords.latitude !== "undefined" ) { tempPosition.coords.latitude = position.coords.latitude; }
-          if ( typeof position.coords.longitude !== "undefined" ) { tempPosition.coords.longitude = position.coords.longitude; }
-          if ( typeof position.coords.altitude !== "undefined" ) { tempPosition.coords.altitude = position.coords.altitude; }
-          if ( typeof position.coords.heading !== "undefined" ) { tempPosition.coords.heading = position.coords.heading; }
-          if ( typeof position.coords.speed !== "undefined" ) { tempPosition.coords.speed = position.coords.speed; }
         }
-        if ( typeof position.latitude !== "undefined" ) { tempPosition.latitude = position.latitude; }
-        if ( typeof position.longitude !== "undefined" ) { tempPosition.longitude = position.longitude; }
-        if ( typeof position.altitude !== "undefined" ) { tempPosition.altitude = position.altitude; }
-        if ( typeof position.heading !== "undefined" ) { tempPosition.heading = position.heading; }
-        if ( typeof position.speed !== "undefined" ) { tempPosition.speed = position.speed; }
+        properties.forEach ( setProperty );
       }
       self._position = tempPosition;
       self.notify ( "positionChanged" );

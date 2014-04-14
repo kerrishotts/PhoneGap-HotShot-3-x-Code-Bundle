@@ -67,7 +67,6 @@ body.android
   -moz-box-shadow: 2px 0px 5px rgba(0,0,0,0.2);
   -ms-box-shadow: 2px 0px 5px rgba(0,0,0,0.2);
   box-shadow: 2px 0px 5px rgba(0,0,0,0.2);
-  zborder-right: 1px solid rgba(48, 112, 16,0.75);
 }
 
 .ui-back-button::before,
@@ -196,34 +195,28 @@ body.android
 
 .pathEditView .ui-navigation-bar .ui-title
 {
-  left: 80px;
-  right: 80px;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.android .pathEditView .ui-navigation-bar .ui-title
-{
-  left: 20px;
-}
-
-.pathEditView .ui-map-container
+.pathEditView .map-container
 {
     width: 100%;
     height: 100%;
 }
 
-.android .ui-split-view .pathEditView .ui-navigation-bar .ui-title
+.ui-split-view .ui-navigation-bar .ui-glyph-menu,
+.ui-container .ui-navigation-bar .ui-glyph-menu
 {
-  left: 80px;
+    display: none;
+}
+.ui-split-overlay-view .ui-navigation-bar .ui-glyph-menu,
+.ui-off-canvas-view .ui-navigation-bar .ui-glyph-menu
+{
+    display: inline-block;
 }
 
-.ui-navigation-bar .ui-save-button
+.ui-off-canvas-view .ui-container.left-side .ui-navigation-bar .ui-glyph-menu
 {
-  display: none;
-}
-
-.ui-split-view .ui-navigation-bar .ui-save-button
-{
-  display: initial;
+    display: none;
 }

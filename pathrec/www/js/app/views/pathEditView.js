@@ -59,12 +59,11 @@ define(["yasmf", "app/models/pathStorageSingleton",
            // our internal pointers to specific elements
            self._navigationBar = null;
            self._nameEditor = null;
-           self._scrollContainer = null;
            self._mapContainer = null;
            self._backButton = null;
            self._locateButton = null;
            self._recordButton = null;
-           self._saveButton = null;
+           self._menuButton = null;
 
            // the path we're editing
            self._path = null;
@@ -219,6 +218,7 @@ define(["yasmf", "app/models/pathStorageSingleton",
              }
            }
 
+
            self.deletePath = function ()
            {
              var areYouSure = new _y.UI.Alert();
@@ -261,9 +261,7 @@ define(["yasmf", "app/models/pathStorageSingleton",
              return _y.template(pathEditViewHTML,
                                 {
                                   "PATH_NAME":   self._path.name,
-                                  "BACK":        _y.T("BACK"),
-                                  "DELETE_PATH": _y.T("app.pev.DELETE_PATH"),
-                                  "SAVE_PATH":   _y.T("app.pev.SAVE_PATH")
+                                  "BACK":        _y.T("BACK")
                                 });
            }
 
@@ -276,19 +274,17 @@ define(["yasmf", "app/models/pathStorageSingleton",
              // and now find and link up any elements we want to keep track of
              self._navigationBar = self.element.querySelector(".ui-navigation-bar");
              self._nameEditor = self.element.querySelector(".ui-navigation-bar .ui-title");
-             var navigationBarButtons = self.element.querySelectorAll(".ui-navigation-bar .ui-bar-button");
 
-             self._backButton = navigationBarButtons[0];
-             self._saveButton = navigationBarButtons[1];
-             self._locateButton = navigationBarButtons[2];
-             self._recordButton = navigationBarButtons[3];
+             self._backButton = self.element.querySelector(".ui-navigation-bar .ui-back-button");
+             self._menuButton = self.element.querySelector(".ui-navigation-bar .ui-glyph-menu");
+             self._locateButton = self.element.querySelector(".ui-navigation-bar .ui-glyph-gps-locate");
+             self._recordButton = self.element.querySelector(".ui-navigation-bar .ui-glyph-circle-outlined");
 
-             self._scrollContainer = self.element.querySelector(".ui-scroll-container");
-             self._mapContainer = self.element.querySelector(".ui-map-container");
+             self._mapContainer = self.element.querySelector(".map-container");
 
              // the back and delete buttons should have an event listener
              Hammer(self._backButton).on("tap", self.goBack);
-             Hammer(self._saveButton).on("tap", self.savePath);
+             Hammer(self._menuButton, {prevent_default:true}).on("tap", function () { self.navigationController.splitViewController.toggleLeftView() });
              Hammer(self._locateButton).on("tap", self.centerMapAroundLocation);
              Hammer(self._recordButton).on("tap", self.togglePathRecording);
 
@@ -323,13 +319,13 @@ define(["yasmf", "app/models/pathStorageSingleton",
 
                             // and create a polyline that we can work with
                             self._polyline = new gmaps.Polyline ( {
-                                                                    strokeColor: '#80A0C0', strokeOpacity:0.85,
-                                                                    strokeWeight:5 } );
+                                                                    strokeColor: '#60E020', strokeOpacity:0.85,
+                                                                    strokeWeight:10 } );
                             self._polyline.setMap ( self._map );
 
                             // add all the places in our path currently to the
                             // polyline
-                            self._path.places.map (
+                            self._path.places.forEach (
                               function ( place )
                               {
                                 self._polyline.getPath().push ( place.googleLatitudeLongitude );
@@ -390,10 +386,9 @@ define(["yasmf", "app/models/pathStorageSingleton",
              self._backButton = null;
              self._recordButton = null;
              self._locateButton = null;
-             self._scrollContainer = null;
              self._nameEditor = null;
              self._mapContainer = null;
-             self._saveButton = null;
+             self._menuButton = null;
 
              self._currentPositionMarker = null;
              self._lastKnownPosition = null;

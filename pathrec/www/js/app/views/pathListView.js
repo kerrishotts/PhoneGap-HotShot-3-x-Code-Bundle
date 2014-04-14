@@ -64,6 +64,7 @@ function ( _y, pathStorageSingleton, pathListViewHTML,
       self._scrollContainer = null;
       self._pathList = null;
       self._addPathButton = null;
+      self._menuButton = null;
 
       self._displayEditView = function ( theView )
       {
@@ -82,6 +83,10 @@ function ( _y, pathStorageSingleton, pathListViewHTML,
            }
            // change the root view of the right-side of the split view
            self.navigationController.splitViewController.rightView.rootView = theView;
+           // hide our selves
+           if ( self.navigationController.splitViewController.viewType !== "split") {
+             self.navigationController.splitViewController.toggleLeftView();
+           }
          }
          else
          {
@@ -222,10 +227,11 @@ function ( _y, pathStorageSingleton, pathListViewHTML,
          self._pathList = self.element.querySelector ( ".ui-list" );
 
          // all our buttons:
-         self._addPathButton = self.element.querySelector ( ".ui-navigation-bar .ui-bar-button" );
+         self._addPathButton = self.element.querySelector ( ".ui-navigation-bar .ui-glyph-plus" );
+         self._menuButton = self.element.querySelector ( ".ui-navigation-bar .ui-glyph-menu" );
 
-         // the new Button should have an event listener
-         Hammer ( self._addPathButton ).on ("tap", self.createNewPath );
+         Hammer ( self._addPathButton,{prevent_default:true} ).on ("tap", self.createNewPath );
+         Hammer(self._menuButton,{prevent_default:true}).on("tap", function () { self.navigationController.splitViewController.toggleLeftView() });
 
          // and make sure we know about the physical back button
          _y.UI.backButton.addListenerForNotification ( "backButtonPressed", self.quitApp );
@@ -267,15 +273,15 @@ function ( _y, pathStorageSingleton, pathListViewHTML,
               var contentsElement = e.querySelector ( ".ui-list-item-contents"),
                   actionElement  = e.querySelector ( ".ui-list-action" );
 
-              Hammer ( contentsElement ).on ("tap", self.editExistingPath );
+              Hammer ( contentsElement, {prevent_default:true} ).on ("tap", self.editExistingPath );
 
               if (!self.element.classList.contains("wide"))
               {
                 // the following is applicable only when we're rendering a list view
                 // (not a thumbnail view)
-                Hammer ( contentsElement, {swipe_velocity:0.1} ).on ("swipeleft", self.exposeActionForPath );
-                Hammer ( contentsElement, {swipe_velocity:0.1 } ).on ("swiperight", self.hideActionForPath );
-                Hammer ( actionElement   ).on ("tap", self.deleteExistingPath );
+                Hammer ( contentsElement, {swipe_velocity:0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true } ).on ("dragleft", self.exposeActionForPath );
+                Hammer ( contentsElement, {swipe_velocity:0.1,drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true } ).on ("dragright", self.hideActionForPath );
+                Hammer ( actionElement , {prevent_default:true}  ).on ("tap", self.deleteExistingPath );
               }
               else
               {
@@ -353,6 +359,7 @@ function ( _y, pathStorageSingleton, pathListViewHTML,
          self._addPathButton = null;
          self._scrollContainer = null;
          self._pathList = null;
+         self._menuButton = null;
 
          self.super ( _className, "destroy" );
       }

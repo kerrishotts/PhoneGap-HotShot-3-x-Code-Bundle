@@ -250,7 +250,23 @@ define ( ["yasmf/ui/core", "yasmf/ui/viewContainer"], function ( UI, ViewContain
          }
 
         return self;
-      }
+      };
+
+     self.override ( function destroy()
+                     {
+                       if (self._leftElement !== null)
+                       {
+                         self.element.removeChild ( self._leftElement );
+                       }
+                       if (self._rightElement !== null)
+                       {
+                         self.element.removeChild ( self._rightElement );
+                       }
+                       self._leftElement = null;
+                       self._rightElement = null;
+
+                       self.super ( _className, "destroy" );
+                     });
 
      self._autoInit.apply (self, arguments);
       return self;

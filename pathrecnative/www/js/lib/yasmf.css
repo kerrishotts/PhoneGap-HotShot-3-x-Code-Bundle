@@ -138,7 +138,12 @@ div {
   -ms-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box;
-  position: relative; }
+  position: relative;
+  -webkit-outline: none;
+  -moz-outline: none;
+  -ms-outline: none;
+  -o-outline: none;
+  outline: none; }
 
 /* Containers themselves are absolutely positioned */
 .ui-container {
@@ -361,7 +366,12 @@ div {
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
-  display: flex; }
+  display: flex;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  -ms-box-pack: justify;
+  -o-box-pack: justify;
+  justify-content: space-between; }
 
 /* iOS 7's navbar needs to account for the status bar. Apparently the status bar
    can be different sizes, and yet based on testing with a double-height status
@@ -396,11 +406,11 @@ div {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
-  -webkit-box-ordinal-group: 1;
-  -moz-box-ordinal-group: 1;
-  -ms-flex-order: 1;
-  -webkit-order: 1;
-  order: 1;
+  -webkit-box-ordinal-group: 2;
+  -moz-box-ordinal-group: 2;
+  -ms-flex-order: 2;
+  -webkit-order: 2;
+  order: 2;
   position: initial; }
 
 /* Android left-aligns the title */
@@ -441,7 +451,12 @@ div {
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
-  display: flex; }
+  display: flex;
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  -ms-box-pack: justify;
+  -o-box-pack: justify;
+  justify-content: space-between; }
 
 .android .ui-tool-bar {
   height: 48px;
@@ -561,32 +576,37 @@ div {
 .ui-navigation-bar .ui-bar-button-group.ui-align-right,
 .ui-tool-bar .ui-bar-button-group.ui-align-right,
 .ui-tab-bar .ui-bar-button-group.ui-align-right {
-  -webkit-box-ordinal-group: 2;
-  -moz-box-ordinal-group: 2;
-  -ms-flex-order: 2;
-  -webkit-order: 2;
-  order: 2;
+  -webkit-box-ordinal-group: 3;
+  -moz-box-ordinal-group: 3;
+  -ms-flex-order: 3;
+  -webkit-order: 3;
+  order: 3;
   text-align: right; }
 
 .ui-navigation-bar .ui-bar-button-group.ui-align-left,
 .ui-tool-bar .ui-bar-button-group.ui-align-left,
 .ui-tab-bar .ui-bar-button-group.ui-align-left {
-  -webkit-box-ordinal-group: 0;
-  -moz-box-ordinal-group: 0;
-  -ms-flex-order: 0;
-  -webkit-order: 0;
-  order: 0;
+  -webkit-box-ordinal-group: 1;
+  -moz-box-ordinal-group: 1;
+  -ms-flex-order: 1;
+  -webkit-order: 1;
+  order: 1;
   text-align: left; }
 
 .ui-navigation-bar .ui-bar-button-group.ui-align-center,
 .ui-tool-bar .ui-bar-button-group.ui-align-center,
 .ui-tab-bar .ui-bar-button-group.ui-align-center {
   text-align: center;
-  -webkit-box-ordinal-group: 1;
-  -moz-box-ordinal-group: 1;
-  -ms-flex-order: 1;
-  -webkit-order: 1;
-  order: 1; }
+  -webkit-box-ordinal-group: 2;
+  -moz-box-ordinal-group: 2;
+  -ms-flex-order: 2;
+  -webkit-order: 2;
+  order: 2;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1; }
 
 /* Any bar button within a group inherits the group's alignment */
 .ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button,
@@ -1380,7 +1400,12 @@ div {
  * End Alert
  */
 .input, .textarea {
-  display: block; }
+  display: block;
+  -webkit-outline: none;
+  -moz-outline: none;
+  -ms-outline: none;
+  -o-outline: none;
+  outline: none; }
 
 /*****************************************************************************
  *

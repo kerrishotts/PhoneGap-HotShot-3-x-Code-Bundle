@@ -178,10 +178,10 @@ define
         if (ua.indexOf("android") > -1)
         {
           // android reports if it is a phone or tablet based on user agent
-          if (ua.indexOf("mobile safari") > -1)
+          /*if (ua.indexOf("mobile safari") > -1)
           {
             return "phone";
-          }
+          }*/
           if (ua.indexOf("mobile safari") < 0 && ua.indexOf("safari") > -1)
           {
             return "tablet";
@@ -191,11 +191,11 @@ define
         // the following is hacky, and not guaranteed to work all the time,
         // especially as phones get bigger screens with higher DPI.
 
-        if (Math.max(window.screen.width, window.screen.height) < 1024)
+        if ((Math.max(window.screen.width, window.screen.height)/window.devicePixelRatio) >= 900)
         {
-          return "phone";
+          return "tablet";
         }
-        return "tablet";
+        return "phone";
       },
       /**
        * Determines if the device is a tablet (or tablet-sized, more accurately)

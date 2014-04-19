@@ -190,6 +190,16 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
   -ms-flex: $value;
   flex: $value;
 }
+@mixin justify-content-space-between ()
+{
+  -webkit-box-pack: justify;
+  -moz-box-pack: justify;
+  -ms-box-pack: justify;
+  -o-box-pack: justify;
+  justify-content: space-between;
+
+
+}
 //****************************************************************************
 //
 // mixins (convenience)
@@ -288,6 +298,8 @@ div {
   background-size: contain;
   @include box-sizing (border-box);
   position: relative;
+  @include outline (none); // you'd think putting this on the BODY style
+                           // would carry to here, but on Android, it doesn't.
 }
 
 /* Containers themselves are absolutely positioned */
@@ -497,6 +509,7 @@ $android-destructive-color: #CC0000;
   font: 18px/44px $font-stack;
   font-weight: 300;
   @include flex-box();
+  @include justify-content-space-between();
 }
 /* iOS 7's navbar needs to account for the status bar. Apparently the status bar
    can be different sizes, and yet based on testing with a double-height status
@@ -535,7 +548,7 @@ $android-destructive-color: #CC0000;
   font-weight: bold;
   height: 44px;
   @include flex(1);
-  @include order(1);
+  @include order(2); // 2==center (would be 1, but android <4.4)
   position: initial;
 }
 /* Android left-aligns the title */
@@ -570,6 +583,7 @@ $android-destructive-color: #CC0000;
   font: 18px/44px $font-stack;
   font-weight: 300;
   @include flex-box();
+  @include justify-content-space-between();
 }
 .android .ui-tool-bar
 {
@@ -702,7 +716,7 @@ $android-destructive-color: #CC0000;
 .ui-tab-bar .ui-bar-button-group.ui-align-right
 {
   //right: 0;
-  @include order(2);
+  @include order(3); //3==right-side; would be 2, but android<4.4
   text-align: right;
 }
 .ui-navigation-bar .ui-bar-button-group.ui-align-left,
@@ -710,7 +724,7 @@ $android-destructive-color: #CC0000;
 .ui-tab-bar .ui-bar-button-group.ui-align-left
 {
   //left: 0
-  @include order(0);
+  @include order(1); //1==left-side; would be 0, but android<4.4
   text-align: left;
 }
 .ui-navigation-bar .ui-bar-button-group.ui-align-center,
@@ -720,7 +734,8 @@ $android-destructive-color: #CC0000;
   //left: 0;
   //right: 0;
   text-align: center;
-  @include order(1);
+  @include order(2); //2==center; would be 1, but android<4.4
+  @include flex(1);
 }
 
 /* Any bar button within a group inherits the group's alignment */
@@ -1258,6 +1273,8 @@ $glyphs: arror-corners-inward, arrow-corners-outward, bookmark, books,
 
 .input, .textarea {
   display: block;
+  @include outline(none); // you'd think having this on the body element would be sufficient,
+                          // but not for android.
 }
 
 /*****************************************************************************

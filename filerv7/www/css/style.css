@@ -367,10 +367,12 @@ body.android
 }
 .AudioNoteEditView .ui-text-box
 {
+  /* Android < 4.4 doesn't understand calc, but in this case, it's fine; it'll get 100% */
   height: calc(100% - 100px);
 }
 .ImageNoteEditView .ui-text-box, .VideoNoteEditView .ui-text-box
 {
+    /* Android < 4.4 doesn't understand calc, but in this case, it's fine; it'll get 100% */
   height: calc(100% - 200px);
   -webkit-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
   -moz-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
@@ -389,6 +391,13 @@ body.android
 {
   height: 100%;
   margin-top: -200px;
+  /* without these, android puts the text bux underneath the image/video */
+  -webkit-transform: translateZ(1px);
+  -moz-transform: translateZ(1px);
+  -ms-transform: translateZ(1px);
+  -o-transform: translateZ(1px);
+  transform: translateZ(1px);
+  position: absolute;
 }
 
 
@@ -497,12 +506,16 @@ div.ui-glyph.ui-background-tint-color.ui-glyph-share.non-outline
   position: relative;  
 }
 
+/* without these, the height of the video container is incorrect. */
 .VideoNoteEditView .video-container .video-element
 {
+  height: 156px; /* Android < 4.4 doesn't understand calc */
   height: calc(100% - 44px);
+  z-index:1; /* without this, Android renders all glyphs below as squares !!! */
 }
 .android .VideoNoteEditView .video-container .video-element
 {
+  height: 152px; /* Android < 4.4 doesn't understand calc */
   height: calc(100% - 48px);
 }
 
@@ -542,6 +555,7 @@ div.ui-glyph.ui-background-tint-color.ui-glyph-share.non-outline
 .tablet.landscape .VideoNoteEditView .ui-text-box
 {
   height: 100%;
+  width: 49%; /* Android < 4.4 doesn't understand calc */
   width: calc(50% - 10px);
   display: inline-block;
 }

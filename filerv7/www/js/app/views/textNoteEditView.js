@@ -62,7 +62,6 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       self._backButton = null;
       self._deleteButton = null;
       self._shareButton = null; // new for v6
-      self._saveButton = null; // new vor v7
 
       // the note we're editing
       self._note = null;
@@ -166,8 +165,7 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
                                  "NOTE_NAME": self._note.name,
                                  "NOTE_CONTENTS": self._note.textContents,
                                  "BACK": _y.T("BACK"),
-                                 "DELETE_NOTE": _y.T("app.nev.DELETE_NOTE"), 
-                                 "SAVE_NOTE": _y.T("app.nev.SAVE_NOTE")
+                                 "DELETE_NOTE": _y.T("app.nev.DELETE_NOTE")
                               });
       }
 
@@ -187,15 +185,13 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          var navigationBarButtons = self.element.querySelectorAll ( ".ui-navigation-bar .ui-bar-button" );
          
          self._backButton = self.element.querySelectorAll ( ".ui-navigation-bar .ui-bar-button" )[0];
-         self._saveButton = self.element.querySelectorAll ( ".ui-navigation-bar .ui-bar-button" )[1]; 
-         self._deleteButton = self.element.querySelectorAll ( ".ui-navigation-bar .ui-bar-button" )[2];
+         self._deleteButton = self.element.querySelectorAll ( ".ui-navigation-bar .ui-bar-button" )[1];
          self._scrollContainer = self.element.querySelector ( ".ui-scroll-container" );
          self._contentsEditor = self.element.querySelector ( ".ui-text-box" );
 
          // the back and delete buttons should have an event listener
          Hammer ( self._backButton ).on("tap", self.goBack);
          Hammer ( self._deleteButton ).on("tap", self.deleteNote );
-         Hammer ( self._saveButton ).on("tap", self.saveNote ); // new for v7
 
          // new for v6
          self._shareButton = self.element.querySelector ( ".share-button" );
@@ -203,7 +199,6 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          {
            Hammer ( self._shareButton ).on("tap", self.shareNote);
          }
-
 
          // and make sure we know about the physical back button
          _y.UI.backButton.addListenerForNotification ( "backButtonPressed", self.goBack );
@@ -268,7 +263,6 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          self._nameEditor = null;
          self._contentsEditor = null;
          self._shareButton = null; // new for v6
-         self._saveButton = null; // new for v7
 
          self.super ( _className, "destroy" );
       }
@@ -294,10 +288,6 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       {
         "EN": "Are you sure? This action can't be undone.",
         "ES": "¿Está seguro? Esta acción no se puede deshacer."
-      },
-      "app.nev.SAVE_NOTE":
-      {
-        "EN": "Save"
       }
    });
 

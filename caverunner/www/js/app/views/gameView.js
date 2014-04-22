@@ -76,7 +76,7 @@ define(["yasmf",
 
            // contains all the coordinates for the current level, including
            // the cavern walls and any obstacles
-           self._points = [];
+           self._caveSegments = [];
 
            // indicates the current position within the cave
            self._currentTop = null;
@@ -88,17 +88,20 @@ define(["yasmf",
            self._timer = undefined;
 
            // length of each individual cave segment
-           self._pieceWidth = 40;
+           self._segmentLength = 20;
 
            // ship information
            self._ship = {x: (self._canvasWidth/2) - 10,
                          y: 30,
                          acceleration: 0};
 
+           // collision detection
+           self._collidingLines = [[], []];
+
            // button/control scheme information
            self._controlSchemes = { "slide": 0, "tilt": 1, "buttons": 2}
            self._controlScheme = 0; // 0=slide; 1=tilt; 2=buttons
-           self._pressedButton = 0; // no button
+           self._desiredDirection = 0; // direction user wants ship to go
 
            // slide control scheme
            self._lastTouch = {x: -1, y: -1}; // no previous screen touch
@@ -221,22 +224,22 @@ define(["yasmf",
            self._leftButtonDown = function ()
            {
              self._leftButton.classList.add ("pressed");
-             self._pressedButton = -1;
+             self._desiredDirection = -1;
            }
            self._leftButtonUp = function ()
            {
              self._leftButton.classList.remove ("pressed");
-             self._pressedButton = 0;
+             self._desiredDirection = 0;
            }
            self._rightButtonDown = function ()
            {
              self._rightButton.classList.add ("pressed");
-             self._pressedButton = 1;
+             self._desiredDirection = 1;
            }
            self._rightButtonUp = function ()
            {
              self._rightButton.classList.remove ("pressed");
-             self._pressedButton = 0;
+             self._desiredDirection = 0;
            }
 
            // event handling for canvas touches
@@ -278,23 +281,23 @@ define(["yasmf",
              var deltaX = curTouchX-self._lastTouch.x;
              if (Math.abs(deltaX)> 1)
              {
-               self._pressedButton = ( (deltaX) / Math.abs(deltaX) ) / ( 8/Math.min(Math.abs(deltaX),8));
+               self._desiredDirection = ( (deltaX) / Math.abs(deltaX) ) / ( 8/Math.min(Math.abs(deltaX),8));
                self._lastTouch.x = curTouchX;
              }
              else
              {
-               self._pressedButton = 0;
+               self._desiredDirection = 0;
              }
              // if player stays in same spot, clear the button...
              self._touchTimer = setTimeout ( function()
                                              {
-                                               self._pressedButton = 0;
+                                               self._desiredDirection  = 0;
                                              }, 25 );
 
            }
            self._canvasTouchEnded = function (evt)
            {
-             self._pressedButton = 0;
+             self._desiredDirection = 0;
              self._amTouching = false;
            }
 
@@ -357,12 +360,8 @@ define(["yasmf",
 
            self._generateLevel = function ( lvl )
            {
-             // reset the existing level points
-             self._points = [];
-             self._points[0] = []; // left side of corridor
-             self._points[1] = []; // right side of corridor
-             self._points[2] = []; // left, open side of wall, -1 = no wall
-             self._points[3] = []; // right, open side of wall, -1 = no wall
+             // reset the existing level segments
+             self._segments = [[], [], [], []];
 
              var generateWidth = self._generateWidth;
              // start the cavern out reasonably wide
@@ -397,32 +396,36 @@ define(["yasmf",
              var i;
              for (i=0; i<30; i++)
              {
-               self._points[0].push (lastLeft * self._scale);
-               self._points[1].push (lastRight * self._scale);
-               self._points[2].push (-1);
-               self._points[3].push (-1);
+               self._segments[0].push (lastLeft * self._scale); // left of corridor
+               self._segments[1].push (lastRight * self._scale); // right of corridor
+               self._segments[2].push (-1); // no wall
+               self._segments[3].push (-1); // no wall
              }
 
-             for (i=0; i< Math.floor(300 + ( 125 * (lvl/2) ) ); i++)
+             for (i=0; i< Math.floor(600 + ( 125 * lvl ) ); i++)
              {
                var newLeft = lastLeft + ( bias ) + ( (rndWidth/2) - Math.floor( Math.random()* (rndWidth+1) ) );
                var newRight = lastRight + ( bias )  + ( (rndWidth/2) - Math.floor( Math.random()* (rndWidth+1) ) );
 
-               if ( newLeft < 10 ) { newLeft = 10; bias = Math.floor( Math.random()* (self._pieceWidth/2)); }
-               if ( newLeft > (generateWidth-channelWidth-10) ) { newLeft = generateWidth-channelWidth-10; bias = -Math.floor( Math.random()* (self._pieceWidth/2)); }
-               if ( generateWidth - newRight < newLeft + (channelWidth/1.25) )
-               {
+               if ( newLeft < 10 ) { newLeft = 10; bias = Math.floor( Math.random()* (self._segmentLength/2)); }
+               if ( newLeft > (generateWidth-channelWidth-10) ) {
+                 newLeft = generateWidth-channelWidth-10;
+                 bias = -Math.floor( Math.random()* (self._segmentLength/2)); }
+               if ( generateWidth - newRight < newLeft + (channelWidth/1.25) ) {
                  newRight = generateWidth - ( newLeft + (channelWidth/1.25) );
                }
-               if ( generateWidth - newRight > newLeft + (channelWidth*1.25))
-               {
-                 newRight = generateWidth - (newLeft + (channelWidth*1.25)); //newRight + (Math.random() * rndWidth);
+               if ( generateWidth - newRight > newLeft + (channelWidth*1.25)) {
+                 newRight = generateWidth - (newLeft + (channelWidth*1.25));
                }
-               if ( newRight < 10 ) { newRight = 10; bias = -Math.floor( Math.random()* (self._pieceWidth/2)); }
-               if ( newRight > (generateWidth-10)) { newRight = generateWidth-10; bias = Math.floor( Math.random()* (self._pieceWidth/2));}
+               if ( newRight < 10 ) {
+                 newRight = 10;
+                 bias = -Math.floor( Math.random()* (self._segmentLength/2)); }
+               if ( newRight > (generateWidth-10)) {
+                 newRight = generateWidth-10;
+                 bias = Math.floor( Math.random()* (self._segmentLength/2));}
 
-               self._points[0].push ( newLeft * self._scale);
-               self._points[1].push ( newRight * self._scale);
+               self._segments[0].push ( newLeft * self._scale);
+               self._segments[1].push ( newRight * self._scale);
 
                lastLeft = newLeft;
                lastRight = newRight;
@@ -435,31 +438,47 @@ define(["yasmf",
                    var openingWidth = channelWidth/1.35;
                    var caveWidth = ((generateWidth-newRight) - newLeft) - openingWidth;
                    var wallOpening = Math.floor ( Math.random() * caveWidth );
-                   self._points[2].push ( (newLeft + wallOpening) * self._scale );
-                   self._points[3].push ( (newLeft + wallOpening + openingWidth) * self._scale );
+                   self._segments[2].push ( (newLeft + wallOpening) * self._scale );
+                   self._segments[3].push ( (newLeft + wallOpening + openingWidth) * self._scale );
                  }
                  else
                  {   // no wall
-                   self._points[2].push ( -1 );
-                   self._points[3].push ( -1 );
+                   self._segments[2].push ( -1 );
+                   self._segments[3].push ( -1 );
                  }
                }
                else
                {   // no wall
-                 self._points[2].push ( -1 );
-                 self._points[3].push ( -1 );
+                 self._segments[2].push ( -1 );
+                 self._segments[3].push ( -1 );
                }
              }
            }
 
            self._doUpdate = function ( f )
            {
+
+             function doSegmentsIntersect ( segment1, segment2 )
+             {
+               // from: http://stackoverflow.com/a/16725715
+               function CCW (p1, p2, p3) {
+                 var a = p1.x, b = p1.y,
+                   c = p2.x, d = p2.y,
+                   e = p3.x, f = p3.y;
+                 return (f - b) * (c - a) > (d - b) * (e - a);
+               }
+               var p1 = {x: segment1.x1, y: segment1.y1 },
+                   p2 = {x: segment1.x2, y: segment1.y2 },
+                   p3 = {x: segment2.x1, y: segment2.y1 },
+                   p4 = {x: segment2.x2, y: segment2.y2 };
+               return (CCW(p1, p3, p4) != CCW(p2, p3, p4)) && (CCW(p1, p2, p3) != CCW(p1, p2, p4));
+             }
              var gameOver = false;
              var levelOver = false;
-             var ctx = self._context;
-
+/*
              // check to see if the ship has impacted something
              // pixel-based collision
+             var ctx = self._context;
              var pixels = ctx.getImageData(Math.floor((self._ship.x * self._scale) * self._pixelRatio),
                                            Math.floor((self._ship.y) * self._pixelRatio),
                                            1,1).data;
@@ -471,17 +490,20 @@ define(["yasmf",
                gameOver = true;
                self._currentLevel = 0;
              }
+*/
+             var oldShip = {x: self._ship.x,
+                            y: self._ship.y };  // we need this to get the origin for the line the ship makes while moving
 
              if (f > 0 && f != Infinity)
              {
                // move the ship
                if (self._controlScheme != self._controlSchemes["tilt"])
                {
-                 if (self._pressedButton !== 0)
+                 if (self._desiredDirection !== 0)
                  {
                    if (Math.abs(self._ship.acceleration)<1)
-                   { self._ship.acceleration = self._pressedButton; }
-                   self._ship.acceleration = self._ship.acceleration + ( self._pressedButton * self._deviceFactor);
+                   { self._ship.acceleration = self._desiredDirection; }
+                   self._ship.acceleration = self._ship.acceleration + ( self._desiredDirection * self._deviceFactor);
                    if (self._ship.acceleration < -10) { self._ship.acceleration = -10; }
                    if (self._ship.acceleration > 10) { self._ship.acceleration = 10; }
                  }
@@ -507,7 +529,6 @@ define(["yasmf",
                      self._ship.x = previousX;
                      deltaX = 0;
                    }
-
                    if ( self._ship.x < 0 )
                    {
                      self._ship.x = 0;
@@ -522,18 +543,48 @@ define(["yasmf",
 
                var speed = ((4+self._currentLevel) * (f));
                self._currentTop+= speed;
+               oldShip.y -= speed; // our line extends in the opposite direction
                if (!gameOver && !levelOver)
                {
                  self._score += (self._currentLevel * f);
                }
              }
 
-             if ( Math.floor (self._currentTop/self._pieceWidth) > self._points[0].length )
+             if ( Math.floor (self._currentTop/self._segmentLength) > self._segments[0].length )
              {
                self._actionButton.innerHTML = _y.T("CONTINUE");
                self._showMessage (_y.T('NEXT_LEVEL'));
                levelOver = true;
              }
+
+             // calculate if our ship has collided with the cavern or walls
+             // mathematical-based collision (not pixel-based)
+             var shipCollided = false;
+             var segment1 = { x1: oldShip.x * self._scale,    y1: oldShip.y,
+                              x2: self._ship.x * self._scale, y2: self._ship.y },
+                 segment2;
+             for (var i=0; i<2; i++)
+             {
+               for ( var j=0; j< self._collidingLines[i].length - 1; j++ )
+               {
+                 segment2 = { x1: self._collidingLines[i][j].x,   y1: self._collidingLines[i][j].y,
+                              x2: self._collidingLines[i][j+1].x, y2: self._collidingLines[i][j+1].y };
+                 if (doSegmentsIntersect( segment1, segment2))
+                 {
+                   shipCollided = true;
+                   break;
+                 }
+               }
+               if (shipCollided) { break; }
+             }
+             if (shipCollided)
+             {
+               self._actionButton.innerHTML = _y.T("TRY_AGAIN");
+               self._showMessage (_y.T('CRASHED'));
+               gameOver = true;
+               self._currentLevel = 0;
+             }
+
              if (!gameOver && !levelOver)
              {
                var requestAnimationFrame = window.requestAnimationFrame ||
@@ -559,39 +610,72 @@ define(["yasmf",
 
              ctx.save();
              ctx.scale (window.devicePixelRatio, window.devicePixelRatio);
-             ctx.fillStyle = "#402010";
-             ctx.strokeStyle = "#804020";
              ctx.clearRect ( 0, 0, self._canvasWidth, self._canvasHeight);
+
+             self._collidingLines = [[],[]];
 
              for (var i=0; i<2; i++)
              {
-               var pts;
-               var cLeft = -10;
-               if (i===0) { pts = self._points[0]; }
-               if (i===1) { pts = self._points[1]; cLeft = self._canvasWidth+10; }
+               var seg, x, y, j;
+               var offX = -10;
+               if (i===0) { seg = self._segments[0]; }
+               if (i===1) {
+                 seg = self._segments[1];
+                 offX = self._canvasWidth+10; }
 
+               ctx.fillStyle = "#402010";
+               ctx.strokeStyle = "#804020";
                ctx.beginPath();
-               ctx.moveTo ( cLeft, -self._pieceWidth );
-               for (var j = Math.floor ( self._currentTop  / self._pieceWidth )-1;
-                    j < Math.floor ( self._currentTop / self._pieceWidth ) + ( (self._canvasHeight+(2*self._pieceWidth)) / self._pieceWidth );
+               ctx.moveTo ( offX, -self._segmentLength );
+               self._collidingLines.push ( { x: offX, y: -self._segmentLength } );
+               for (j = Math.floor ( self._currentTop  / self._segmentLength )-1;
+                    j < Math.floor ( self._currentTop / self._segmentLength ) +
+                        ( (self._canvasHeight+(2*self._segmentLength)) / self._segmentLength );
                     j++)
                {
-                 var p = pts[j];
-                 var y = (j * self._pieceWidth) - self._currentTop;
-                 if (i==1) { p = self._canvasWidth - p; }
-                 ctx.lineTo ( p, y );
+                 x = seg[j];
+                 y = (j * self._segmentLength) - self._currentTop;
+                 if (i==1) { x = self._canvasWidth - x; }
+                 ctx.lineTo ( x, y );
+                 self._collidingLines[i].push ( { x: x, y: y } );
 
                  // do we need to draw a wall?
-                 if ( self._points[2][j] > -1 )
+                 if ( self._segments[2][j] > -1 )
                  {
-                   ctx.lineTo ( self._points[i+2][j], y );
-                   ctx.lineTo ( self._points[i+2][j], y+self._pieceWidth );
+                   ctx.lineTo ( self._segments[i+2][j], y );
+                   self._collidingLines[i].push ( { x: self._segments[i+2][j], y: y } );
+                   ctx.lineTo ( self._segments[i+2][j], y+self._segmentLength );
+                   self._collidingLines[i].push ( { x: self._segments[i+2][j], y: y+self._segmentLength } );
                  }
                }
-               ctx.lineTo ( cLeft, ((self._canvasWidth+2)*self._pieceWidth) );
+               ctx.lineTo ( offX, ((self._canvasWidth+2)*self._segmentLength) );
+               self._collidingLines[i].push ( {x: offX, y: ((self._canvasWidth+2)*self._segmentLength) } );
                ctx.closePath();
                ctx.fill();
                ctx.stroke();
+
+               // fill in the walls with a different color, so as to make them stand out
+               for (j = Math.floor ( self._currentTop  / self._segmentLength )-1;
+                    j < Math.floor ( self._currentTop / self._segmentLength ) +
+                        ( (self._canvasHeight+(2*self._segmentLength)) / self._segmentLength );
+                    j++)
+               {
+                 y = (j * self._segmentLength) - self._currentTop;
+                 if ( self._segments[2][j] > -1 )
+                 {
+                   x = self._segments[i+2][j];
+                   ctx.fillStyle = "#804020";
+                   ctx.strokeStyle = "#C06030";
+                   ctx.beginPath();
+                   ctx.moveTo ( offX, y );
+                   ctx.lineTo ( x, y );
+                   ctx.lineTo ( x, y+self._segmentLength );
+                   ctx.lineTo ( offX, y+self._segmentLength );
+                   ctx.closePath();
+                   ctx.fill();
+                   ctx.stroke();
+                 }
+               }
              }
 
              // draw ship
@@ -641,7 +725,7 @@ define(["yasmf",
                           y: 100,
                           acceleration: 0
                          }
-             self._pressedButton=0;
+             self._desiredDirection =0;
              self._touchTimer = -1;
              self._lastTouch.x = -1;
              self._lastTouch.y = -1;

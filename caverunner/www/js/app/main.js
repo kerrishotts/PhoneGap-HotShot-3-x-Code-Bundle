@@ -57,6 +57,12 @@ define ( ["yasmf", "app/views/startView"], function ( _y, StartView )
 
    APP.start = function ()
    {
+     // update the iOS 7 status bar
+     if (_y.device.platform() == "ios")
+     {
+       StatusBar.hide();
+       //StatusBar.styleLightContent();
+     }
       // start listening for resume/pause events
       var gN = _y.UI.globalNotifications;
       gN.registerNotification ( "onApplicationPause" );

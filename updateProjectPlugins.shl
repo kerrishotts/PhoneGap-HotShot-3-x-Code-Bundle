@@ -54,8 +54,8 @@ cordova platform update ios
 cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
-cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.media
+cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.file-extras
 cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
@@ -72,8 +72,8 @@ cordova platform update ios
 cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
-cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.media
+cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
@@ -91,10 +91,10 @@ cordova platform update ios
 cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
-cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.media
-cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.media-capture
+cordova plugin rm org.apache.cordova.file
+cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.file-extras
 cordova plugin rm org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.globalization
@@ -113,10 +113,10 @@ cordova platform update ios
 cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
-cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.media
-cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.media-capture
+cordova plugin rm org.apache.cordova.file
+cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.file-extras
 cordova plugin rm socialmessage
 cordova plugin rm org.apache.cordova.keyboard
@@ -140,10 +140,10 @@ cordova platform update ios
 cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
-cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.media
-cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.media-capture
+cordova plugin rm org.apache.cordova.file
+cordova plugin rm org.apache.cordova.camera
 cordova plugin rm socialmessage
 cordova plugin rm org.apache.cordova.file-extras
 cordova plugin rm org.apache.cordova.keyboard

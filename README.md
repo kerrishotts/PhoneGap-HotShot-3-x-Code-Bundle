@@ -4,7 +4,7 @@ This repository stores the code for the book entitled PhoneGap HotShot 3.x Mobil
 
 The code herein is not listed in chapter order but by project name. A lookup from chapter number to project name is provided below.
 
-Furthermore, the code herein is not a complete Cordova project. The build artifacts (namely the `platforms`, `plugins`, etc., directories) are ignored. Only the `www` and `merges` directories are provided. In order to execute any of these projects, you'll need to create a new Cordova project and copy the relevent files from this repository into your project.
+Furthermore, the code herein is not a complete Cordova project. The build artifacts (namely the `platforms`, `plugins`, etc., directories) are ignored. Only the `www` directory is provided. In order to execute any of these projects, you'll need to create a new Cordova project and copy the relevant files from this repository into your project.
 
 ## Chapter/Project Lookup
 
@@ -22,7 +22,6 @@ Furthermore, the code herein is not a complete Cordova project. The build artifa
 |         10 | Maps and GPS                       | PathRec           |
 |         11 | Canvas Games and the Accelerometer | CaveRunner        |
 |         12 | Adding a Back-end (Parse)          | CaveRunner2       |
-|     Online | Using Native Controls              | Native            |
 | Appendix A | Quick Design Pattern Reference     | Not Applicable    |
 | Appendix B | Quirks and Gotchas                 | Not Applicable    |
 
@@ -140,18 +139,7 @@ PathRec is a simple app that uses the geolocation API to record paths and show t
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
 cordova plugin add org.apache.cordova.keyboard
-```
-
-### PathRecNative
-
-PathRecNative expands on PathRec by using native controls. iOS only.
-
-#### Plugins Required
-```
-cordova plugin add org.apache.cordova.globalization
-cordova plugin add org.apache.cordova.geolocation
-cordova plugin add com.photokandy.nativecontrols 
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add org.apache.cordova.statusbar
 ```
 
 ### Cave Runner
@@ -163,17 +151,25 @@ Cave Runner is a simple HTML5 Canvas game that uses the accelerometer as one of 
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.device-motion
 cordova plugin add org.apache.cordova.keyboard
+cordova plugin add org.apache.cordova.statusbar
 ```
 
 ### Cave Runner 2
 
-Cave Runner 2 extends Cave Runner with a Parse back end that provides high score functionality
+Cave Runner 2 extends Cave Runner with a Parse back end that provides high score functionality. 
+
+**NOTE**: The www/js/app.js file is *NOT* provided, as you need to provide your own API keys. You can copy the version from caverunner and add the following code to initialize Parse prior to `APP.start()`:
+
+```
+  Parse.initialize("YOUR_APP_ID_HERE", "YOUR_JAVASCRIPT_KEY_HERE");
+```
 
 #### Plugins Required
 ```
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.device-motion
 cordova plugin add org.apache.cordova.keyboard
+cordova plugin add org.apache.cordova.statusbar
 ```
 
 

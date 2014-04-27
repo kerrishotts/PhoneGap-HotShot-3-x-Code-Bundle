@@ -4,9 +4,9 @@
  * 
  * main.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 0.5.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -59,7 +59,7 @@ define ( ["yasmf", "app/views/noteListView"], function ( _y, NoteListView )
 
       // store this for future reference
       APP.noteListView = noteListView;
-   }
+   };
 
    return APP;
 });

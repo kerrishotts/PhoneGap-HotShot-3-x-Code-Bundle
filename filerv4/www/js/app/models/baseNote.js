@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -44,23 +44,6 @@ define ( ["yasmf"], function ( _y )
 {
    /**
     * Model supporting a basic note. Extend for enhanced functionality
-    *
-    * A note needs a UID for unique identification; we'll use the time.
-    * The note also stores the date it was created and the date it was last
-    * modified.
-    * The note also stores its name and contents, and generates a linecount
-    * based on the number of line breaks.
-    * The note can return a JSON representation via .JSON (using _serialize).
-    * 
-    * Methods
-    *  init
-    *  initWithJSON
-    *  initWithOptions
-    *  
-    * Can Send Notifications:
-    *  uidChanged
-    *  nameChanged
-    *  contentsChanged
     */
    var _className = "BaseNote";
    var BaseNote = function ()
@@ -79,31 +62,27 @@ define ( ["yasmf"], function ( _y )
       self.registerNotification ( "unitValueChanged" );
       self.registerNotification ( "unitLabelsChanged" );
       
-      // private properties are prefixed with _
-      
       /**
        * The note's unique identifier. getUID is the getter, and
        * setUID is the setter. Two properties can be used to
        * access it: uid and UID.
-       * @type {String}
        */
       self._uid = undefined;  
       self.getUID = function ()
       {
          return self._uid;
-      }
+      };
       self.setUID = function ( theUID )
       {
          self._uid = theUID;
          self.notify ( "uidChanged" );
-      }
+      };
       Object.defineProperty ( self, "UID", {get: self.getUID, set: self.setUID, configurable: true});
       Object.defineProperty ( self, "uid", {get: self.getUID, set: self.setUID, configurable: true});
 
       /**
        * The date the note was created. Read-only; the createdDate
        * property only uses a getter (getCreatedDate).
-       * @type {Date}
        */
       self._createdDate = undefined; 
 
@@ -111,38 +90,36 @@ define ( ["yasmf"], function ( _y )
        * The date the note was modified. Read-only; the modifiedDate
        * property only uses a getter (getModifiedDate). It is reset
        * whenever the contents change or the name changes.  
-       * @type {Date}
        */
       self._modifiedDate = undefined; // and a modification date
 
       self.getCreatedDate = function ()
       {
          return self._createdDate;
-      }
+      };
       Object.defineProperty ( self, "createdDate", {get: self.getCreatedDate, configurable: true});
 
       self.getModifiedDate = function ()
       {
          return self._modifiedDate;
-      }
+      };
       Object.defineProperty ( self, "modifiedDate", {get: self.getModifiedDate, configurable: true});
 
       /**
        * The visible name of the note. Read-write with setName and
        * getName; the property is name.
-       * @type {String}
        */
       self._name = "";
       self.getName = function ()
       {
          return self._name;
-      }
+      };
       self.setName = function ( theName )
       {
          self._name = theName;
          self._modifiedDate = new Date();
          self.notify ( "nameChanged" );
-      }
+      };
       Object.defineProperty ( self, "name", {get: self.getName, set: self.setName, configurable: true});
 
 
@@ -161,40 +138,39 @@ define ( ["yasmf"], function ( _y )
       self.getUnitValue = function ()
       {
         return self._unitValue;
-      }
+      };
       self.setUnitValue = function ( theValue )
       {
         self._unitValue = theValue;
         self.notify ( "unitValueChanged" );
-      }
+      };
       Object.defineProperty ( self, "unitValue", {get: self.getUnitValue, set: self.setUnitValue, configurable: true});
 
       self.getUnitLabels = function ()
       {
         return self._unitLabels;
-      }
+      };
       self.setUnitLabels = function ( theLabels )
       {
         self._unitLabels = theLabels;
         self.notify ( "unitLabelsChanged" );
-      }
+      };
       Object.defineProperty ( self, "unitLabels", {get: self.getUnitLabels, set: self.setUnitLabels, configurable: true});
 
       self.getFormattedUnitValue = function ()
       {
-        return _y.N(self.unitValue) + " " + _y.T(self.unitLabels[Math.min((self.unitLabels.length-1),self.unitValue)]);
-      }
+        return _y.N(self.unitValue) + " " + _y.T(self.unitLabels[Math.min((self.unitLabels.length-1),Math.round(self.unitValue))]);
+      };
       Object.defineProperty ( self, "formattedUnitValue", {get: self.getFormattedUnitValue, configurable: true});
 
       /**
        * All notes can have text in the textContents property
-       * @type {String}
        */
       self._textContents = "";  
       self.getTextContents = function ()
       {
          return self._textContents;
-      }
+      };
       self.setTextContents = function ( theContents )
       {
          self._textContents = theContents;
@@ -204,7 +180,7 @@ define ( ["yasmf"], function ( _y )
           self.unitValue = self._textContents.split("\n").length;
          }
          self.notify ( "textContentsChanged" );
-      }
+      };
       Object.defineProperty ( self, "textContents", {get: self.getTextContents, set: self.setTextContents, configurable: true});
 
       /**
@@ -215,13 +191,13 @@ define ( ["yasmf"], function ( _y )
       self.getMediaContents = function ()
       {
         return self._mediaContents;
-      }
+      };
       self.setMediaContents = function ( theContents )
       {
         self._mediaContents = theContents;
         self._modifiedDate = new Date();
         self.notify ( "mediaContentsChanged" );
-      }
+      };
       Object.defineProperty ( self, "mediaContents", {get: self.getMediaContents, set: self.setMediaContents, configurable: true});
 
       /**
@@ -231,13 +207,12 @@ define ( ["yasmf"], function ( _y )
       self.getRepresentation = function ()
       {
         return self._representation;
-      }
+      };
       Object.defineProperty ( self, "representation", {get: self.getRepresentation, configurable: true});
 
       /**
        * Serializes the object into a JSON string ready
        * for saving in storage.
-       * @return {String} JSON-style string of the object
        */
       self._serialize = function ()
       {
@@ -253,14 +228,12 @@ define ( ["yasmf"], function ( _y )
             "unitLabels": self.unitLabels,
             "representation": self.representation
          });
-      }
+      };
       Object.defineProperty ( self, "JSON", {get: self._serialize, configurable: true});
 
       /**
        * Deserializes the JSON String passed in, and returns true if
        * successful, or false if there was an error.
-       * @param  {String} theSerializedObject A JSON-style string
-       * @return {Boolean} true if successful; false if not
        */
       self._deserialize = function ( theSerializedObject )
       {
@@ -296,12 +269,10 @@ define ( ["yasmf"], function ( _y )
          self.super ( _className, "init" ); // BaseObject super doesn't take any parameters
          self._createdDate = new Date(); // if not overridden otherwise, this will be the current datetime.
          if ( typeof theUID !== "undefined" ) { self.uid = theUID; }
-      }
+      };
 
       /**
        * Initializes the note with the specified JSON; akin to initWithOptions.
-       * @param  {String} theJSON The JSON representing the note
-       * @return {Boolean}         True if successfully deserialized.
        */
       self.initWithJSON = function ( theJSON )
       {
@@ -314,14 +285,12 @@ define ( ["yasmf"], function ( _y )
          {
             return false; // no JSON to init with.
          }
-      }
+      };
 
       /**
        * Initialize the note with the values specified in options. The fieldnames in
        * options match those in the object, so uid, name, and contents. Any options
        * not specified are left unspecified with no other defaults.
-       * @param  {Object} options Properties
-       * @return {Void}         
        */
       self.initWithOptions = function ( options )
       {
@@ -336,7 +305,7 @@ define ( ["yasmf"], function ( _y )
             if ( typeof options.unitValue !== "undefined" ) { self.unitValue = options.unitValue; }            
             if ( typeof options.modifiedDate !== "undefined" ) { self._modifiedDate = options.modifiedDate; }
          }
-      }
+      };
 
       // return our new object
       return self;

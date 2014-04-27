@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -56,7 +56,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/videoManager"], function ( 
       self.getVideo = function ()
       {
          return self._video;
-      }
+      };
       Object.defineProperty ( self, "video", {get: self.getVideo, configurable: true});
 
       /**
@@ -76,7 +76,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/videoManager"], function ( 
       self._updateUnit = function ()
       {
         self.unitValue = Math.round(self._video.capturedDuration);
-      }
+      };
 
       /**
        * Called to update the modified date (after recording)
@@ -84,7 +84,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/videoManager"], function ( 
       self._updateModificationDate = function ()
       {
          self._modifiedDate = new Date();
-      }
+      };
 
       /**
        * Override setting the media contents so that we can create a new Media
@@ -104,7 +104,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/videoManager"], function ( 
          self.notify ( "mediaContentsChanged" );
          self._video.addListenerForNotification ( "videoCaptured", self._updateUnit );
          self._video.addListenerForNotification ( "videoCaptured", self._updateModificationDate );
-      }
+      };
       Object.defineProperty ( self, "mediaContents", {get: self.getMediaContents, set: self.setMediaContents, configurable: true});
 
       /**
@@ -116,9 +116,9 @@ define ( ["yasmf","app/models/baseNote", "app/models/videoManager"], function ( 
          self._video.destroy();
          self._video = null;
          self.super ( _className, "destroy" );
-      }
+      };
       return self;
-   }
+   };
 
    _y.addTranslations ( {
       "app.vn.SECOND":

@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -57,23 +57,17 @@ function ( _y, staticViewHTML, Hammer )
       self.overrideSuper ( self.class, "render", self.render );
       self.render = function ()
       {
-         // no need to call super; it's abstract
-         return _y.template ( staticViewHTML, 
+         return _y.template ( staticViewHTML,
                               {
                                  "PICK_A_NOTE": _y.T("PICK_A_NOTE")
                               });
-      }
+      };
 
-      /**
-       * Initialize the view and add listeners for the storage
-       * collection so that when it changes, we can update appropriately
-       */
       self.overrideSuper ( self.class, "init", self.init );
       self.init = function ( theParentElement )
       {
-         // call super
          self.super ( _className, "init", [undefined, "div", "staticView ui-container", theParentElement] );
-      }
+      };
 
       self.overrideSuper ( self.class, "initWithOptions", self.init );
       self.initWithOptions = function ( options )
@@ -85,7 +79,7 @@ function ( _y, staticViewHTML, Hammer )
          }
 
          self.init ( theParentElement );
-      }
+      };
 
       return self;
    };

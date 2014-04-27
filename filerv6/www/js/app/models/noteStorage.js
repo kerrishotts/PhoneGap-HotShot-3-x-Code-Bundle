@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 2.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -79,7 +79,7 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
       self.getFileManager = function ()
       {
         return self._fileManager;
-      }
+      };
       Object.defineProperty ( self, "fileManager", {get: self.getFileManager, configurable: true});
       self._initializeFileManager = function ()
       {
@@ -104,7 +104,7 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
          {
             return Q(); // return a blank promise
          }
-      }
+      };
 
       // the collection of notes
       self._notes = {};
@@ -112,12 +112,11 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
       /**
        * the collection property is read-only and uses getCollection
        * as the getter. 
-       * @return {Object} A collection of notes
        */
       self.getCollection = function ()
       {
          return self._notes;
-      }
+      };
       Object.defineProperty ( self, "collection", { get:self.getCollection, configurable: true });
 
       /**
@@ -129,13 +128,12 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
          if ( aNote.initWithJSON ( aNoteJSON ) )
          {
           self._notes [aNote.uid] = aNote;
-          return;
          }
          else
          {
           throw new Error ( "Couldn't initWithJSON" );
          }
-      }
+      };
 
       /**
        * Parse the contents of a collection file
@@ -173,7 +171,7 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
             return Q();
          }
 
-      }
+      };
 
       /**
        * Load the collection from storage
@@ -190,14 +188,13 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
                         return fm.readFileContents ( "notes.txt", {}, fm.FILETYPE.TEXT); 
                      } )
              .then ( self._parseCollectionContents )
-             .then ( function notifyComplete () { self.notify ("collectionLoaded"); return; } )
+             .then ( function notifyComplete () { self.notify ("collectionLoaded"); } )
              .catch ( function anErrorHappened ( anError )
                       {
                         self.notify ( "collectionFailedLoading", [anError.message] );
-                        return;
                       })
              .done();
-      }
+      };
 
       /**
        * Save the collection to storage
@@ -237,12 +234,10 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
                 .then ( function colletionSaved() 
                         {
                            self.notify ("collectionSaved"); 
-                           return; 
                         } )
                 .catch ( function anErrorHappened (anError) 
                          { 
                            self.notify ("collectionFailedSaving", [anError.message] ); 
-                           return;
                          } )
                 .done ();
          }
@@ -250,8 +245,11 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
          {
             self.notify ("collectionFailedSaving", [anError.message] );
          }
-      }
+      };
 
+    /**
+     * Create a note of the requested type
+     */
     self.createNote = function ( noteType )
     {
       // Create a note from the Note object
@@ -298,7 +296,7 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
       self.getNote = function ( theUID )
       {
          return self._notes [ theUID ];
-      }
+      };
 
       /**
        * Saves the note
@@ -322,12 +320,10 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
                         {
                            self.notify ( "noteSaved", [ theNote.uid ] );
                            self.notify ( "collectionChanged" );
-                           return;
                         })
                 .catch ( function anErrorHappened ( anError )
                          {
                            self.notify ( "noteFailedSaving", [ theNote, anError.message ] );
-                           return;
                          })
                 .done();
          }
@@ -335,7 +331,7 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
          {
             self.notify ( "noteFailedSaving", [ theNote, e.message ] );
          }
-      }
+      };
 
       /**
        * Remove a specific note
@@ -363,12 +359,10 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
                            {
                             return fm.deleteFile ( aNote.mediaContents );
                            }
-                           return;
                         } )
                 .catch ( function anErrorHappened ( anError ) 
                          {
                            self.notify ( "noteFailedRemoving", [ theUID, anError.message ] );
-                           return;
                          })
                 .done ();
          }
@@ -376,7 +370,7 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
          {
             self.notify ( "noteFailedRemoving", [ theUID, e.message ] );
          }
-      }
+      };
 
       /**
        * Listen to changes in the collection -- and when they occur,
@@ -385,7 +379,7 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
       self._collectionChangedListener = function ()
       {
          self.saveCollection();
-      }
+      };
 
       self.overrideSuper ( self.class, "init", self.init );
       self.init = function ()
@@ -395,7 +389,7 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
       };
       
       return self;
-   }
+   };
 
 
 

@@ -4,9 +4,9 @@
  * 
  * imageNoteEditView.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 2.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -76,12 +76,12 @@ function ( _y, noteStorageSingleton, imageNoteViewHTML,
           subject: self._note.name,
           text: self._note.textContents
         };
-        if (self._note.unitValue > 0)
+        if (self._note.unitValue > 0) // crashes if we don't have a valid image, so check
         {
           message.image = nativePath;
         }
         window.socialmessage.send ( message );
-      }
+      };
 
       /**
        * override the text editor's template with our own
@@ -89,20 +89,24 @@ function ( _y, noteStorageSingleton, imageNoteViewHTML,
       self.overrideSuper ( self.class, "render", self.render );
       self.render = function ()
       {
-         // no need to call super; it'd be wrong, anyway.
-         return _y.template ( imageNoteViewHTML, 
+         return _y.template ( imageNoteViewHTML,
                               {
                                  "NOTE_NAME": self._note.name,
                                  "NOTE_CONTENTS": self._note.textContents,
                                  "BACK": _y.T("BACK"),
-                                 "DELETE_NOTE": _y.T("app.nev.DELETE_NOTE"), 
-                                 "SAVE_NOTE": _y.T("app.nev.SAVE_NOTE")
+                                 "DELETE_NOTE": _y.T("app.nev.DELETE_NOTE")
                               });
-      }
+      };
 
+     /**
+      * Whenever the image is loaded or a new photo is taken, we need to update the image onscreen
+      */
       self.updatePhoto = function ()
       {
+        // first, remove the old image from the CSS style
         _y.UI.styleElement(self._imageContainer, "background-image", "inherit");
+
+        // after a 100ms, add a new image (give the DOM a chance to notice the change)
         var template = "url(cdvfile://localhost/persistent%URL%?%CACHE%)";
         setTimeout(function ()
                    {
@@ -113,23 +117,31 @@ function ( _y, noteStorageSingleton, imageNoteViewHTML,
                    }, 100);
       };
 
+     /**
+      * When a photo is captured, remove the listener and update the photo on screen
+      */
       self.onPhotoCaptured = function ()
       {
         self._note.camera.removeListenerForNotification ( "photoCaptured", self.onPhotoCaptured );
 
         // update our photo visually
         self.updatePhoto();
-      }
+      };
 
+     /**
+      * Add a listener so we can be notified when the photo has been taken, and show the camera interface
+      */
       self.takePicture = function ()
       {
         self._note.camera.addListenerForNotification ( "photoCaptured", self.onPhotoCaptured );
         self._note.camera.takePicture()
             .catch ( function ( anError ) {
+                       // if we have an error, remove the listener
+                       self._note.camera.removeListenerForNotification ( "photoCaptured", self.onPhotoCaptured );
                        console.log (anError );
                      })
             .done();
-      }
+      };
 
       /**
        * we get to use some of the text editor's renderToElement to load
@@ -138,21 +150,17 @@ function ( _y, noteStorageSingleton, imageNoteViewHTML,
       self.overrideSuper ( self.class, "renderToElement", self.renderToElement );
       self.renderToElement = function ()
       {
-         // call super, which will also get our HTML into the element,
-         // and hook up the elements it knows are there
          self.super ( _className, "renderToElement" );
 
-         // and now find and link up any elements we want to keep track of
          self._takePictureButton = self.element.querySelector ( ".image-container .ui-glyph.non-outline");
          self._imageContainer = self.element.querySelector (".image-container" );
 
-         // these should also have listeners
          Hammer ( self._takePictureButton ).on("tap", self.takePicture);
 
           // update the photo
          self.updatePhoto ();
 
-      }
+      };
 
       /**
        * Clean up after ourselves and stop listening to notifications
@@ -164,10 +172,10 @@ function ( _y, noteStorageSingleton, imageNoteViewHTML,
          self._imageContainer = null;
          self._note.camera.removeListenerForNotification ( "photoCaptured", self.onPhotoCaptured );
          self.super ( _className, "destroy" );
-      }
+      };
 
       return self;
-   }
+   };
 
    return ImageNoteEditView;
 });

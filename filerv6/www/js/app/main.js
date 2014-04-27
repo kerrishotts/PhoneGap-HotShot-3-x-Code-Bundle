@@ -4,9 +4,9 @@
  * 
  * main.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 2.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -50,12 +50,12 @@ define ( ["yasmf", "app/views/noteListView"], function ( _y, NoteListView )
       console.log ( "Application paused" );
       // on iOS, this isn't processed until a resume event,
       // since calls to the native layer are delayed
-   }
+   };
 
    APP.onResume = function ()
    {
       console.log ( "Application resumed" );
-   }
+   };
 
    APP._lastConnectionStatus = "unknown";
    APP._lastConnectionAlert = null;
@@ -94,12 +94,12 @@ define ( ["yasmf", "app/views/noteListView"], function ( _y, NoteListView )
            }
         }
      }
-   }
+   };
 
    APP.onBatteryStatusChanged = function (sender, notification, data)
    {
      console.log ( "Battery status: " + data[0].level + "; is plugged in? " + data[0].isPlugged );
-   }
+   };
 
    APP.onMenuButtonPressed = function ()
    {
@@ -110,7 +110,7 @@ define ( ["yasmf", "app/views/noteListView"], function ( _y, NoteListView )
             APP.navigationController.topView.onMenuButton();
          }
       }
-   }
+   };
 
    APP.onSearchButtonPressed = function ()
    {
@@ -121,7 +121,7 @@ define ( ["yasmf", "app/views/noteListView"], function ( _y, NoteListView )
             APP.navigationController.topView.onSearchButton();
          }
       }
-   }
+   };
    // APP.start will load the first view and kick us off
    APP.start = function ()
    {
@@ -174,7 +174,7 @@ define ( ["yasmf", "app/views/noteListView"], function ( _y, NoteListView )
       navigationController.initWithOptions ( { rootView: noteListView, parent: rootContainer } );
       APP.navigationController = navigationController;
 
-   }
+   };
 
    return APP;
 });

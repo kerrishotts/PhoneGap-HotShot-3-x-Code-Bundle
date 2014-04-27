@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -56,7 +56,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( 
       self.getMedia = function ()
       {
          return self._media;
-      }
+      };
       Object.defineProperty ( self, "media", {get: self.getMedia, configurable: true});
 
       /**
@@ -76,7 +76,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( 
       self._updateUnit = function ()
       {
          self.unitValue = self._media.duration / 1000; // we want seconds, not milliseconds
-      }
+      };
 
       /**
        * Called to update the modified date (after recording)
@@ -84,7 +84,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( 
       self._updateModificationDate = function ()
       {
          self._modifiedDate = new Date();
-      }
+      };
 
       /**
        * Override setting the media contents so that we can create a new Media
@@ -104,7 +104,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( 
          self.notify ( "mediaContentsChanged" );
          self._media.addListenerForNotification ( "durationUpdated", self._updateUnit );
          self._media.addListenerForNotification ( "recordingStopped", self._updateModificationDate );
-      }
+      };
       Object.defineProperty ( self, "mediaContents", {get: self.getMediaContents, set: self.setMediaContents, configurable: true});
 
       /**
@@ -116,9 +116,9 @@ define ( ["yasmf","app/models/baseNote", "app/models/mediaManager"], function ( 
          self._media.destroy();
          self._media = null;
          self.super ( _className, "destroy" );
-      }
+      };
       return self;
-   }
+   };
 
    _y.addTranslations ( {
       "app.an.SECOND":

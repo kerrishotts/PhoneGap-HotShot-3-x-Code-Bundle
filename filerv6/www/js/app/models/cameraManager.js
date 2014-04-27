@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -52,17 +52,16 @@ define ( ["yasmf", "Q"], function ( _y, Q )
 
       /**
        * The quality of the image to capture
-       * @type {Number}
        */
       self._quality = 75;
       self.getQuality = function ()
       {
          return self._quality;
-      }
+      };
       self.setQuality = function ( theQuality )
       {
          self._quality = theQuality;
-      }
+      };
       Object.defineProperty ( self, "quality", { get: self.getQuality, set: self.setQuality, configurable: true });
 
       /**
@@ -75,56 +74,53 @@ define ( ["yasmf", "Q"], function ( _y, Q )
       self.getCameraSource = function ()
       {
          return self._cameraSource;
-      }
+      };
       self.setCameraSource = function ( theSource )
       {
          self._cameraSource = theSource;
-      }
+      };
       Object.defineProperty ( self, "cameraSource", { get: self.getCameraSource, set: self.setCameraSource, configurable: true });
 
       /**
        * Determines if editing is allowed after the image is captured
-       * @type {Boolean}
        */
       self._editingAllowed = false;
       self.getEditingAllowed = function ()
       {
          return self._editingAllowed;
-      }
+      };
       self.setEditingAllowed = function ( isEditingAllowed )
       {
          self._editingAllowed = isEditingAllowed;
-      }
+      };
       Object.defineProperty ( self, "editingAllowed", { get: self.getEditingAllowed, set: self.setEditingAllowed, configurable: true });
 
       /**
        * Sets the encoding for the captured image. Valid options:
        * Camera.EncodingType.JPEG
        * Camera.EncodingType.PNG
-       * @type {[type]}
        */
       self._encodingType = Camera.EncodingType.JPEG;
       self.getEncodingType = function ()
       {
          return self._encodingType;
-      }
+      };
       self.setEncodingType = function ( theEncodingType )
       {
          self._encodingType = theEncodingType;
-      }
+      };
       Object.defineProperty ( self, "encodingType", { get: self.getEncodingType, set: self.setEncodingType, configurable: true });
 
       /**
        * The target size is a {width: #, height: #} object
        * that defines the target size of the captured image.
        * Aspect ratio is maintained.
-       * @type {Object}
        */
       self._targetSize = null;
       self.getTargetSize = function ()
       {
          return self._targetSize;
-      }
+      };
       self.setTargetSize = function ( targetWidth, targetHeight )
       {
         if (typeof targetWidth === "object")
@@ -135,7 +131,7 @@ define ( ["yasmf", "Q"], function ( _y, Q )
         {
           self._targetSize = { width: targetWidth, height: targetHeight };
         }
-      }
+      };
       Object.defineProperty ( self, "targetSize", { get: self.getTargetSize, set: self.setTargetSize, configurable: true });
 
       /**
@@ -149,45 +145,43 @@ define ( ["yasmf", "Q"], function ( _y, Q )
       self.getMediaFilter = function ()
       {
          return self._mediaFilter;
-      }
+      };
       self.setMediaFilter = function ( filter )
       {
          self._mediaFilter = filter;
-      }
+      };
       Object.defineProperty ( self, "mediaFilter", { get: self.getMediaFilter, set: self.setMediaFilter, configurable: true });
 
       /**
        * If true, use the correct orientation as obtained from
        * the device orientation while the image was taken. If false,
        * use the captured orientation.
-       * @type {Boolean}
        */
       self._useCorrectOrientation = true;
       self.getUseCorrectOrientation = function ()
       {
          return self._useCorrectOrientation;
-      }
+      };
       self.setUseCorrectOrientation = function ( useCorrectOrientation )
       {
          self._useCorrectOrientation = useCorrectOrientation;
-      }
+      };
       Object.defineProperty ( self, "useCorrectOrientation", { get: self.getUseCorrectOrientation, 
                                                                set: self.setUseCorrectOrientation, configurable: true });
 
       /**
        * If true, saves the captured image ot the photo album
        * in addition to the app's file system
-       * @type {Boolean}
        */
       self._alsoSaveToPhotoAlbum = false;
       self.getAlsoSaveToPhotoAlbum = function ()
       {
          return self._alsoSaveToPhotoAlbum;
-      }
+      };
       self.setAlsoSaveToPhotoAlbum = function ( alsoSaveToPhotoAlbum )
       {
          self._alsoSaveToPhotoAlbum = alsoSaveToPhotoAlbum;
-      }
+      };
       Object.defineProperty ( self, "alsoSaveToPhotoAlbum", { get: self.getAlsoSaveToPhotoAlbum, 
                                                               set: self.setAlsoSaveToPhotoAlbum, configurable: true });
 
@@ -199,11 +193,11 @@ define ( ["yasmf", "Q"], function ( _y, Q )
       self.getCameraDirection = function ()
       {
          return self._cameraDirection;
-      }
+      };
       self.setCameraDirection = function ( theCameraDirection )
       {
          self._cameraDirection = theCameraDirection;
-      }
+      };
       Object.defineProperty ( self, "cameraDirection", { get: self.getCameraDirection, 
                                                          set: self.setCameraDirection, configurable: true });
 
@@ -211,17 +205,16 @@ define ( ["yasmf", "Q"], function ( _y, Q )
        * src indicates where we want to either
        *  1) save the photo
        *  2) check if the photo exists
-       * @type {String}
        */
       self._src = null;
       self.getSrc = function ()
       {
          return self._src;
-      }
+      };
       self.setSrc = function ( theSource )
       {
          self._src = theSource;
-      }
+      };
       Object.defineProperty ( self, "src", { get: self.getSrc, set: self.setSrc, configurable: true });
 
       /**
@@ -260,7 +253,7 @@ define ( ["yasmf", "Q"], function ( _y, Q )
                                { captureOptions.correctOrientation = self.useCorrectOrientation; }
          captureOptions.destinationType = Camera.DestinationType.FILE_URI;
          return captureOptions;
-      }
+      };
 
       /**
        * Captures an image and returns a promise resolving to the URI if successful or an error if not.
@@ -281,7 +274,7 @@ define ( ["yasmf", "Q"], function ( _y, Q )
          }
 
          return deferred.promise;
-      }
+      };
 
       /**
        * Takes a picture, and then moves it to the specified src position when complete.
@@ -321,7 +314,7 @@ define ( ["yasmf", "Q"], function ( _y, Q )
            .catch ( function ( anError ) { deferred.resolve ( null ); })
            .done();
          return deferred.promise;
-      }
+      };
 
       /**
        * Initialize the object; we also set up the source if it is passed
@@ -331,7 +324,7 @@ define ( ["yasmf", "Q"], function ( _y, Q )
       {
          self.super ( _className, "init" );
          if (typeof theSource !== "undefined") { self.src = theSource; }
-      }
+      };
 
       return self;
    };

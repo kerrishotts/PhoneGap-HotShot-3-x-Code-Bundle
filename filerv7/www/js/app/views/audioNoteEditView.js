@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -72,8 +72,7 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
                             "NOTE_NAME":     self._note.name,
                             "NOTE_CONTENTS": self._note.textContents,
                             "BACK":          _y.T("BACK"),
-                            "DELETE_NOTE":   _y.T("app.nev.DELETE_NOTE"),
-                            "SAVE_NOTE":     _y.T("app.nev.SAVE_NOTE")
+                            "DELETE_NOTE":   _y.T("app.nev.DELETE_NOTE")
                           });
      };
 
@@ -90,6 +89,7 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
        self._recordAudioButton.classList.add("ui-glyph-circle-filled");
        self._note.media.removeListenerForNotification("recordingStopped", self.onAudioStopped);
        self._note.media.removeListenerForNotification("playingStopped", self.onAudioStopped);
+       self._note.media.removeListenerForNotification("positionUpdated", self.updateAudioInformation);
      };
 
      /**
@@ -156,7 +156,7 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
                                                           "MM1": _y.format(positionParts.minutes, "d2"),
                                                           "SS2": _y.format(durationParts.seconds, "d2"),
                                                           "MM2": _y.format(durationParts.minutes, "d2") });
-     }
+     };
 
      /**
       * we get to use some of the text editor's renderToElement to load
@@ -170,11 +170,8 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
        self.super(_className, "renderToElement");
 
        //look for the audio buttons
-       // and now find and link up any elements we want to keep track of
-       var audioButtons = self.element.querySelectorAll(".audio-container .ui-glyph");
-       self._recordAudioButton = audioButtons [0];
-       self._playAudioButton = audioButtons [1];
-
+       self._recordAudioButton = self.element.querySelector(".audio-container .ui-glyph-circle-filled");
+       self._playAudioButton = self.element.querySelector(".audio-container .ui-glyph-play-filled");
        self._audioInformation = self.element.querySelector(".audio-information");
 
        // these should also have listeners
@@ -198,7 +195,7 @@ function ( _y, noteStorageSingleton, audioNoteViewHTML,
          self._note.media.removeListenerForNotification("durationUpdated", self.updateAudioInformation);
        });
 
-     }
+     };
      /**
       * Clean up after ourselves and stop listening to notifications
       */

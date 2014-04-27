@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -52,51 +52,47 @@ define ( ["yasmf", "Q"], function ( _y, Q )
 
       /**
        * The maximum duration for the recorded video. If -1, no limit.
-       * @type {Number}
        */
       self._maximumDuration = -1;
       self.getMaximumDuration = function ()
       {
          return self._maximumDuration;
-      }
+      };
       self.setMaximumDuration = function ( theDuration )
       {
          self._maximumDuration = theDuration;
-      }
+      };
       Object.defineProperty ( self, "maximumDuration", { get: self.getMaximumDuration,
                                                          set: self.setMaximumDuration,
                                                          configurable: true } );
       /**
        * The path + file to the recorded video. After capturing, the video file
        * will be moved to this location.
-       * @type {String}
        */
       self._src = null;
       self.getSrc = function ()
       {
          return self._src;
-      }
+      };
       self.setSrc = function ( theSource )
       {
          self._src = theSource;
-      }
+      };
       Object.defineProperty ( self, "src", { get: self.getSrc, set: self.setSrc,
                                              configurable: true } );
 
       /**
        * After recording, this contains the length of the video, in seconds
-       * @type {Number}
        */
       self._capturedDuration = -1;
       self.getCapturedDuration = function ()
       {
          return self._capturedDuration;
-      }
+      };
       Object.defineProperty ( self, "capturedDuration", { get: self.getCapturedDuration, configurable: true } );
 
       /**
        * Builds the options object for captureVideo
-       * @return {Object} Video Capture Options
        */
       self._buildCaptureOptions = function ()
       {
@@ -109,12 +105,11 @@ define ( ["yasmf", "Q"], function ( _y, Q )
          }
          captureOptions.limit = 1; // we only support one video at a time
          return captureOptions;
-      }
+      };
 
       /**
        * Attempts to capture video. Returns a promise that resolves to a list
        * of media files (which should always be one, in our case) or an error.
-       * @return {Promise} 
        */
       self._captureVideo = function ()
       {
@@ -134,14 +129,12 @@ define ( ["yasmf", "Q"], function ( _y, Q )
             deferred.reject ( anError );
          }
          return deferred.promise;
-      }
+      };
 
       /**
        * Gets the duration of a specific media file. Only works after the
        * file has been captured from the camera. The duration is returned
        * when the promise is resolved.
-       * @param  {MediaFile} theMediaFile
-       * @return {Promise}              
        */
       self._getCapturedDuration = function ( theMediaFile )
       {
@@ -156,13 +149,12 @@ define ( ["yasmf", "Q"], function ( _y, Q )
             deferred.reject (anError);
          }
          return deferred.promise;
-      }
+      };
 
       /**
        * Captures a video clip. When complete, the duration is obtained, and
        * then the file is moved to src. When that is finished, the videoCaptured
        * notification is sent.
-       * @return {Promise}
        */
       self.captureVideo = function ()
       {
@@ -190,9 +182,9 @@ define ( ["yasmf", "Q"], function ( _y, Q )
                   .then ( function (theFileEntry ) {
                      return fm.moveFile ( theFileEntry, targetPath, targetName ) ; 
                   })
-                  .then ( function ( ) { self.notify ("videoCaptured"); return; })
+                  .then ( function ( ) { self.notify ("videoCaptured"); })
          ;
-      }
+      };
 
       /**
        * Initialize the object; we also set up the source if it is passed
@@ -202,9 +194,9 @@ define ( ["yasmf", "Q"], function ( _y, Q )
       {
          self.super ( _className, "init" );
          if (typeof theSource !== "undefined") { self.src = theSource; }
-      }
+      };
 
       return self;
-   }
+   };
    return VideoManager;
 });

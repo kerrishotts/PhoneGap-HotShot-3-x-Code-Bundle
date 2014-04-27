@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -71,14 +71,13 @@ define ( ["yasmf"], function ( _y )
       /**
        * Returns / sets the position in the stream. Position is in milliseconds.
        * If < 0, the position has yet to be determined.
-       * @type {Number}
        */
       self._position = -1; // in milliseconds
       self.getPosition = function ()
       {
          // assumes _position is being updated by an interval calling _media.getCurrentPosition
          return self._position >= 0 ? self._position : 0;
-      }
+      };
       self.setPosition = function ( thePosition )
       {
          if (self._media !== null)
@@ -90,20 +89,19 @@ define ( ["yasmf"], function ( _y )
          {
             throw new Error ( "Can't seek to a position without initialized Media." );
          }
-      }
+      };
       Object.defineProperty ( self, "position", { get: self.getPosition, set: self.setPosition, configurable: true } );
 
       /**
        * Returns the duration of the stream. In milliseconds.
        * If < 0, the duration has yet to be determined. Gives up after 20 seconds.
-       * @type {Number}
        */
       self._duration = -1; // in milliseconds
       self.getDuration = function ()
       {
          // assumes the duration has been updated by _media.getDuration()
          return self._duration >= 0 ? self._duration : 0;
-      }
+      };
       Object.defineProperty ( self, "duration", { get: self.getDuration, configurable: true} );
 
 
@@ -111,47 +109,43 @@ define ( ["yasmf"], function ( _y )
       self.getState = function ()
       {
         return self._state;
-      }
+      };
       Object.defineProperty ( self, "state", { get: self.getState, configurable: true } );
 
       /**
        * Determines if media is playing (true), or not (false)
-       * @type {Boolean}
        */
       self.getIsPlaying = function ()
       {
          return self._state === MediaManager.STATE_PLAYING;
-      }
+      };
       Object.defineProperty ( self, "isPlaying", { get: self.getIsPlaying, configurable: true } );
 
       /**
        * Determines if media is recording (true), or not (false)
-       * @type {Boolean}
        */
       self.getIsRecording = function ()
       {
          return self._state === MediaManager.STATE_RECORDING;
-      }
+      };
       Object.defineProperty ( self, "isRecording", { get: self.getIsRecording, configurable: true } );
       
       /**
        * Determines if media is paused (true), or not (false)
-       * @type {Boolean}
        */
       self.getIsPaused = function ()
       {
          return self._state === MediaManager.STATE_PAUSED;
-      }
+      };
       Object.defineProperty ( self, "isPaused", { get: self.getIsPaused, configurable: true } );
 
      /**
       * Determines if media is stopped (true), or not (false)
-      * @type {Boolean}
       */
      self.getIsStopped = function ()
      {
        return self._state === MediaManager.STATE_STOPPED;
-     }
+     };
      Object.defineProperty ( self, "isStopped", { get: self.getIsStopped, configurable: true } );
 
       /**
@@ -198,7 +192,7 @@ define ( ["yasmf"], function ( _y )
               self.notify ( "durationUpdated");
             }
          }
-      }
+      };
 
 
       /**
@@ -206,13 +200,13 @@ define ( ["yasmf"], function ( _y )
        */
       self._mediaSuccess = function ()
       {
-         self._state = MediaManager.STATE_STOPPED;
          self._position = 0;
          self.notify ( "positionUpdated" );
          if (self.isPlaying) { self.notify ( "playingStopped" ); }
          if (self.isRecording) { self.notify ( "recordingStopped" ); }
+         self._state = MediaManager.STATE_STOPPED;
          self._media.release();
-      }
+      };
 
       /**
        * Allows access to the last error intercepted. Use .code to get the error code,
@@ -222,7 +216,7 @@ define ( ["yasmf"], function ( _y )
       self.getLastError = function ()
       {
          return self._lastError;
-      }
+      };
       Object.defineProperty ( self, "lastError", { get: self.getLastError, configurable: true});
 
       /**
@@ -233,7 +227,7 @@ define ( ["yasmf"], function ( _y )
          self._lastError = anError;
          console.log ( "Media Error: encountered " + anError.code + ". Current status is " + self.status);
          self.notify ( "error" );
-      }
+      };
 
       /**
        * The status of the media object; as described in the cordova docs.
@@ -243,7 +237,7 @@ define ( ["yasmf"], function ( _y )
       self.getMediaStatus = function ()
       {
          return self._mediaStatus;
-      }
+      };
       Object.defineProperty ( self, "mediaStatus", {get: self.getMediaStatus, configurable: true});
 
       /**
@@ -253,7 +247,7 @@ define ( ["yasmf"], function ( _y )
       {
          self._status = aStatus;
          self.notify ( "statusUpdated" );
-      }
+      };
 
       /**
        * Creates the underlying _media object and sets up the recurring
@@ -268,7 +262,7 @@ define ( ["yasmf"], function ( _y )
             self._state = MediaManager.STATE_STOPPED;
             self.notify ( "mediaAllocated");
          }
-      }
+      };
       /**
        * Releases the underlying media object and destroys the recurring status updates.
        */
@@ -286,7 +280,7 @@ define ( ["yasmf"], function ( _y )
          self._media = null;
          self._state = MediaManager.STATE_NONE;
          self.notify ("mediaDestroyed");
-      }
+      };
 
       /*
        * src stores the URL to the media file. This can be a file, URL, etc., and doesn't need
@@ -296,7 +290,7 @@ define ( ["yasmf"], function ( _y )
       self.getSrc = function ()
       {
          return self._src;
-      }
+      };
       self.setSrc = function ( newSrc )
       {
          self._destroyMediaObjectIfNecessary();
@@ -309,7 +303,7 @@ define ( ["yasmf"], function ( _y )
          {
           self._src = null;
          }
-      }
+      };
       Object.defineProperty ( self, "src", { get: self.getSrc, set: self.setSrc, configurable: true } );
 
       /**
@@ -325,7 +319,7 @@ define ( ["yasmf"], function ( _y )
          self.notify ( "playingStarted" );
          self._media.play();
          self._state = MediaManager.STATE_PLAYING;
-      }
+      };
 
       /**
        * Pause playback. No effect if already paused, or if recording.
@@ -343,7 +337,7 @@ define ( ["yasmf"], function ( _y )
          {
            console.log ( "Media Error: can't pause during recording.")
          }
-      }
+      };
 
       /**
        * Record. If already playing or recording, it stops first.
@@ -362,7 +356,7 @@ define ( ["yasmf"], function ( _y )
         self.notify ( "recordingStarted" );
         self.notify ( "durationUpdated" );
         self.notify ( "positionUpdated" );
-      }
+      };
 
       /**
        * Stop playback or recording (depending on which is active).
@@ -390,7 +384,7 @@ define ( ["yasmf"], function ( _y )
             self.notify ( "playingStopped" );
             self._media.release();
          }
-      }
+      };
 
       /**
        * Initialize the object; we also set up the source if it is passed
@@ -400,7 +394,7 @@ define ( ["yasmf"], function ( _y )
       {
          self.super ( _className, "init" );
          if (typeof theSource !== "undefined") { self.src = theSource; }
-      }
+      };
 
       /**
        * Destroy the object; release the media object if necessary.
@@ -410,14 +404,13 @@ define ( ["yasmf"], function ( _y )
       {
          self._destroyMediaObjectIfNecessary();
          self.super ( _className, "destroy" );
-      }
+      };
 
       return self;
    };
 
   /**
    *  Some useful constants for play state
-   * @type {number}
    */
    MediaManager.STATE_NONE = 0;
    MediaManager.STATE_PAUSED = 1;

@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -74,7 +74,7 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          self._note.name = self._nameEditor.innerText;
          self._note.textContents = self._contentsEditor.value;
          noteStorageSingleton.saveNote ( self._note );
-      }
+      };
 
       /**
        * Delete the specific note. NO WARNING!
@@ -93,7 +93,7 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
       {
          self.saveNote();
          self.navigationController.popView();
-      }
+      };
 
       /**
        * Render the template, passing the note contents and
@@ -110,34 +110,31 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
                                  "BACK": _y.T("BACK"),
                                  "DELETE_NOTE": _y.T("app.nev.DELETE_NOTE")
                               });
-      }
+      };
 
       /**
-       * RenderToElement renders the templat, finds our elements in the DOM
+       * RenderToElement renders the template, finds our elements in the DOM
        * and hooks up the necessary event handling
        */
       self.overrideSuper ( self.class, "renderToElement", self.renderToElement );
       self.renderToElement = function ()
       {
-         // call super, which will also get our HTML into the element
          self.super ( _className, "renderToElement" );
 
-         // and now find and link up any elements we want to keep track of
          self._navigationBar = self.element.querySelector ( ".ui-navigation-bar" );
          self._nameEditor = self.element.querySelector ( ".ui-navigation-bar .ui-title" );
-         self._backButton = self.element.querySelectorAll ( ".ui-navigation-bar .ui-bar-button" )[0];
-         self._deleteButton = self.element.querySelectorAll ( ".ui-navigation-bar .ui-bar-button" )[1];
+
+         self._backButton = self.element.querySelector ( ".ui-navigation-bar .ui-bar-button-group.ui-align-left .ui-back-button" );
+         self._deleteButton = self.element.querySelector ( ".ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button" );
          self._scrollContainer = self.element.querySelector ( ".ui-scroll-container" );
          self._contentsEditor = self.element.querySelector ( ".ui-text-box" );
 
-         // the back and delete buttons should have an event listener
          Hammer ( self._backButton ).on("tap", self.goBack);
          Hammer ( self._deleteButton ).on("tap", self.deleteNote );
 
-         // and make sure we know about the physical back button
          _y.UI.backButton.addListenerForNotification ( "backButtonPressed", self.goBack );
 
-      }
+      };
 
       /**
        * Initializes our view -- theParentElement is the DOM element to attach to, and
@@ -155,7 +152,7 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          // listen for our disappearance
          self.addListenerForNotification ( "viewWasPopped", self.releaseBackButton );
          self.addListenerForNotification ( "viewWasPopped", self.destroy );
-      }
+      };
 
       self.overrideSuper ( self.class, "initWithOptions", self.init );
       self.initWithOptions = function ( options )
@@ -169,13 +166,13 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          }
 
          self.init ( theParentElement, theNote );
-      }
+      };
 
       self.releaseBackButton = function ()
       {
          // and make sure we forget about the physical back button
          _y.UI.backButton.removeListenerForNotification ( "backButtonPressed", self.goBack );
-      }
+      };
       /**
        * When destroy is called, release all our elements and
        * remove our backButton listener.
@@ -198,7 +195,7 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          self._contentsEditor = null;
 
          self.super ( _className, "destroy" );
-      }
+      };
 
       return self;
    };

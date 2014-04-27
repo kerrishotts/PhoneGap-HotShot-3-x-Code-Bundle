@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -69,17 +69,18 @@ function ( _y, noteStorageSingleton, videoNoteViewHTML,
       self.overrideSuper ( self.class, "render", self.render );
       self.render = function ()
       {
-         // no need to call super; it'd be wrong, anyway.
-         return _y.template ( videoNoteViewHTML, 
+         return _y.template ( videoNoteViewHTML,
                               {
                                  "NOTE_NAME": self._note.name,
                                  "NOTE_CONTENTS": self._note.textContents,
                                  "BACK": _y.T("BACK"),
-                                 "DELETE_NOTE": _y.T("app.nev.DELETE_NOTE"), 
-                                 "SAVE_NOTE": _y.T("app.nev.SAVE_NOTE")
+                                 "DELETE_NOTE": _y.T("app.nev.DELETE_NOTE")
                               });
-      }
+      };
 
+     /**
+      * Update the video element (after loading or a video is recorded)
+      */
       self.updateVideo = function ()
       {
         var html = "<video controls src='%URL%?%CACHE%'></video>";
@@ -89,23 +90,31 @@ function ( _y, noteStorageSingleton, videoNoteViewHTML,
                     self._videoElementContainer.innerHTML = _y.template ( html, {
                       "URL": nativePath,
                       "CACHE": cacheBust} );
-      }
+      };
 
+     /**
+      * After video is captured, remove the listener and update the video on-screen
+      */
       self.onVideoCaptured = function ()
       {
         self._note.video.removeListenerForNotification ( "videoCaptured", self.onVideoCaptured );
         self.updateVideo();
-      }
+      };
 
+     /**
+      * Called when the user wants to record video
+      */
       self.captureVideo = function ()
       {
         self._note.video.addListenerForNotification ( "videoCaptured", self.onVideoCaptured );
         self._note.video.captureVideo()
             .catch ( function ( anError ) {
+                       // if an error, remove the listener
+                       self._note.video.removeListenerForNotification ( "videoCaptured", self.onVideoCaptured );
                        console.log (anError );
                      })
             .done();
-      }
+      };
 
       /**
        * we get to use some of the text editor's renderToElement to load
@@ -114,21 +123,17 @@ function ( _y, noteStorageSingleton, videoNoteViewHTML,
       self.overrideSuper ( self.class, "renderToElement", self.renderToElement );
       self.renderToElement = function ()
       {
-         // call super, which will also get our HTML into the element,
-         // and hook up the elements it knows are there
          self.super ( _className, "renderToElement" );
 
-         // and now find and link up any elements we want to keep track of
          self._recordButton = self.element.querySelector ( ".video-container .video-actions .ui-glyph");
          self._videoElementContainer = self.element.querySelector (".video-container .video-element" );
 
-         // these should also have listeners
          Hammer ( self._recordButton ).on("tap", self.captureVideo);
 
           // update the photo
          self.updateVideo ();
 
-      }
+      };
 
       /**
        * Clean up after ourselves and stop listening to notifications
@@ -140,10 +145,10 @@ function ( _y, noteStorageSingleton, videoNoteViewHTML,
          self._videoElementContainer = null;
          self._note.video.removeListenerForNotification ( "videoCaptured", self.onVideoCaptured );
          self.super ( _className, "destroy" );
-      }
+      };
 
       return self;
-   }
+   };
 
    return VideoNoteEditView;
 });

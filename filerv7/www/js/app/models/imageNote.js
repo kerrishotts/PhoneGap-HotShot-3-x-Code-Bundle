@@ -6,7 +6,7 @@
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -55,7 +55,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/cameraManager"], function (
       self.getCamera = function ()
       {
          return self._camera;
-      }
+      };
       Object.defineProperty ( self, "camera", {get: self.getCamera, configurable: true});
 
       /**
@@ -69,7 +69,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/cameraManager"], function (
       self.unitLabels = [ "bytes", "byte", "bytes", "KB", "MB" ];
 
       /**
-       * 
+       * Called when we need to update the unit (after a picture has been taken)
        */
       self. _updateUnit = function ()
       {
@@ -85,8 +85,11 @@ define ( ["yasmf","app/models/baseNote", "app/models/cameraManager"], function (
                       return;
                      } )
             .done ();
-      }
+      };
 
+     /**
+      * Override getFormattedUnitValue so that we can report a human-readable file size
+      */
       self.overrideSuper ( self.class, "getFormattedUnitValue", self.getFormattedUnitValue );
       self.getFormattedUnitValue = function ()
       {
@@ -105,7 +108,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/cameraManager"], function (
             return _y.N(self.unitValue / (1024*1024) ) + _y.T(self.unitLabels[ 4 ])
           }
         }
-      }
+      };
       Object.defineProperty ( self, "formattedUnitValue", {get: self.getFormattedUnitValue, configurable: true});
 
 
@@ -115,7 +118,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/cameraManager"], function (
       self._updateModificationDate = function ()
       {
          self._modifiedDate = new Date();
-      }
+      };
 
       /**
        * Override setting the media contents so that we can create a new camera notification
@@ -134,7 +137,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/cameraManager"], function (
          self.notify ( "mediaContentsChanged" );
          self._camera.addListenerForNotification ( "photoCaptured", self._updateUnit );
          self._camera.addListenerForNotification ( "photoCaptured", self._updateModificationDate );
-      }
+      };
       Object.defineProperty ( self, "mediaContents", {get: self.getMediaContents, set: self.setMediaContents, configurable: true});
 
       /**
@@ -146,9 +149,9 @@ define ( ["yasmf","app/models/baseNote", "app/models/cameraManager"], function (
          self._camera.destroy();
          self._camera = null;
          self.super ( _className, "destroy" );
-      }
+      };
       return self;
-   }
+   };
 
    return ImageNote;
 });

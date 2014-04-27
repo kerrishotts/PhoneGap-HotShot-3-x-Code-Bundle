@@ -4,9 +4,9 @@
  *
  * noteListView.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 2.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
  * without restriction, including without limitation the rights to use, copy, modify,
@@ -83,20 +83,23 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
                      })
                .catch(function (anError) { console.log(anError) })
                .done();
-           }
+           };
 
-           /**
-            * Creates a new note; called when "New" is tapped
-            */
+            /**
+             * Create a new text note
+             */
            self.createNewTextNote = function ()
            {
              self._createAndEditNote(noteFactory.TEXTNOTE);
            };
 
-           self.createNewAudioNote = function ()
-           {
-             self._createAndEditNote(noteFactory.AUDIONOTE);
-           };
+             /**
+              * Create a new audio note
+              */
+             self.createNewAudioNote = function ()
+             {
+               self._createAndEditNote(noteFactory.AUDIONOTE);
+             };
 
            /**
             * Edit an existing note. Called when a note item is tapped in the list.
@@ -114,6 +117,9 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
              self.navigationController.pushView(aNoteEditView);
            };
 
+             /**
+              * Delete an existing note
+              */
            self.deleteExistingNote = function (e)
            {
              // get the UID
@@ -121,6 +127,9 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
              noteStorageSingleton.removeNote(theUID);
            };
 
+      /**
+       * Expose the underlying actions for a note; called when a right-to-left swipe is detected
+       */
            self.exposeActionForNote = function (e)
            {
              _y.UI.styleElement(this, "transition", "%PREFIX%transform 0.3s ease-in-out");
@@ -129,6 +138,9 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
              _y.UI.styleElement(this, "transform", "translateX(-" + amountToTranslate + ")");
            };
 
+      /**
+       * hide the underlying actions for a note
+       */
            self.hideActionForNote = function (e)
            {
              _y.UI.styleElement(this, "transition", "%PREFIX%transform 0.3s ease-in-out");
@@ -139,10 +151,6 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
             */
            self.quitApp = function ()
            {
-             // only called on platforms that support going back on the first page
-             // on iOS we don't have a back button to call it.
-             //
-             // note: not guaranteed to always work
              navigator.app.exitApp();
            };
 
@@ -152,7 +160,6 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
              self.overrideSuper ( self.class, "render", self.render );
              self.render = function ()
              {
-               // no need to call super; it's abstract
                return _y.template(_y.device.platform()==="android" ? noteListViewAndroidHTML : noteListViewHTML,
                                   {
                                     "APP_TITLE": _y.T("APP_TITLE")
@@ -167,28 +174,21 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
            self.overrideSuper(self.class, "renderToElement", self.renderToElement);
            self.renderToElement = function ()
            {
-             // call super, which will also get our HTML into the element
              self.super(_className, "renderToElement");
 
-             // and now find and link up any elements we want to keep track of
              self._navigationBar = self.element.querySelector(".ui-navigation-bar");
              self._scrollContainer = self.element.querySelector(".ui-scroll-container");
              self._listOfNotes = self.element.querySelector(".ui-list");
 
-               // all our "new" buttons:
-               var newButtons = self.element.querySelectorAll(".ui-bar-button");
-               self._newTextNoteButton = newButtons[0];
-               self._newAudioNoteButton = newButtons[1];
-               self._newImageNoteButton = newButtons[2];
-               self._newVideoNoteButton = newButtons[3];
+               self._newTextNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-page-text-new");
+               self._newAudioNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-sound-wave");
+               self._newImageNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-camera");
+               self._newVideoNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-camera-video");
 
 
-             // the new Button should have an event listener
-             //_y.UI.event.addListener ( self._newButton, "click", self.createNewNote );
              Hammer(self._newTextNoteButton).on("tap", self.createNewTextNote);
              Hammer(self._newAudioNoteButton).on("tap", self.createNewAudioNote);
 
-             // and make sure we know about the physical back button
              _y.UI.backButton.addListenerForNotification("backButtonPressed", self.quitApp);
            };
 
@@ -247,6 +247,8 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
 
                    Hammer(contentsElement).on("tap", self.editExistingNote);
 
+                       // right-to-left swipe exposes action, and when it occurs, we need add code to all other itmes
+                       // to hide all actions
                    Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal: true, drag_block_vertical: true, prevent_default: true }).on("dragleft", function (e)
                    {
                      var row = this;

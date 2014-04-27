@@ -4,9 +4,9 @@
  *
  * noteListView.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 6.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
  * without restriction, including without limitation the rights to use, copy, modify,
@@ -70,6 +70,10 @@ define ( ["yasmf",
              self._newImageNoteButton = null;
              self._newVideoNoteButton = null;
 
+             /**
+              * Displays an edit view by checking if we are in a split view or a regular
+              * navigation controller
+              */
              self._displayEditView = function (theView)
              {
                if (typeof self.navigationController.splitViewController !== "undefined")
@@ -89,6 +93,9 @@ define ( ["yasmf",
                }
              };
 
+             /**
+              * Create and edit a note of the requested type
+              */
              self._createAndEditNote = function (noteType)
              {
                // ask storage for a new note
@@ -105,29 +112,38 @@ define ( ["yasmf",
                  .done();
 
              };
+
              /**
-              * Creates a new note; called when "New" is tapped
+              * Create a new text note
               */
              self.createNewTextNote = function ()
              {
                self._createAndEditNote(noteFactory.TEXTNOTE);
              };
 
+             /**
+              * Create a new audio note
+              */
              self.createNewAudioNote = function ()
              {
                self._createAndEditNote(noteFactory.AUDIONOTE);
              };
 
+             /**
+              * Create a new image note
+              */
              self.createNewImageNote = function ()
              {
                self._createAndEditNote(noteFactory.IMAGENOTE);
              };
 
+             /**
+              * Create a new video note
+              */
              self.createNewVideoNote = function ()
              {
                self._createAndEditNote(noteFactory.VIDEONOTE);
              };
-
 
              /**
               * Edit an existing note. Called when a note item is tapped in the list.
@@ -144,6 +160,9 @@ define ( ["yasmf",
                self._displayEditView(aNoteEditView);
              };
 
+             /**
+              * Delete an existing note
+              */
              self.deleteExistingNote = function ()
              {
                // get the UID
@@ -168,6 +187,9 @@ define ( ["yasmf",
                }
              };
 
+             /**
+              * Display actions for the note; called if in a wide list view and an item is long-pressed
+              */
              self.popupActionsForNote = function (e)
              {
                e.gesture.preventDefault();
@@ -193,6 +215,9 @@ define ( ["yasmf",
                  .done();
              };
 
+             /**
+              * Expose the underlying actions for a note; called when a right-to-left swipe is detected
+              */
              self.exposeActionForNote = function (e)
              {
                _y.UI.styleElement(this, "transition", "%PREFIX%transform 0.3s ease-in-out");
@@ -201,20 +226,20 @@ define ( ["yasmf",
                _y.UI.styleElement(this, "transform", "translateX(-" + amountToTranslate + ")");
              };
 
+             /**
+              * hide the underlying actions for a note
+              */
              self.hideActionForNote = function (e)
              {
                _y.UI.styleElement(this, "transition", "%PREFIX%transform 0.3s ease-in-out");
                _y.UI.styleElement(this, "transform", "translateX(0px)");
              };
+
              /**
               * Quit the app, in response to a back button event.
               */
              self.quitApp = function ()
              {
-               // only called on platforms that support going back on the first page
-               // on iOS we don't have a back button to call it.
-               //
-               // note: not guaranteed to always work
                navigator.app.exitApp();
              };
 
@@ -224,7 +249,6 @@ define ( ["yasmf",
              self.overrideSuper ( self.class, "render", self.render );
              self.render = function ()
              {
-               // no need to call super; it's abstract
                return _y.template(_y.device.platform()==="android" ? noteListViewAndroidHTML : noteListViewHTML,
                                   {
                                     "APP_TITLE": _y.T("APP_TITLE")
@@ -239,31 +263,28 @@ define ( ["yasmf",
              self.overrideSuper ( self.class, "renderToElement", self.renderToElement );
              self.renderToElement = function ()
              {
-               // call super, which will also get our HTML into the element
                self.super(_className, "renderToElement");
 
-               // and now find and link up any elements we want to keep track of
                self._navigationBar = self.element.querySelector(".ui-navigation-bar");
                self._scrollContainer = self.element.querySelector(".ui-scroll-container");
                self._listOfNotes = self.element.querySelector(".ui-list");
 
-               // all our "new" buttons:
-               var newButtons = self.element.querySelectorAll(".ui-bar-button");
-               self._newTextNoteButton = newButtons[0];
-               self._newAudioNoteButton = newButtons[1];
-               self._newImageNoteButton = newButtons[2];
-               self._newVideoNoteButton = newButtons[3];
+               self._newTextNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-page-text-new");
+               self._newAudioNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-sound-wave");
+               self._newImageNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-camera");
+               self._newVideoNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-camera-video");
 
-               // the new Button should have an event listener
                Hammer(self._newTextNoteButton).on("tap", self.createNewTextNote);
                Hammer(self._newAudioNoteButton).on("tap", self.createNewAudioNote);
                Hammer(self._newImageNoteButton).on("tap", self.createNewImageNote);
                Hammer(self._newVideoNoteButton).on("tap", self.createNewVideoNote);
 
-               // and make sure we know about the physical back button
                _y.UI.backButton.addListenerForNotification("backButtonPressed", self.quitApp);
              };
 
+             /**
+              * private method that handles hiding any visible actions in a list
+              */
              self._hideActions = function (e)
              {
                e.gesture.preventDefault();
@@ -328,6 +349,9 @@ define ( ["yasmf",
                      {
                        // the following is applicable only when we're rendering a list view
                        // (not a thumbnail view)
+
+                       // right-to-left swipe exposes action, and when it occurs, we need add code to all other itmes
+                       // to hide all actions
                        Hammer(contentsElement, {swipe_velocity: 0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true }).on("dragleft", function (e) {
                          var row = this;
                          e.gesture.preventDefault();

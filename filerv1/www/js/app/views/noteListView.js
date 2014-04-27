@@ -4,9 +4,9 @@
  * 
  * noteListView.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 0.9.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -79,7 +79,7 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
              };
       
       /**
-       * Creates a new note; called when "New" is tapped
+       * Creates a new text note
        */
              self.createNewTextNote = function ()
              {
@@ -99,19 +99,15 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
         var aNoteEditView = noteViewFactory.createNoteEditView(aNote.class);
         // and tell it about the note
         aNoteEditView.initWithOptions({note: aNote, parent: self.parentElement});
-      }
+      };
 
       /**
        * Quit the app, in response to a back button event.
        */
       self.quitApp = function ()
       {
-         // only called on platforms that support going back on the first page
-         // on iOS we don't have a back button to call it.
-         // 
-         // note: not guaranteed to always work
          navigator.app.exitApp();
-      }
+      };
 
              /**
               * Render the template, passing the app title and translated text
@@ -119,7 +115,6 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
              self.overrideSuper ( self.class, "render", self.render );
              self.render = function ()
              {
-               // no need to call super; it's abstract
                return _y.template(_y.device.platform()==="android" ? noteListViewAndroidHTML : noteListViewHTML,
                                   {
                                     "APP_TITLE": _y.T("APP_TITLE")
@@ -134,26 +129,20 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
       self.overrideSuper ( self.class, "renderToElement", self.renderToElement );
       self.renderToElement = function ()
       {
-         // call super, which will also get our HTML into the element
          self.super ( _className, "renderToElement" );
 
-         // and now find and link up any elements we want to keep track of
          self._navigationBar = self.element.querySelector ( ".ui-navigation-bar" );
          self._scrollContainer = self.element.querySelector ( ".ui-scroll-container" );
          self._listOfNotes = self.element.querySelector ( ".ui-list" );
 
-               // all our "new" buttons:
-               var newButtons = self.element.querySelectorAll(".ui-bar-button");
-               self._newTextNoteButton = newButtons[0];
-               self._newAudioNoteButton = newButtons[1];
-               self._newImageNoteButton = newButtons[2];
-               self._newVideoNoteButton = newButtons[3];
+               self._newTextNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-page-text-new");
+               self._newAudioNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-sound-wave");
+               self._newImageNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-camera");
+               self._newVideoNoteButton = self.element.querySelector(".ui-bar-button.ui-glyph-camera-video");
 
 
-         // the new Button should have an event listener
          _y.UI.event.addListener ( self._newTextNoteButton, "click", self.createNewTextNote );
 
-         // and make sure we know about the physical back button
          _y.UI.backButton.addListenerForNotification ( "backButtonPressed", self.quitApp );
       }
 
@@ -199,7 +188,7 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
          }
          self._listOfNotes.innerHTML = "";
          self._listOfNotes.appendChild ( fragment );
-      }
+      };
 
              self.onOrientationChanged = function ()
              {
@@ -231,7 +220,7 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
          noteStorageSingleton.loadCollection();
                // we need to register for orientation changes
                _y.UI.orientationHandler.addListenerForNotification("orientationChanged", self.onOrientationChanged);
-      }
+      };
 
       self.overrideSuper ( self.class, "initWithOptions", self.init );
       self.initWithOptions = function ( options )
@@ -243,7 +232,7 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
          }
 
          self.init ( theParentElement );
-      }
+      };
 
       /**
        * Be a good citizen. Clean up after ourselves when asked.
@@ -264,7 +253,7 @@ function ( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
          self._listOfNotes = null;
 
          self.super ( _className, "destroy" );
-      }
+      };
 
       return self;
    };

@@ -3,6 +3,75 @@
 
 > **NOTE**: If you utilize the code package available on GitHub at [https://github.com/kerrishotts/PhoneGap-HotShot-3-x-Code-Bundle](https://github.com/kerrishotts/PhoneGap-HotShot-3-x-Code-Bundle), the fixes below are already incorporated into the code.
 
+### Recording video notes doesn't change the unit on the note
+
+Version 0.3.0 of the `media-capture` plugin isn't returning the length of the video; no known fix at this time.
+
+**Affects**: FilerV5 (Chapter 7),
+             FilerV6 (Chapter 8),
+             FilerV7 (Chapter 9)
+
+
+### After audio playback completes, the play button doesn't appear
+
+This occurs because the `_mediaSuccess` method resets the player state too early. In `www/js/app/models/mediaManager.js`, ensure `_mediaSuccess` appears as follows:
+
+```
+self._position = 0;
+self.notify ( "positionUpdated" );
+if (self.isPlaying) { self.notify ( "playingStopped" ); }
+if (self.isRecording) { self.notify ( "recordingStopped" ); }
+self._state = MediaManager.STATE_STOPPED;
+self._media.release();
+```
+
+**Affects**: FilerV3 (Chapter 5),
+             FilerV4 (Chapter 6),
+             FilerV5 (Chapter 7),
+             FilerV6 (Chapter 8),
+             FilerV7 (Chapter 9)
+
+
+### Audio Playback doesn't remove `positionUpdated` listener
+
+This occurs because the `onAudioStopped` handler doesn't remove the listener for the `positionUpdated` notification. 
+
+Add the following to the `self.onAudioStopped` handler in `www/js/app/views/audioNoteEditView.js`:
+
+```
+self._note.media.removeListenerForNotification("positionUpdated", self.updateAudioInformation);
+```
+
+**Affects**: FilerV3 (Chapter 5),
+             FilerV4 (Chapter 6),
+             FilerV5 (Chapter 7),
+             FilerV6 (Chapter 8),
+             FilerV7 (Chapter 9)
+
+
+### Camera listeners aren't removed if an error occurs
+
+This occurs because the error routine doesn't properly remove the listener.
+
+In `www/js/app/views/videoNoteEditView.js` in `self.captureVideo`, the error handler should look like this:
+
+```
+self._note.video.removeListenerForNotification ( "videoCaptured", self.onVideoCaptured);
+console.log (anError);
+```
+
+The same issue occurs in `www/js/app/views/imageNoteEditView.js` in `self.capturePhoto`, the error handler should look like this:
+
+```
+self._note.camera.removeListenerForNotification ( "photoCaptured", self.onPhotoCaptured);
+console.log (anError);
+```
+
+**Affects**: FilerV4 (Chapter 6),
+             FilerV5 (Chapter 7),
+             FilerV6 (Chapter 8),
+             FilerV7 (Chapter 9)
+
 ### Text boxes appear underneath video/image elements
 
 This occurs on Android devices and is due to the fact that the video or image element (for whatever reason) is taking visual precedence over the text area. The fix is to force the text area to use the GPU.

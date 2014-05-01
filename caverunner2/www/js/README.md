@@ -1,4 +1,4 @@
-# Why is there no app.js in this folder?
+# Why is there no keys in app.js?
 
 Easy: it has keys that I don't want to share with the world.
 

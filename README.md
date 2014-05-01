@@ -178,7 +178,7 @@ cordova plugin add org.apache.cordova.statusbar
 The code herein is licensed under the MIT license. You are free to with it as you will, provided the requirements of said license are met.
 
 ```
-Copyright (c) 2013, 2014 PacktPub Publishing
+Copyright (c) 2013, 2014 Packt Publishing
 Permission is hereby granted, free of charge, to any person obtaining a copy of this
 software and associated documentation files (the "Software"), to deal in the Software
 without restriction, including without limitation the rights to use, copy, modify,

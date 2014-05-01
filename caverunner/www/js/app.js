@@ -1,12 +1,12 @@
 /**
  *
- * Kickstarter for the Filer App.
+ * Kickstarter for the CaveRunner App.
  *
  * app.js
  * @author Kerri Shotts
  * @version 1.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
  * without restriction, including without limitation the rights to use, copy, modify,
@@ -80,6 +80,5 @@ require(['yasmf', 'app/main',
   // and the app as well
   window.APP = APP;
   // and GO!
-  //APP.start(); // uncomment this, if playing in a browser
-  document.addEventListener ( "deviceready", APP.start, false); // comment this if playing in a browser
+  _y.executeWhenReady ( function () { _y.getDeviceLocale( APP.start ) } );
 });

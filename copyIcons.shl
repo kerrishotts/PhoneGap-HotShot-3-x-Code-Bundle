@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# $1 is the source directory (./design/filer-icon-v7)
+# $2 is the target project (./filerv7)
+# #3 is the project name (FilerV7)
+#
+# The source directory should be as follows:
+#   /source-directory
+#     /ios
+#       icon-files
+#     /android
+#       icon-files (icon-96, icon-72...)
+#
+# The iOS icons will be copied to the iOS project and overwrite Cordova's stock
+# images. The Android icons will be copied to each individual directory in
+# the project's res folder and overwrite Cordova's stock images.
+#
+
+# copy iOS
+cp "$1/ios"/icon*.* "$2/platforms/ios/$3/Resources/icons"
+
+# copy android
+cp "$1/android/icon-96.png" "$2/platforms/android/res/drawable/icon.png"
+cp "$1/android/icon-96.png" "$2/platforms/android/res/drawable-xhdpi/icon.png"
+cp "$1/android/icon-72.png" "$2/platforms/android/res/drawable-hdpi/icon.png"
+cp "$1/android/icon-48.png" "$2/platforms/android/res/drawable-mdpi/icon.png"
+cp "$1/android/icon-36.png" "$2/platforms/android/res/drawable-ldpi/icon.png"
+
+# done!
+
+

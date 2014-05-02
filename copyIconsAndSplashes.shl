@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# Copies the icons and splash screens for all the projects
+# except localizationdemo (project 2)
+#
+#PathRec 
+sh copyIcons.shl design/pathrec-icon pathrec PathRec
+sh copySplash.shl design/pathrec-splash pathrec PathRec
+#CaveRunner V1
+sh copyIcons.shl design/caverunner-icon-v1 caverunner CaveRunner
+sh copySplash.shl design/caverunner-splash caverunner CaveRunner
+#CaveRunner V2
+sh copyIcons.shl design/caverunner-icon-v2 caverunner2 CaveRunner2
+sh copySplash.shl design/caverunner-splash caverunner2 CaveRunner2
+#Filer V1
+sh copyIcons.shl design/filer-icon-v1 filerv1 FilerV1
+sh copySplash.shl design/filer-splash filerv1 FilerV1
+#Filer V2
+sh copyIcons.shl design/filer-icon-v2 filerv2 FilerV2
+sh copySplash.shl design/filer-splash filerv2 FilerV2
+#Filer V3
+sh copyIcons.shl design/filer-icon-v3 filerv3 FilerV3
+sh copySplash.shl design/filer-splash filerv3 FilerV3
+#Filer V4
+sh copyIcons.shl design/filer-icon-v4 filerv4 FilerV4
+sh copySplash.shl design/filer-splash filerv4 FilerV4
+#Filer V5
+sh copyIcons.shl design/filer-icon-v5 filerv5 FilerV5
+sh copySplash.shl design/filer-splash filerv5 FilerV5
+#Filer V6
+sh copyIcons.shl design/filer-icon-v6 filerv6 FilerV6
+sh copySplash.shl design/filer-splash filerv6 FilerV6
+#Filer V7
+sh copyIcons.shl design/filer-icon-v7 filerv7 FilerV7
+sh copySplash.shl design/filer-splash filerv7 FilerV7
+#Done!

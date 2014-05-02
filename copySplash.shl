@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# $1 is source (./design/filer-splash)
+# $2 is target (./filerv7)
+# $3 is project (FilerV7)
+#
+# Source should be a directory of the form
+#   /source-directory
+#     /ios
+#       splash-files
+#
+
+# copy iOS
+cp "$1/ios"/*.* "$2/platforms/ios/$3/Resources/splash"
+
+# done!

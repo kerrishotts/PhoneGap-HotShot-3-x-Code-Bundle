@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# Creates a project based on the code for our package.
+#
+# $1 is the source folder (filerv1)
+# $2 is the display name (FilerV1)
+
+# the directory we supply needs to move so that we can create a project in place of it
+mv "$1" "$1"-source
+# create the project
+cordova create $1 com.packtpub.phonegaphotshot.$1 $2 --copy-from "$1"-source
+# copy the config.xml
+cp "$1"-source/config.xml "$1"/config.xml
+
+# done!

@@ -4,7 +4,45 @@ This repository stores the code for the book entitled PhoneGap HotShot 3.x Mobil
 
 The code herein is not listed in chapter order but by project name. A lookup from chapter number to project name is provided below.
 
-Furthermore, the code herein is not a complete Cordova project. The build artifacts (namely the `platforms`, `plugins`, etc., directories) are ignored. Only the `www` directory is provided. In order to execute any of these projects, you'll need to create a new Cordova project and copy the relevant files from this repository into your project.
+Furthermore, the code herein is not a complete Cordova project. The build artifacts (namely the `platforms`, `plugins`, etc., directories) are ignored. Only the `www` directory and `config.xml` file for each project is provided. In order to execute any of these projects, you'll need to create a new Cordova project and copy the relevant files from this repository into your project.
+
+## Useful Directories
+
+Other than the actual code for each project, the following directories may be of interest to you:
+
+* `/design`
+  * Contains icons and splash screen for each project, except the localization demo. Also contains design documents for each project in PDF and OmniGraffle format.
+* `/template`
+  * Contains the template we used to create each project (`cordova create ... --copy-from ./template`). This is built in Chapter 2, but you are free to use this copy instead of working through those steps.
+* `/framework`
+  * Contains the version of the YASMF-Next framework that was used to build the projects. You are welcome to update the framework version at any time, but it is always possible that new framework versions might break the apps.
+
+## Useful Scripts
+
+Contained within the top level of this project are several useful scripts. **NOTE:** Your use of these scripts is at your own risk. Neither the author of the book and code nor Packt Publishing can be held liable for the use, abuse, or misuse of these scripts.
+
+* `copyIcons.shl`
+  * Copies the icons from the design folders into a specific project. Take a peek inside to see how we overwrite Cordova's stock icons.
+  * Useful when you first create a new project, after you add the platforms to the project. Also useful if you need to remove the platform for any reason and then add it back.
+  * Example: `sh copyIcons.shl design/filer-icon-v7 filerv7 FilerV7` (the third parameter is the Xcode project name, located in `/platforms/ios`)
+* `copySplash.shl`
+  * Copies the splash screens from the design folders into a specific project. Take a peek inside to see how we overwrite Cordova's stock splash screens for iOS.
+  * Useful when you first create a new project, after you add the platforms to the project. Also useful if you need to remove the platform for any reason and then add it back.
+  * Example: `sh copySplash.shl design/filer-splash filerv7 FilerV7`
+* `copyIconsAndSplashes.shl` 
+  * This script automates the process of copying all the icons and splash screens for each project into their corresponding platform directories.
+  * Example: `sh copyIconsAndSplashes.shl`
+* `updateProjectPlugins.shl`
+  * Updates the Cordova platform on each project to the most recent version. ***Careful!** Things may break!*      
+  * Updates all the plugins for each project to the most recent version by removing them and adding them back. ***Careful!** Things will probably break!*
+* `createProject.shl`
+  * Creates a project based on one of our projects.
+  * Example: `sh ./createProject.shl filerv1 FilerV1`
+* `createProjects.shl`
+  * Run this command to create all the Cordova projects automatically. Once created, each project will be automatically updated, and all plugins will be added. Icons and splash screens will also be created. 
+  * Example: `sh ./createProjects.shl`
+
+Note that these scripts are shell scripts that should work on Mac OS X or Linux. If you want to use them on Windows, you'll need to adapt them to the correct syntax.
 
 ## Chapter/Project Lookup
 

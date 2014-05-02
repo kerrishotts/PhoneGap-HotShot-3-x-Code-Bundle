@@ -6,6 +6,9 @@
 #PathRec 
 sh copyIcons.shl design/pathrec-icon pathrec PathRec
 sh copySplash.shl design/pathrec-splash pathrec PathRec
+#PathRec Native
+sh copyIcons.shl design/pathrec-icon pathrecnative PathRecNative
+sh copySplash.shl design/pathrec-splash pathrecnative PathRecNative
 #CaveRunner V1
 sh copyIcons.shl design/caverunner-icon-v1 caverunner CaveRunner
 sh copySplash.shl design/caverunner-splash caverunner CaveRunner

@@ -7,16 +7,17 @@
 #
 
 echo "Creating all projects..."
-sh ./createProject filerv1 FilerV1
-sh ./createProject filerv2 FilerV2
-sh ./createProject filerv3 FilerV3
-sh ./createProject filerv4 FilerV4
-sh ./createProject filerv5 FilerV5
-sh ./createProject filerv6 FilerV6
-sh ./createProject filerv7 FilerV7
-sh ./createProject pathrec PathRec
-sh ./createProject caverunner CaveRunner
-sh ./createProject caverunner2 CaveRunner2
+sh ./createProject.shl filerv1 FilerV1
+sh ./createProject.shl filerv2 FilerV2
+sh ./createProject.shl filerv3 FilerV3
+sh ./createProject.shl filerv4 FilerV4
+sh ./createProject.shl filerv5 FilerV5
+sh ./createProject.shl filerv6 FilerV6
+sh ./createProject.shl filerv7 FilerV7
+sh ./createProject.shl pathrec PathRec
+sh ./createProject.shl pathrecnative PathRecNative
+sh ./createProject.shl caverunner CaveRunner
+sh ./createProject.shl caverunner2 CaveRunner2
 
 echo "Updating projects..."
 sh ./updateProjectPlugins.shl

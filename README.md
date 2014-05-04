@@ -8,14 +8,15 @@ Furthermore, the code herein is not a complete Cordova project. The build artifa
 
 # Table of Contents
 
-* [Chapter/Project Lookup](#lookup)
-* [Application Demos](#demos)
-* [Useful Directories](#dirs)
-* [Useful Scripts](#scripts)
-* [Using PhoneGap Build](#pgbuild)
-* [Additional Project Information](#more)
+* [Chapter/Project Lookup](#chapterproject-lookup)
+* [Application Demos](#application-demos)
+* [Useful Directories](#useful-directories)
+* [Useful Scripts](#useful-scripts)
+* [Using PhoneGap Build](#using-phonegap-build)
+* [Additional Project Information](#additional-project-information)
+* [License](#license)
 
-## [Chapter/Project Lookup](id:lookup)
+## [Chapter/Project Lookup](id:chapterproject-lookup)
 
 |    Chapter | Title                              | Project           | App.io Demo
 |-----------:|:---------------------------------- |:------------------|:------------
@@ -34,7 +35,7 @@ Furthermore, the code herein is not a complete Cordova project. The build artifa
 | Appendix A | User Interface Resources           | Not Applicable    | N/A
 | Appendix B | Tips, Tricks, and Quirks           | Not Applicable    | N/A
 
-## [Application Demos](id:demos)
+## [Application Demos](id:application-demos)
 
 I've taken the time to upload the final versions of Filer, PathRec, and CaveRunner to [App.io](http://www.app.io) at the following links. **Note:** It is not possible to simulate all aspects of each app; pay attention to what features are not available.
 
@@ -46,7 +47,7 @@ I've taken the time to upload the final versions of Filer, PathRec, and CaveRunn
   * App.io does not pass your device location to the app. As such, you will be unable to center on a location or record a path. Consider this a user-interface demo, since there's little else you can do.
 
 
-## [Useful Directories](id:dirs)
+## [Useful Directories](id:useful-directories)
 
 Other than the actual code for each project, the following directories may be of interest to you:
 
@@ -57,7 +58,7 @@ Other than the actual code for each project, the following directories may be of
 * `/framework`
   * Contains the version of the YASMF-Next framework that was used to build the projects. You are welcome to update the framework version at any time, but it is always possible that new framework versions might break the apps.
 
-## [Useful Scripts](id:scripts)
+## [Useful Scripts](id:useful-scripts)
 
 Contained within the top level of this project are several useful scripts. **NOTE:** Your use of these scripts is at your own risk. Neither the author of the book and code nor Packt Publishing can be held liable for the use, abuse, or misuse of these scripts.
 
@@ -84,7 +85,7 @@ Contained within the top level of this project are several useful scripts. **NOT
   
 Note that these scripts are shell scripts that should work on Mac OS X or Linux. If you want to use them on Windows, you'll need to adapt them to the correct syntax.
 
-## [Using PhoneGap Build](id:pgbuild)
+## [Using PhoneGap Build](id:using-phonegap-build)
 
 The projects as delivered are *Cordova* projects. In order to utilize them with PhoneGap build, you will need to follow these steps:
 
@@ -98,7 +99,7 @@ The projects as delivered are *Cordova* projects. In order to utilize them with 
 * Upload the project to PhoneGap Build by using `phonegap remote build android` (or `ios`). 
 
 
-## [Additional Project Information](id:more)
+## [Additional Project Information](id:additional-project-information)
 
 ### [LocalizationDemo](id:LocalizationDemo)
 
@@ -215,7 +216,7 @@ cordova plugin add org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.statusbar
 ```
 
-### [Cave Runner](id:CaveRunner)
+### [CaveRunner](id:CaveRunner)
 
 Cave Runner is a simple HTML5 Canvas game that uses the accelerometer as one of its input methods.
 
@@ -227,7 +228,7 @@ cordova plugin add org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.statusbar
 ```
 
-### [Cave Runner 2](id:CaveRunner2)
+### [CaveRunner2](id:CaveRunner2)
 
 Cave Runner 2 extends Cave Runner with a Parse back end that provides high score functionality. 
 
@@ -246,7 +247,7 @@ cordova plugin add org.apache.cordova.statusbar
 ```
 
 
-## License
+## [License](id:license)
 
 The code herein is licensed under the MIT license. You are free to with it as you will, provided the requirements of said license are met.
 

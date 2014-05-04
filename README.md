@@ -21,17 +21,17 @@ Furthermore, the code herein is not a complete Cordova project. The build artifa
 |    Chapter | Title                              | Project           | App.io Demo
 |-----------:|:---------------------------------- |:------------------|:------------
 |          1 | Your First Project                 | Not applicable    | N/A
-|          2 | Localization and Globalization     | [LocalizationDemo](#LocalizationDemo)  | N/A
-|          3 | App Design                         | [FilerV1](#FilerV1)           | See v7
-|          4 | The File API                       | [FilerV2](#FilerV2)           | See v7
-|          5 | Working with Audio                 | [FilerV3](#FilerV3)           | See v7
-|          6 | Working with Still images          | [FilerV4](#FilerV4)           | See v7
-|          7 | Working with Video                 | [FilerV5](#FilerV5)           | See v7
-|          8 | Sharing Content                    | [FilerV6](#FilerV6)           | See v7
-|          9 | Dealing With Tablets               | [FilerV7](#FilerV7)           | [Demo](https://app.io/v6Fbyf) (offsite)
-|         10 | Maps and GPS                       | [PathRec](#PathRec)           | [Demo](https://app.io/kAxEF4) (offsite)
-|         11 | Canvas Games and the Accelerometer | [CaveRunner](#CaveRunner)        | See v2
-|         12 | Adding a Back-end (Parse)          | [CaveRunner2](#CaveRunner2)       | [Demo](https://app.io/kAxEF4) (offsite)
+|          2 | Localization and Globalization     | [LocalizationDemo](#localizationdemo)  | N/A
+|          3 | App Design                         | [FilerV1](#filerv1)           | See v7
+|          4 | The File API                       | [FilerV2](#filerv2)           | See v7
+|          5 | Working with Audio                 | [FilerV3](#filerv3)           | See v7
+|          6 | Working with Still images          | [FilerV4](#filerv4)           | See v7
+|          7 | Working with Video                 | [FilerV5](#filerv5)           | See v7
+|          8 | Sharing Content                    | [FilerV6](#filerv6)           | See v7
+|          9 | Dealing With Tablets               | [FilerV7](#filerv7)           | [Demo](https://app.io/v6Fbyf) (offsite)
+|         10 | Maps and GPS                       | [PathRec](#pathrec)           | [Demo](https://app.io/kAxEF4) (offsite)
+|         11 | Canvas Games and the Accelerometer | [CaveRunner](#caverunner)        | See v2
+|         12 | Adding a Back-end (Parse)          | [CaveRunner2](#caverunner2)       | [Demo](https://app.io/kAxEF4) (offsite)
 | Appendix A | User Interface Resources           | Not Applicable    | N/A
 | Appendix B | Tips, Tricks, and Quirks           | Not Applicable    | N/A
 
@@ -101,7 +101,7 @@ The projects as delivered are *Cordova* projects. In order to utilize them with 
 
 ## [Additional Project Information](id:additional-project-information)
 
-### [LocalizationDemo](id:LocalizationDemo)
+### [LocalizationDemo](id:localizationdemo)
 
 Introduces you to the various localization functions provided by jQuery/Globalize and YASMF. Nothing fancy: just a list of translated strings, but important to get right from the start.
 
@@ -110,7 +110,7 @@ Introduces you to the various localization functions provided by jQuery/Globaliz
 cordova plugin add org.apache.cordova.globalization
 ```
 
-### [FilerV1](id:FilerV1)
+### [FilerV1](id:filerv1)
 
 The very first version of our note taking app, Filer. Sets up the typical project structure, data models, and also gets into `localStorage`.
 
@@ -120,7 +120,7 @@ cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.keyboard
 ```
 
-### [FilerV2](id:FilerV2)
+### [FilerV2](id:filerv2)
 
 The second version of Filer. The key point is using the File API to write to persistent storage. 
 
@@ -131,7 +131,7 @@ cordova plugin add org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.file
 ```
 
-### [FilerV3](id:FilerV3)
+### [FilerV3](id:filerv3)
 
 In the third version of Filer, we extend the app to permit audio memos. 
 
@@ -143,7 +143,7 @@ cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 ```
 
-### [FilerV4](id:FilerV4)
+### [FilerV4](id:filerv4)
 
 In the fourth version of Filer, we extend the app to permit image notes obtained from the camera. 
 
@@ -156,7 +156,7 @@ cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
 ```
 
-### [FilerV5](id:FilerV5)
+### [FilerV5](id:filerv5)
 
 In the fifth version of Filer, we extend the app to permit video notes obtained from the camera. 
 
@@ -170,7 +170,7 @@ cordova plugin add org.apache.cordova.camera
 cordova plugin add org.apache.cordova.media-capture
 ```
 
-### [FilerV6](id:FilerV6)
+### [FilerV6](id:filerv6)
 
 In the sixth version of Filer, we extend the app to share notes to various social networks. 
 
@@ -187,7 +187,7 @@ cordova plugin add org.apache.cordova.battery-status
 cordova plugin add org.apache.cordova.network-information
 ```
 
-### [FilerV7](id:FilerV7)
+### [FilerV7](id:filerv7)
 
 In the seventh version of Filer, we learn to deal with tablet form factors. 
 
@@ -204,7 +204,7 @@ cordova plugin add org.apache.cordova.battery-status
 cordova plugin add org.apache.cordova.network-information
 ```
 
-### [PathRec](id:PathRec)
+### [PathRec](id:pathrec)
 
 PathRec is a simple app that uses the geolocation API to record paths and show them to the user. Uses localStorage for simplicity.
 
@@ -216,7 +216,7 @@ cordova plugin add org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.statusbar
 ```
 
-### [CaveRunner](id:CaveRunner)
+### [CaveRunner](id:caverunner)
 
 Cave Runner is a simple HTML5 Canvas game that uses the accelerometer as one of its input methods.
 
@@ -228,7 +228,7 @@ cordova plugin add org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.statusbar
 ```
 
-### [CaveRunner2](id:CaveRunner2)
+### [CaveRunner2](id:caverunner2)
 
 Cave Runner 2 extends Cave Runner with a Parse back end that provides high score functionality. 
 

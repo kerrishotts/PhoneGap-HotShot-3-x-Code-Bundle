@@ -6,6 +6,37 @@ The code herein is not listed in chapter order but by project name. A lookup fro
 
 Furthermore, the code herein is not a complete Cordova project. The build artifacts (namely the `platforms`, `plugins`, etc., directories) are ignored. Only the `www` directory and `config.xml` file for each project is provided. In order to execute any of these projects, you'll need to create a new Cordova project and copy the relevant files from this repository into your project.
 
+## [Chapter/Project Lookup](id:lookup)
+
+|    Chapter | Title                              | Project           | App.io Demo
+|-----------:|:---------------------------------- |:------------------|:------------
+|          1 | Your First Project                 | Not applicable    | N/A
+|          2 | Localization and Globalization     | LocalizationDemo  | N/A
+|          3 | App Design                         | FilerV1           | See v7
+|          4 | The File API                       | FilerV2           | See v7
+|          5 | Working with Audio                 | FilerV3           | See v7
+|          6 | Working with Still images          | FilerV4           | See v7
+|          7 | Working with Video                 | FilerV5           | See v7
+|          8 | Sharing Content                    | FilerV6           | See v7
+|          9 | Dealing With Tablets               | FilerV7           | [Demo](https://app.io/v6Fbyf)
+|         10 | Maps and GPS                       | PathRec           | [Demo](https://app.io/kAxEF4)
+|         11 | Canvas Games and the Accelerometer | CaveRunner        | See v2
+|         12 | Adding a Back-end (Parse)          | CaveRunner2       | [Demo](https://app.io/kAxEF4)
+| Appendix A | User Interface Resources           | Not Applicable    | N/A
+| Appendix B | Tips, Tricks, and Quirks           | Not Applicable    | N/A
+
+## Application Demos
+
+I've taken the time to upload the final versions of Filer, PathRec, and CaveRunner to [App.io](http://www.app.io) at the following links. **Note:** It is not possible to simulate all aspects of each app; pay attention to what features are not available.
+
+* [CaveRunner v2](https://app.io/kAxEF4)
+  * Using the accelerometer will not work, but you can simulate a swipe by clicking and dragging with your mouse.
+* [Filer v7](https://app.io/v6Fbyf)
+  * You can not record audio, video, or capture an image from the camera. App.io does not pass your device's microphone or webcam to the app. You can create the note types, but you won't be able to supply any content. 
+* [PathRec](https://app.io/kAxEF4)
+  * App.io does not pass your device location to the app. As such, you will be unable to center on a location or record a path. Consider this a user-interface demo, since there's little else you can do.
+
+
 ## Useful Directories
 
 Other than the actual code for each project, the following directories may be of interest to you:
@@ -41,27 +72,22 @@ Contained within the top level of this project are several useful scripts. **NOT
 * `createProjects.shl`
   * Run this command to create all the Cordova projects automatically. Once created, each project will be automatically updated, and all plugins will be added. Icons and splash screens will also be created. 
   * Example: `sh ./createProjects.shl`
-
+  
 Note that these scripts are shell scripts that should work on Mac OS X or Linux. If you want to use them on Windows, you'll need to adapt them to the correct syntax.
 
-## Chapter/Project Lookup
+## Using PhoneGap Build
 
-|    Chapter | Title                              | Project           |
-|-----------:|:---------------------------------- |:------------------|
-|          1 | Your First Project                 | Not applicable    |
-|          2 | Localization and Globalization     | LocalizationDemo  |
-|          3 | App Design                         | FilerV1           |
-|          4 | The File API                       | FilerV2           |
-|          5 | Working with Audio                 | FilerV3           |
-|          6 | Working with Still images          | FilerV4           |
-|          7 | Working with Video                 | FilerV5           |
-|          8 | Sharing Content                    | FilerV6           |
-|          9 | Dealing With Tablets               | FilerV7           |
-|         10 | Maps and GPS                       | PathRec           |
-|         11 | Canvas Games and the Accelerometer | CaveRunner        |
-|         12 | Adding a Back-end (Parse)          | CaveRunner2       |
-| Appendix A | Quick Design Pattern Reference     | Not Applicable    |
-| Appendix B | Quirks and Gotchas                 | Not Applicable    |
+The projects as delivered are *Cordova* projects. In order to utilize them with PhoneGap build, you will need to follow these steps:
+
+* Copy `config.xml` from the application root to the `www` directory.
+* Add the required plugins to `config.xml`, using the form:
+
+```
+<gap:plugin name="reverse.domain.id"/>
+```
+* If you want to add the icon and splash screen assets to the project, you'll need to copy the appropriate icons from the `design` directory into the project's `www` directory, and then update `config.xml` using [these directions](http://docs.build.phonegap.com/en_US/configuring_icons_and_splash.md.html#Icons%20and%20Splash%20Screens).
+* Upload the project to PhoneGap Build by using `phonegap remote build android` (or `ios`). 
+
 
 ## Additional Project Information
 
@@ -196,7 +222,7 @@ cordova plugin add org.apache.cordova.statusbar
 
 Cave Runner 2 extends Cave Runner with a Parse back end that provides high score functionality. 
 
-**NOTE**: The www/js/app.js file is *NOT* provided, as you need to provide your own API keys. You can copy the version from caverunner and add the following code to initialize Parse prior to `APP.start()`:
+**NOTE**: The `www/js/app.js` file is *NOT* provided, as you need to provide your own API keys. You can copy the version from caverunner and add the following code to initialize Parse prior to `APP.start()`:
 
 ```
   Parse.initialize("YOUR_APP_ID_HERE", "YOUR_JAVASCRIPT_KEY_HERE");

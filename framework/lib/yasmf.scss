@@ -329,7 +329,8 @@ div {
 {
   width: 100%;
 }
-
+/* Note: ui-off-canvas-view is supported on iOS and Android 4.4+. Android <4.4
+   will fail spectacularly */
 .ui-off-canvas-view
 {
   width: calc(100% + 320px);
@@ -1042,7 +1043,7 @@ $android-selection-color: rgba(36, 36, 36, 1);
  *
  *****************************************************************************/
 
-$glyphs: arror-corners-inward, arrow-corners-outward, bookmark, books,
+$glyphs: arrow-corners-inward, arrow-corners-outward, bookmark, books,
          brightness-less, brightness-more, camera-video, camera, checkmark,
          chevron-left-thick, chevron-left-thin, chevron-right-thick, chevron-right-thin,
          circle-filled, circle-hollow, pause-filled, pause-hollow,

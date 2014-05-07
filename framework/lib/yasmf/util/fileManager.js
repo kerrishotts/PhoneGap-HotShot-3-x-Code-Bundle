@@ -44,11 +44,14 @@
 /*global define, Q, LocalFileSystem, console*/
 
 define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
+/**
+ * @typedef {{}} Promise
+ */
 
   var DEBUG = false;
   /**
    * Requests a quota from the file system
-   * @param  {Constant} fileSystemType    PERSISTENT or TEMPORARY
+   * @param  {*} fileSystemType    PERSISTENT or TEMPORARY
    * @param  {Number} requestedDataSize The quota we're asking for
    * @return {Promise}                   The promise
    */
@@ -103,7 +106,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
 
   /**
    * Request a file system with the requested size (obtained first by getting a quota)
-   * @param  {Constant} fileSystemType    TEMPORARY or PERSISTENT
+   * @param  {*} fileSystemType    TEMPORARY or PERSISTENT
    * @param  {Number} requestedDataSize The quota
    * @return {Promise}                   The promise
    */
@@ -130,7 +133,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
 
   /**
    * Resolves theURI to a fileEntry or directoryEntry, if possible.
-   * @param  {String} theURI the path, should start with file://, but if it doesn't we'll add it.
+   * @param  {String} theURL the path, should start with file://, but if it doesn't we'll add it.
    */
   function _resolveLocalFileSystemURL ( theURL )
   {
@@ -186,6 +189,9 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
 
   }
 
+  /**
+   * @typedef {{}} DirectoryEntry
+   */
   /**
    * Returns a directory entry based on the path from the parent using
    * the specified options ( or {} )
@@ -247,6 +253,9 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
   }
 
   /**
+   * @typedef {{}} FileEntry
+   */
+  /**
    * Returns a file object based on the file entry.
    * @param  {FileEntry} fileEntry The file Entry
    * @return {Promise}           The Promise
@@ -286,11 +295,11 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       fileReader.onloadend = function ( e )
       {
         deferred.resolve ( e.target.result );
-      }
+      };
       fileReader.onerror = function ( anError )
       {
         deferred.reject ( anError );
-      }
+      };
       fileReader["readAs" + readAsKind]( fileObject );
     }
     catch ( anError )
@@ -324,9 +333,12 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
   }
 
   /**
+   * @typedef {{}} FileWriter
+   */
+  /**
    * Write the contents to the fileWriter
    * @param  {FileWriter} fileWriter Obtained from _createFileWriter
-   * @param  {Variable} contents   The contents to write
+   * @param  {*} contents   The contents to write
    * @return {Promise}            the Promise
    */
   function _writeFileContents ( fileWriter, contents )
@@ -340,13 +352,13 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
         fileWriter.onwrite = function ( e )
         {
           deferred.resolve ( e );
-        }
+        };
         fileWriter.write ( contents );
-      }
+      };
       fileWriter.onError = function ( anError )
       {
         deferred.reject ( anError );
-      }
+      };
       fileWriter.truncate ( 0 ); // clear out the contents, first
     }
     catch ( anError )
@@ -574,14 +586,14 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
     self.getGlobalDebug = function ()
     {
       return DEBUG;
-    }
+    };
     self.setGlobalDebug = function ( debug )
     {
       DEBUG = debug;
-    }
+    };
     Object.defineProperty ( self, "globalDebug", { get: self.getGlobalDebug,
                                                    set: self.setGlobalDebug,
-                                                   configurable: true})
+                                                   configurable: true});
 
     /**
      * the fileSystemType can either be self.PERSISTENT or self.TEMPORARY, and is only
@@ -591,19 +603,19 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
     self.getFileSystemType = function ()
     {
       return self._fileSystemType;
-    }
+    };
     Object.defineProperty ( self, "fileSystemType", { get: self.getFileSystemType,
                                                       configurable: true });
 
     /**
      * The requested quota -- stored for future reference, since we ask for it
-     * specificall during an INIT operation. It cannot be changed.
+     * specifically during an INIT operation. It cannot be changed.
      */
     self._requestedQuota = 0; // can only be changed during INIT
     self.getRequestedQuota = function ()
     {
       return self._requestedQuota;
-    }
+    };
     Object.defineProperty ( self, "requestedQuota", { get: self.getRequestedQuota,
                                                       configurable: true });
 
@@ -616,10 +628,13 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
     self.getActualQuota = function ()
     {
       return self._actualQuota;
-    }
+    };
     Object.defineProperty ( self, "actualQuota", { get: self.getActualQuota,
                                                    configurable: true });
 
+    /**
+     * @typedef {{}} FileSystem
+     */
     /**
      * The current filesystem -- either the temporary or persistent one; it can't be changed
      * @type {FileSystem}
@@ -628,7 +643,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
     self.getFileSystem = function ()
     {
       return self._fileSystem;
-    }
+    };
     Object.defineProperty ( self, "fileSystem", { get: self.getFileSystem,
                                                   configurable: true });
 
@@ -641,12 +656,12 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
     self.getCurrentWorkingDirectory = function ()
     {
       return self._cwd;
-    }
+    };
     self.setCurrentWorkingDirectory = function ( theCWD )
     {
       self._cwd = theCWD;
       if (hasBaseObject) { self.notify ( "changedCurrentWorkingDirectory" ); }
-    }
+    };
     Object.defineProperty ( self, "cwd", { get: self.getCurrentWorkingDirectory,
                                            set: self.setCurrentWorkingDirectory,
                                            configurable: true });
@@ -666,14 +681,14 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
     self.pushCurrentWorkingDirectory = function ()
     {
       self._cwds.push ( self._cwd );
-    }
+    };
     /**
      * Pop the topmost directory on the stack and change to it
      */
     self.popCurrentWorkingDirectory = function ()
     {
       self.setCurrentWorkingDirectory ( self._cwds.pop() );
-    }
+    };
 
     self.resolveLocalFileSystemURL = function ( theURI )
     {
@@ -683,7 +698,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Returns the file entry for the given path (useful for
@@ -697,7 +712,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Returns the file object for a given file (useful for getting
@@ -707,7 +722,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
     {
       return self.getFileEntry ( theFilePath, options )
                  .then ( _getFileObject );
-    }
+    };
 
     /**
      * Returns the directory entry for a given path
@@ -720,7 +735,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * returns the URL for a given file
@@ -733,7 +748,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
     /**
      * Returns a URL for the given directory
      */
@@ -745,9 +760,9 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
-    self.getNativeURL = function ( theEntry, options )
+    self.getNativeURL = function ( theEntry )
     {
       var thePath = theEntry;
       if (typeof theEntry !== "string")
@@ -757,7 +772,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       var isAbsolute = (thePath.substr(0,1)==="/");
       var theRootPath = isAbsolute ? self._root.nativeURL : self.cwd.nativeURL;
       return theRootPath + (isAbsolute ? "" : "/") + thePath;
-    }
+    };
     /**
      * returns the native file path for a given file
      */
@@ -770,7 +785,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
         .catch ( function ( anError ) { deferred.reject (anError); } )
         .done ();
       return deferred.promise;
-    }
+    };
     /**
      * Returns a URL for the given directory
      */
@@ -782,7 +797,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
         .catch ( function ( anError ) { deferred.reject (anError); } )
         .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Change to an arbitrary directory
@@ -798,7 +813,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Read an arbitrary file's contents.
@@ -817,7 +832,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject ( anError ); } )
       .done();
       return deferred.promise;
-    }
+    };
 
     /**
      * Read an arbitrary directory's entries.
@@ -834,13 +849,13 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject ( anError ); } )
       .done();
       return deferred.promise;
-    }
+    };
 
     /**
      * Write data to an arbitrary file
      * @param  {String} theFilePath The file name to write to, relative to cwd
      * @param  {Object} options     The options to use when opening the file
-     * @param  {Variable} theData     The data to write
+     * @param  {*} theData     The data to write
      * @return {Promise}             The Promise
      */
     self.writeFileContents = function ( theFilePath, options, theData )
@@ -853,7 +868,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject ( anError ); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Creates an arbitrary directory
@@ -868,7 +883,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Copies a file to a new directory, with an optional new name
@@ -889,7 +904,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Copies a directory to a new directory, with an optional new name
@@ -910,7 +925,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Moves a file to a new directory, with an optional new name
@@ -931,7 +946,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Moves a directory to a new directory, with an optional new name
@@ -952,7 +967,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Renames a file to a new name, in the cwd
@@ -963,7 +978,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
     self.renameFile = function ( sourceFilePath, withNewName )
     {
       return self.moveFile ( sourceFilePath, ".", withNewName );
-    }
+    };
 
     /**
      * Renames a directory to a new name, in the cwd
@@ -974,7 +989,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
     self.renameDirectory = function ( sourceDirectoryPath, withNewName )
     {
       return self.moveDirectory ( sourceDirectoryPath, ".", withNewName );
-    }
+    };
 
     /**
      * Deletes a file
@@ -990,7 +1005,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Removes a directory, possibly recursively
@@ -1007,7 +1022,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Asks the browser for the requested quota, and then requests the file system
@@ -1036,7 +1051,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
                 deferred.reject ( anError ); })
       .done();
       return deferred.promise;
-    }
+    };
 
     /**
      * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
@@ -1055,7 +1070,7 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       self._fileSystemType = fileSystemType;
 
       return self._initializeFileSystem(); // this returns a promise, so we can .then after.
-    }
+    };
 
     /**
      * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
@@ -1068,10 +1083,14 @@ define (["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
       if (typeof options.requestedQuota === "undefined") { throw new Error ("No quota requested. If you don't know, specify ZERO."); }
 
       return self.init ( options.fileSystemType, options.requestedQuota );
-    }
+    };
 
     return self;
   };
 
+  FileManager.meta = { version: '00.04.450',
+                       class: _className,
+                       autoInitializable: false,
+                       categorizable: false };
   return FileManager;
 });

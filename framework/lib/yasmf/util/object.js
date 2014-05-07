@@ -48,6 +48,7 @@
 define (
   function () {
 
+    var _className = "BaseObject";
     /**
      * BaseObject is the base object for all complex objects used by YASMF;
      * simpler objects that are properties-only do not inherit from this
@@ -80,14 +81,14 @@ define (
        * and so we implement inheritance in a different way.
        *
        * First, the _classHierarchy, a private property, provides the
-       * inheritance tree. All objects inherit from "PKObject".
+       * inheritance tree. All objects inherit from "BaseObject".
        *
        * @private
        * @property _classHierarchy
        * @type Array
        * @default ["BaseObject"]
        */
-      self._classHierarchy = ["BaseObject"];
+      self._classHierarchy = [_className];
 
       /**
        *
@@ -251,6 +252,37 @@ define (
       };
 
       /**
+       * Category support; for an object to get category support for their class,
+       * they must call this method prior to any auto initialization
+       *
+       * @method _constructObjectCategories
+       *
+       */
+      self._constructObjectCategories = function _constructObjectCategories( pri )
+      {
+        var priority = BaseObject.ON_CREATE_CATEGORY;
+        if (typeof pri !== "undefined")
+        {
+          priority = pri;
+        }
+        if (typeof BaseObject._objectCategories[priority][self.class] !== "undefined")
+        {
+          BaseObject._objectCategories[priority][self.class].forEach(
+            function (categoryConstructor)
+            {
+              try
+              {
+                categoryConstructor(self);
+              }
+              catch (e)
+              {
+                console.log ('Error during category construction: ' + e.message);
+              }
+            });
+        }
+      };
+
+      /**
        *
        * initializes the object
        *
@@ -259,9 +291,10 @@ define (
        */
       self.init = function ()
       {
-        // since we're at the top of the hierarchy, we don't do anything.
+        self._constructObjectCategories(BaseObject.ON_INIT_CATEGORY);
         return self;
       };
+
 
       /*
        *
@@ -865,6 +898,26 @@ define (
                               defPropOptions);
       };
 
+      /**
+       * Auto initializes the object based on the arguments passed to the object constructor. Any object
+       * that desires to be auto-initializable must perform the following prior to returning themselves:
+       *
+       * ```
+       * self._autoInit.apply (self, arguments);
+       * ```
+       *
+       * Each init must call the super of init, and each init must return self.
+       *
+       * If the first parameter to _autoInit (and thus to the object constructor) is an object,
+       * initWithOptions is called if it exists. Otherwise init is called with all the arguments.
+       *
+       * If NO arguments are passed to the constructor (and thus to this method), then no
+       * auto initialization is performed. If one desires an auto-init on an object that requires
+       * no parameters, pass a dummy parameter to ensure init will be called
+       *
+       * @returns {*}
+       * @private
+       */
       self._autoInit = function ( )
       {
         if (arguments.length > 0)
@@ -879,7 +932,7 @@ define (
               }
               else
               {
-                self.init.apply (self, arguments);
+                return self.init.apply (self, arguments);
               }
             }
             else {
@@ -906,10 +959,82 @@ define (
 
         // ready to be destroyed
       };
-      self._autoInit.apply (self, arguments);
-      return self;
 
+      // self-categorize
+      self._constructObjectCategories();
+
+      // call auto init
+      self._autoInit.apply (self, arguments);
+
+      // done
+      return self;
     };
+
+    /**
+     * Object categories. Of the form:
+     *
+     * ```
+     * { className: [ constructor1, constructor2, ... ], ... }
+     * ```
+     *
+     * Global to the app and library. BaseObject's init() method will call each category in the class hierarchy.
+     *
+     * @property _objectCategories
+     * @type {{}}
+     * @private
+     */
+    BaseObject._objectCategories = [{},{}];
+    BaseObject.ON_CREATE_CATEGORY = 0;
+    BaseObject.ON_INIT_CATEGORY = 1;
+    /**
+     * Register a category constructor for a specific class. The function must take `self` as a parameter, and must
+     * not assume the presence of any other category
+     *
+     * The options parameter takes the form:
+     *
+     * ```
+     * { class: class name to register for
+     *   method: constructor method
+     *   priority: ON_CREATE_CATEGORY or ON_INIT_CATEGORY
+     * }
+     * ```
+     *
+     * @method registerCategoryConstructor
+     * @param {Object} options
+     */
+    BaseObject.registerCategoryConstructor = function registerCategoryConstructor( options)
+    {
+      if (typeof options === "undefined")
+      {
+        throw new Error( "registerCategoryConstructor requires a class name and a constructor method." );
+      }
+      if (typeof options.class !== "undefined")
+      {
+        throw new Error( "registerCategoryConstructor requires options.class" );
+      }
+      if (typeof options.method !== "undefined")
+      {
+        throw new Error( "registerCategoryConstructor requires options.method" );
+      }
+      var className = options.class;
+      var method = options.method;
+      var priority = BaseObject.ON_CREATE_CATEGORY;
+      if (typeof options.priority !== "undefined")
+      {
+        priority = options.priority;
+      }
+      if ( typeof BaseObject._objectCategories[priority][className] === "undefined" )
+      {
+        BaseObject._objectCategories[priority][className] = [];
+      }
+      BaseObject._objectCategories[priority][className].push (categoryConstructor);
+    };
+
+    BaseObject.meta = { version: '00.04.900',
+                        class: _className,
+                        autoInitializable: true,
+                        categorizable: true
+                      };
 
     return BaseObject;
 

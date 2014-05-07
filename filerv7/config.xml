@@ -2,10 +2,10 @@
 <widget id="com.packtpub.phonegaphotshot.filerv7" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>FilerV7</name>
     <description>
-        PhoneGap HotShot 3.x Mobile Application Development, Filer Version 7. 
+        PhoneGap HotShot 3.x Mobile Application Development, Filer Version 7.
     </description>
     <author email="kerrishotts@gmail.com" href="http://www.photokandy.com/books/pghs3">
-        Kerri Shotts 
+        Kerri Shotts
     </author>
     <content src="index.html" />
     <access origin="*" />

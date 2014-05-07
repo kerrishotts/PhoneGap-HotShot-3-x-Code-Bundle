@@ -132,7 +132,7 @@ define ( ["yasmf","app/models/baseNote", "app/models/cameraManager"], function (
             self._camera.destroy();
             self._camera = null;
          }
-         self._camera = new CameraManager(); 
+         self._camera = new CameraManager();
          self._camera.init ( theMediaContents );
          self.notify ( "mediaContentsChanged" );
          self._camera.addListenerForNotification ( "photoCaptured", self._updateUnit );

@@ -308,8 +308,10 @@ define ( ["yasmf", "Q"], function ( _y, Q )
       {
          var fm = new _y.FileManager();
          var deferred = Q.defer();
+         var img = self.src;
+         if (_y.device.platform() === "android") { img = img.substr(1,img.length); }
          fm.init ( fm.PERSISTENT, 0 )
-           .then ( function () { return fm.getFile (self.src, {} ); })
+           .then ( function () { return fm.getFile (img, {} ); })
            .then ( function ( theFile ) { deferred.resolve ( theFile ); })
            .catch ( function ( anError ) { deferred.resolve ( null ); })
            .done();

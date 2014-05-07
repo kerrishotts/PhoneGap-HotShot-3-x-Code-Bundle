@@ -28,7 +28,7 @@ Furthermore, the code herein is not a complete Cordova project. The build artifa
 |          6 | Working with Still images          | [FilerV4](#filerv4)           | See v7
 |          7 | Working with Video                 | [FilerV5](#filerv5)           | See v7
 |          8 | Sharing Content                    | [FilerV6](#filerv6)           | See v7
-|          9 | Dealing With Tablets               | [FilerV7](#filerv7)           | [Demo](https://app.io/v6Fbyf) (offsite)
+|          9 | Devices of Different Sizes         | [FilerV7](#filerv7)           | [Demo](https://app.io/v6Fbyf) (offsite)
 |         10 | Maps and GPS                       | [PathRec](#pathrec)           | [Demo](https://app.io/v6Fbyf) (offsite)
 |         11 | Canvas Games and the Accelerometer | [CaveRunner](#caverunner)        | See v2
 |         12 | Adding a Back-end (Parse)          | [CaveRunner2](#caverunner2)       | [Demo](https://app.io/kAxEF4) (offsite)

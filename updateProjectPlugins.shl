@@ -119,6 +119,7 @@ cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.file-extras
 cordova plugin rm socialmessage
+cordova plugin rm uk.co.ilee.socialmessage
 cordova plugin rm org.apache.cordova.keyboard
 cordova plugin rm org.apache.cordova.battery-status
 cordova plugin rm org.apache.cordova.network-information
@@ -127,6 +128,7 @@ cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
 cordova plugin add org.apache.cordova.media-capture
+cordova plugin add https://github.com/leecrossley/cordova-plugin-social-message.git
 cordova plugin add org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.battery-status
 cordova plugin add org.apache.cordova.network-information
@@ -145,6 +147,7 @@ cordova plugin rm org.apache.cordova.media-capture
 cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.camera
 cordova plugin rm socialmessage
+cordova plugin rm uk.co.ilee.socialmessage
 cordova plugin rm org.apache.cordova.file-extras
 cordova plugin rm org.apache.cordova.keyboard
 cordova plugin rm org.apache.cordova.battery-status

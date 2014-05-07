@@ -156,6 +156,54 @@ On Android < 4.4, these may appear below the video and images. This isn't horrib
 **Affects**: FilerV5 (Chapter 7),
              FilerV6 (Chapter 8),
              FilerV7 (Chapter 9)
+             
+### Image size is not returned on Android
+
+If, when you take a picture with Filer, you can't share the image, it is possible that the File API isn't locating the file. Typically, an image note's `mediaContents` looks like this:
+
+```
+/com.phonegaphotshot.packtpub.filer/image123456....jpg
+```
+
+However, for some reason, The File API may balk at the initial `/`. If this is the case, replace `doesPhotoExist` in `js/app/models/cameraManager.js` with the following:
+
+```
+      self.doesPhotoExist = function ()
+      {
+         var fm = new _y.FileManager();
+         var deferred = Q.defer();
+         var img = self.src;
+         if (_y.device.platform() === "android") { img = img.substr(1,img.length); }
+         fm.init ( fm.PERSISTENT, 0 )
+           .then ( function () { return fm.getFile (img, {} ); })
+           .then ( function ( theFile ) { deferred.resolve ( theFile ); })
+           .catch ( function ( anError ) { deferred.resolve ( null ); })
+           .done();
+         return deferred.promise;
+      };
+```     
+
+Alternatively, if the above fails, replace it with the original content:
+
+```
+      self.doesPhotoExist = function ()
+      {
+         var fm = new _y.FileManager();
+         var deferred = Q.defer();
+         fm.init ( fm.PERSISTENT, 0 )
+           .then ( function () { return fm.getFile (self.src, {} ); })
+           .then ( function ( theFile ) { deferred.resolve ( theFile ); })
+           .catch ( function ( anError ) { deferred.resolve ( null ); })
+           .done();
+         return deferred.promise;
+      };
+```        
+
+**Affects**: FilerV4 (Chapter 6),
+             FilerV5 (Chapter 7),
+             FilerV6 (Chapter 8),
+             FilerV7 (Chapter 9)
+
 
 ### Off-canvas View is not available in Android < 4.4
 

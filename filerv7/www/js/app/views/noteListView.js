@@ -396,6 +396,39 @@ define ( ["yasmf",
                }
              };
 
+             self.checkForPersistedNotes = function ()
+             {
+               if (typeof localStorage["noteInProgressType"] !== "undefined")
+               {
+                 // check if there's a note with our UID already -- if so, we need to overwrite it instead of
+                 // creating a new one.
+                 var anExistingNote = noteStorageSingleton.getNote(localStorage["noteInProgressUID"]);
+                 if (anExistingNote !== undefined)
+                 {
+                   anExistingNote.initWithJSON(localStorage["noteInProgress"]);
+                   noteStorageSingleton.saveNote(anExistingNote);
+                   noteStorageSingleton.saveCollection();
+                   localStorage.removeItem("noteInProgress");
+                   localStorage.removeItem("noteInProgressUID");
+                   localStorage.removeItem("noteInProgressType");
+                 }
+                 else
+                 {
+                   noteStorageSingleton.createNote(localStorage["noteInProgressType"], localStorage["noteInProgressUID"])
+                     .then(function (aNewNote)
+                           {
+                             aNewNote.initWithJSON(localStorage["noteInProgress"]);
+                             localStorage.removeItem("noteInProgress");
+                             localStorage.removeItem("noteInProgressUID");
+                             localStorage.removeItem("noteInProgressType");
+                             noteStorageSingleton.saveNote(aNewNote);
+                             noteStorageSingleton.saveCollection();
+                           })
+                     .catch(function (anError) { console.log(anError) })
+                     .done();
+                 }
+               }
+             };
              /**
               * Initialize the view and add listeners for the storage
               * collection so that when it changes, we can update appropriately
@@ -409,9 +442,11 @@ define ( ["yasmf",
                // register for changes in the note collection
                noteStorageSingleton.addListenerForNotification("collectionChanged", self.renderList);
                noteStorageSingleton.addListenerForNotification("collectionLoaded", self.renderList);
+               noteStorageSingleton.addListenerForNotification("collectionLoaded", self.checkForPersistedNotes);
 
                // and ask noteStorage to load itself
                noteStorageSingleton.loadCollection();
+
 
                // we need to register for orientation changes
                _y.UI.orientationHandler.addListenerForNotification("orientationChanged", self.onOrientationChanged);

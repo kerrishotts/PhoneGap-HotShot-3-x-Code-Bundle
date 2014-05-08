@@ -249,12 +249,16 @@ define ( ["yasmf", "Q", "app/factories/noteFactory"], function ( _y, Q, noteFact
     /**
      * Create a note of the requested type
      */
-    self.createNote = function ( noteType )
+    self.createNote = function ( noteType, theNoteUID )
     {
       // Create a note from the Note object
       var aNote = noteFactory.createNote ( noteType || noteFactory.TEXTNOTE );
 
       var noteUID = _generateUID();
+      if (typeof theNoteUID !== "undefined")
+      {
+        noteUID = theNoteUID;
+      }
       var newMediaFileName = noteFactory.createAssociatedMediaFileName ( noteType || noteFactory.TEXTNOTE,
                                                                          noteUID );
       // init it with a new UID, a set name and contents.

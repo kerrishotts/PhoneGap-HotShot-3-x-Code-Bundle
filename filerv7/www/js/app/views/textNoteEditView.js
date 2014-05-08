@@ -71,12 +71,27 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
         return self._note.UID;
       };
 
+     /**
+      * Persists the note to localStorage during an Application Pause
+      * event, just-in-case
+      */
+      self.persistNote = function ()
+      {
+        self._note.name = self._nameEditor.innerText;
+        self._note.textContents = self._contentsEditor.value;
+        localStorage["noteInProgress"] = self._note.JSON;
+        localStorage["noteInProgressUID"] = self._note.UID;
+        localStorage["noteInProgressType"] = self._note.class;
+      }
       /**
        * Save the specific note by copying the name and contents
        * from the DOM
        */
       self.saveNote = function ()
       {
+        localStorage.removeItem("noteInProgress"); // clean up any persisted notes during a pause
+        localStorage.removeItem("noteInProgressUID");
+        localStorage.removeItem("noteInProgressType");
          self._note.name = self._nameEditor.innerText;
          self._note.textContents = self._contentsEditor.value;
          noteStorageSingleton.saveNote ( self._note );
@@ -202,6 +217,18 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
 
       };
 
+     self.registerGlobalNotifications = function registerGlobalNotifications()
+     {
+       _y.UI.globalNotifications.addListenerForNotification ( "applicationPausing", self.persistNote );
+       _y.UI.globalNotifications.addListenerForNotification ( "applicationResuming", self.saveNote );
+     };
+
+     self.deRegisterGlobalNotifications = function deRegisterGlobalNotifications()
+     {
+       _y.UI.globalNotifications.removeListenerForNotification ("applicationPausing", self.persistNote );
+       _y.UI.globalNotifications.removeListenerForNotification ("applicationResuming", self.saveNote );
+     }
+
       /**
        * Initializes our view -- theParentElement is the DOM element to attach to, and
        * theUID is the specific note to edit.
@@ -215,9 +242,13 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          // call super
          self.super ( _className, "init", [undefined, "div", self.class + " noteEditView ui-container", theParentElement] );
 
+         // listen for our appearance
+         self.addListenerForNotification ( "viewWasPushed", self.registerGlobalNotifications );
+
          // listen for our disappearance
          self.addListenerForNotification ( "viewWasPopped", self.releaseBackButton );
          self.addListenerForNotification ( "viewWasPopped", self.destroy );
+         self.addListenerForNotification ( "viewWasPopped", self.deRegisterGlobalNotifications );
       };
 
       self.overrideSuper ( self.class, "initWithOptions", self.init );
@@ -251,6 +282,7 @@ define ( ["yasmf", "app/models/noteStorageSingleton",
          // Stop listening for our disappearance
          self.removeListenerForNotification ( "viewWasPopped", self.releaseBackButton );
          self.removeListenerForNotification ( "viewWasPopped", self.destroy );
+         self.addListenerForNotification ( "viewWasPopped", self.deRegisterGlobalNotifications );
 
          // release our objects
          self._navigationBar = null

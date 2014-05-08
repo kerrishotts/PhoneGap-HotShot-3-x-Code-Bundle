@@ -3,6 +3,16 @@
 
 > **NOTE**: If you utilize the code package available on GitHub at [https://github.com/kerrishotts/PhoneGap-HotShot-3-x-Code-Bundle](https://github.com/kerrishotts/PhoneGap-HotShot-3-x-Code-Bundle), the fixes below are already incorporated into the code.
 
+### Data is not persisted should the app be terminated after a `pause` event
+
+This is because there is no auto-save mechanism in place. One could add such a mechanism by listening to `blur` events and calling `saveNote` and `savePath` as appropriate. But this doesn't handle the case should the user put the app in the background without `blur`ing off a field.
+
+In this case, FilerV7 has been modified to show an example of proper persistence of data. The note that is currently being edited is saved to `localStorage` (since we can't use native plugins). If the app is paused and then terminated, on the next startup, the data will still be in `localStorage`, and the app will create the note from `localStorage`. This makes it appear to the user as if no data was lost.
+
+Of course, it's still possible to lose data -- if the app is terminated out-right without an intervening `pause`, there's no chance. In this case, one could use a combination of the two plus a save every few seconds in order to reduce the chance of data loss.
+
+For more information about how FilerV7 was modified, see the `pause-resume-handling.md` document in this code package.
+
 ### Recording video notes doesn't change the unit on the note
 
 Version 0.3.0 of the `media-capture` plugin isn't returning the length of the video; no known fix at this time.

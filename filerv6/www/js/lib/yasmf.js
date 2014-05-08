@@ -3308,6 +3308,7 @@ define
 define (
   'yasmf/util/object',[],function () {
 
+    var _className = "BaseObject";
     /**
      * BaseObject is the base object for all complex objects used by YASMF;
      * simpler objects that are properties-only do not inherit from this
@@ -3340,14 +3341,14 @@ define (
        * and so we implement inheritance in a different way.
        *
        * First, the _classHierarchy, a private property, provides the
-       * inheritance tree. All objects inherit from "PKObject".
+       * inheritance tree. All objects inherit from "BaseObject".
        *
        * @private
        * @property _classHierarchy
        * @type Array
        * @default ["BaseObject"]
        */
-      self._classHierarchy = ["BaseObject"];
+      self._classHierarchy = [_className];
 
       /**
        *
@@ -3511,6 +3512,37 @@ define (
       };
 
       /**
+       * Category support; for an object to get category support for their class,
+       * they must call this method prior to any auto initialization
+       *
+       * @method _constructObjectCategories
+       *
+       */
+      self._constructObjectCategories = function _constructObjectCategories( pri )
+      {
+        var priority = BaseObject.ON_CREATE_CATEGORY;
+        if (typeof pri !== "undefined")
+        {
+          priority = pri;
+        }
+        if (typeof BaseObject._objectCategories[priority][self.class] !== "undefined")
+        {
+          BaseObject._objectCategories[priority][self.class].forEach(
+            function (categoryConstructor)
+            {
+              try
+              {
+                categoryConstructor(self);
+              }
+              catch (e)
+              {
+                console.log ('Error during category construction: ' + e.message);
+              }
+            });
+        }
+      };
+
+      /**
        *
        * initializes the object
        *
@@ -3519,9 +3551,10 @@ define (
        */
       self.init = function ()
       {
-        // since we're at the top of the hierarchy, we don't do anything.
+        self._constructObjectCategories(BaseObject.ON_INIT_CATEGORY);
         return self;
       };
+
 
       /*
        *
@@ -3761,12 +3794,14 @@ define (
        *
        * @method registerNotification
        * @param {String} theNotification  the name of the notification.
+       * @param {Boolean} async  if true, notifications are sent wrapped in setTimeout
        */
-      self.registerNotification = function (theNotification)
+      self.registerNotification = function (theNotification, async)
       {
         if ( typeof self._notificationListeners[ theNotification ] === "undefined")
         {
           self._notificationListeners [ theNotification ] = [];
+          self._notificationListeners [ theNotification ]._useAsyncNotifications = (typeof async !== "undefined" ? async : true);
         }
         if (self._traceNotifications)
         {
@@ -3796,6 +3831,7 @@ define (
         {
           console.log("Notifying " + self._notificationListeners[theNotification].length + " listeners for " + theNotification + " ( " + args + " ) ");
         }
+        var async = self._notificationListeners[theNotification]._useAsyncNotifications;
         var notifyListener = function (theListener, theNotification, args)
         {
           return function ()
@@ -3805,7 +3841,14 @@ define (
         };
         for (var i = 0; i < self._notificationListeners[theNotification].length; i++)
         {
-          setTimeout(notifyListener(self._notificationListeners[theNotification][i], theNotification, args), 0);
+          if (async)
+          {
+            setTimeout(notifyListener(self._notificationListeners[theNotification][i], theNotification, args), 0);
+          }
+          else
+          {
+            (notifyListener(self._notificationListeners[theNotification][i], theNotification, args))();
+          }
         }
       };
 
@@ -3831,10 +3874,17 @@ define (
         {
           console.log("Notifying " + self._notificationListeners[theNotification].length + " listeners for " + theNotification + " ( " + args + " ) ");
         }
+        var async = self._notificationListeners[theNotification]._useAsyncNotifications;
         var i = self._notificationListeners[theNotification].length - 1;
         if (i >= 0)
         {
-          setTimeout(function () {self._notificationListeners[theNotification][i](self, theNotification, args);}, 0);
+          if (async) {
+            setTimeout(function () {self._notificationListeners[theNotification][i](self, theNotification, args);}, 0);
+          }
+          else
+          {
+            self._notificationListeners[theNotification][i](self, theNotification, args);
+          }
         }
       };
 
@@ -4125,6 +4175,26 @@ define (
                               defPropOptions);
       };
 
+      /**
+       * Auto initializes the object based on the arguments passed to the object constructor. Any object
+       * that desires to be auto-initializable must perform the following prior to returning themselves:
+       *
+       * ```
+       * self._autoInit.apply (self, arguments);
+       * ```
+       *
+       * Each init must call the super of init, and each init must return self.
+       *
+       * If the first parameter to _autoInit (and thus to the object constructor) is an object,
+       * initWithOptions is called if it exists. Otherwise init is called with all the arguments.
+       *
+       * If NO arguments are passed to the constructor (and thus to this method), then no
+       * auto initialization is performed. If one desires an auto-init on an object that requires
+       * no parameters, pass a dummy parameter to ensure init will be called
+       *
+       * @returns {*}
+       * @private
+       */
       self._autoInit = function ( )
       {
         if (arguments.length > 0)
@@ -4139,7 +4209,7 @@ define (
               }
               else
               {
-                self.init.apply (self, arguments);
+                return self.init.apply (self, arguments);
               }
             }
             else {
@@ -4166,10 +4236,82 @@ define (
 
         // ready to be destroyed
       };
-      self._autoInit.apply (self, arguments);
-      return self;
 
+      // self-categorize
+      self._constructObjectCategories();
+
+      // call auto init
+      self._autoInit.apply (self, arguments);
+
+      // done
+      return self;
     };
+
+    /**
+     * Object categories. Of the form:
+     *
+     * ```
+     * { className: [ constructor1, constructor2, ... ], ... }
+     * ```
+     *
+     * Global to the app and library. BaseObject's init() method will call each category in the class hierarchy.
+     *
+     * @property _objectCategories
+     * @type {{}}
+     * @private
+     */
+    BaseObject._objectCategories = [{},{}];
+    BaseObject.ON_CREATE_CATEGORY = 0;
+    BaseObject.ON_INIT_CATEGORY = 1;
+    /**
+     * Register a category constructor for a specific class. The function must take `self` as a parameter, and must
+     * not assume the presence of any other category
+     *
+     * The options parameter takes the form:
+     *
+     * ```
+     * { class: class name to register for
+     *   method: constructor method
+     *   priority: ON_CREATE_CATEGORY or ON_INIT_CATEGORY
+     * }
+     * ```
+     *
+     * @method registerCategoryConstructor
+     * @param {Object} options
+     */
+    BaseObject.registerCategoryConstructor = function registerCategoryConstructor( options)
+    {
+      if (typeof options === "undefined")
+      {
+        throw new Error( "registerCategoryConstructor requires a class name and a constructor method." );
+      }
+      if (typeof options.class !== "undefined")
+      {
+        throw new Error( "registerCategoryConstructor requires options.class" );
+      }
+      if (typeof options.method !== "undefined")
+      {
+        throw new Error( "registerCategoryConstructor requires options.method" );
+      }
+      var className = options.class;
+      var method = options.method;
+      var priority = BaseObject.ON_CREATE_CATEGORY;
+      if (typeof options.priority !== "undefined")
+      {
+        priority = options.priority;
+      }
+      if ( typeof BaseObject._objectCategories[priority][className] === "undefined" )
+      {
+        BaseObject._objectCategories[priority][className] = [];
+      }
+      BaseObject._objectCategories[priority][className].push (categoryConstructor);
+    };
+
+    BaseObject.meta = { version: '00.04.900',
+                        class: _className,
+                        autoInitializable: true,
+                        categorizable: true
+                      };
 
     return BaseObject;
 
@@ -4225,11 +4367,14 @@ define (
 /*global define, Q, LocalFileSystem, console*/
 
 define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseObject ) {
+/**
+ * @typedef {{}} Promise
+ */
 
   var DEBUG = false;
   /**
    * Requests a quota from the file system
-   * @param  {Constant} fileSystemType    PERSISTENT or TEMPORARY
+   * @param  {*} fileSystemType    PERSISTENT or TEMPORARY
    * @param  {Number} requestedDataSize The quota we're asking for
    * @return {Promise}                   The promise
    */
@@ -4284,7 +4429,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
 
   /**
    * Request a file system with the requested size (obtained first by getting a quota)
-   * @param  {Constant} fileSystemType    TEMPORARY or PERSISTENT
+   * @param  {*} fileSystemType    TEMPORARY or PERSISTENT
    * @param  {Number} requestedDataSize The quota
    * @return {Promise}                   The promise
    */
@@ -4311,7 +4456,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
 
   /**
    * Resolves theURI to a fileEntry or directoryEntry, if possible.
-   * @param  {String} theURI the path, should start with file://, but if it doesn't we'll add it.
+   * @param  {String} theURL the path, should start with file://, but if it doesn't we'll add it.
    */
   function _resolveLocalFileSystemURL ( theURL )
   {
@@ -4367,6 +4512,9 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
 
   }
 
+  /**
+   * @typedef {{}} DirectoryEntry
+   */
   /**
    * Returns a directory entry based on the path from the parent using
    * the specified options ( or {} )
@@ -4428,6 +4576,9 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
   }
 
   /**
+   * @typedef {{}} FileEntry
+   */
+  /**
    * Returns a file object based on the file entry.
    * @param  {FileEntry} fileEntry The file Entry
    * @return {Promise}           The Promise
@@ -4467,11 +4618,11 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       fileReader.onloadend = function ( e )
       {
         deferred.resolve ( e.target.result );
-      }
+      };
       fileReader.onerror = function ( anError )
       {
         deferred.reject ( anError );
-      }
+      };
       fileReader["readAs" + readAsKind]( fileObject );
     }
     catch ( anError )
@@ -4505,9 +4656,12 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
   }
 
   /**
+   * @typedef {{}} FileWriter
+   */
+  /**
    * Write the contents to the fileWriter
    * @param  {FileWriter} fileWriter Obtained from _createFileWriter
-   * @param  {Variable} contents   The contents to write
+   * @param  {*} contents   The contents to write
    * @return {Promise}            the Promise
    */
   function _writeFileContents ( fileWriter, contents )
@@ -4521,13 +4675,13 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
         fileWriter.onwrite = function ( e )
         {
           deferred.resolve ( e );
-        }
+        };
         fileWriter.write ( contents );
-      }
+      };
       fileWriter.onError = function ( anError )
       {
         deferred.reject ( anError );
-      }
+      };
       fileWriter.truncate ( 0 ); // clear out the contents, first
     }
     catch ( anError )
@@ -4755,14 +4909,14 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
     self.getGlobalDebug = function ()
     {
       return DEBUG;
-    }
+    };
     self.setGlobalDebug = function ( debug )
     {
       DEBUG = debug;
-    }
+    };
     Object.defineProperty ( self, "globalDebug", { get: self.getGlobalDebug,
                                                    set: self.setGlobalDebug,
-                                                   configurable: true})
+                                                   configurable: true});
 
     /**
      * the fileSystemType can either be self.PERSISTENT or self.TEMPORARY, and is only
@@ -4772,19 +4926,19 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
     self.getFileSystemType = function ()
     {
       return self._fileSystemType;
-    }
+    };
     Object.defineProperty ( self, "fileSystemType", { get: self.getFileSystemType,
                                                       configurable: true });
 
     /**
      * The requested quota -- stored for future reference, since we ask for it
-     * specificall during an INIT operation. It cannot be changed.
+     * specifically during an INIT operation. It cannot be changed.
      */
     self._requestedQuota = 0; // can only be changed during INIT
     self.getRequestedQuota = function ()
     {
       return self._requestedQuota;
-    }
+    };
     Object.defineProperty ( self, "requestedQuota", { get: self.getRequestedQuota,
                                                       configurable: true });
 
@@ -4797,10 +4951,13 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
     self.getActualQuota = function ()
     {
       return self._actualQuota;
-    }
+    };
     Object.defineProperty ( self, "actualQuota", { get: self.getActualQuota,
                                                    configurable: true });
 
+    /**
+     * @typedef {{}} FileSystem
+     */
     /**
      * The current filesystem -- either the temporary or persistent one; it can't be changed
      * @type {FileSystem}
@@ -4809,7 +4966,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
     self.getFileSystem = function ()
     {
       return self._fileSystem;
-    }
+    };
     Object.defineProperty ( self, "fileSystem", { get: self.getFileSystem,
                                                   configurable: true });
 
@@ -4822,12 +4979,12 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
     self.getCurrentWorkingDirectory = function ()
     {
       return self._cwd;
-    }
+    };
     self.setCurrentWorkingDirectory = function ( theCWD )
     {
       self._cwd = theCWD;
       if (hasBaseObject) { self.notify ( "changedCurrentWorkingDirectory" ); }
-    }
+    };
     Object.defineProperty ( self, "cwd", { get: self.getCurrentWorkingDirectory,
                                            set: self.setCurrentWorkingDirectory,
                                            configurable: true });
@@ -4847,14 +5004,14 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
     self.pushCurrentWorkingDirectory = function ()
     {
       self._cwds.push ( self._cwd );
-    }
+    };
     /**
      * Pop the topmost directory on the stack and change to it
      */
     self.popCurrentWorkingDirectory = function ()
     {
       self.setCurrentWorkingDirectory ( self._cwds.pop() );
-    }
+    };
 
     self.resolveLocalFileSystemURL = function ( theURI )
     {
@@ -4864,7 +5021,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Returns the file entry for the given path (useful for
@@ -4878,7 +5035,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Returns the file object for a given file (useful for getting
@@ -4888,7 +5045,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
     {
       return self.getFileEntry ( theFilePath, options )
                  .then ( _getFileObject );
-    }
+    };
 
     /**
      * Returns the directory entry for a given path
@@ -4901,7 +5058,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * returns the URL for a given file
@@ -4914,7 +5071,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
     /**
      * Returns a URL for the given directory
      */
@@ -4926,9 +5083,9 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
-    self.getNativeURL = function ( theEntry, options )
+    self.getNativeURL = function ( theEntry )
     {
       var thePath = theEntry;
       if (typeof theEntry !== "string")
@@ -4938,7 +5095,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       var isAbsolute = (thePath.substr(0,1)==="/");
       var theRootPath = isAbsolute ? self._root.nativeURL : self.cwd.nativeURL;
       return theRootPath + (isAbsolute ? "" : "/") + thePath;
-    }
+    };
     /**
      * returns the native file path for a given file
      */
@@ -4951,7 +5108,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
         .catch ( function ( anError ) { deferred.reject (anError); } )
         .done ();
       return deferred.promise;
-    }
+    };
     /**
      * Returns a URL for the given directory
      */
@@ -4963,7 +5120,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
         .catch ( function ( anError ) { deferred.reject (anError); } )
         .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Change to an arbitrary directory
@@ -4979,7 +5136,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Read an arbitrary file's contents.
@@ -4998,7 +5155,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject ( anError ); } )
       .done();
       return deferred.promise;
-    }
+    };
 
     /**
      * Read an arbitrary directory's entries.
@@ -5015,13 +5172,13 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject ( anError ); } )
       .done();
       return deferred.promise;
-    }
+    };
 
     /**
      * Write data to an arbitrary file
      * @param  {String} theFilePath The file name to write to, relative to cwd
      * @param  {Object} options     The options to use when opening the file
-     * @param  {Variable} theData     The data to write
+     * @param  {*} theData     The data to write
      * @return {Promise}             The Promise
      */
     self.writeFileContents = function ( theFilePath, options, theData )
@@ -5034,7 +5191,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject ( anError ); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Creates an arbitrary directory
@@ -5049,7 +5206,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Copies a file to a new directory, with an optional new name
@@ -5070,7 +5227,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Copies a directory to a new directory, with an optional new name
@@ -5091,7 +5248,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Moves a file to a new directory, with an optional new name
@@ -5112,7 +5269,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Moves a directory to a new directory, with an optional new name
@@ -5133,7 +5290,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Renames a file to a new name, in the cwd
@@ -5144,7 +5301,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
     self.renameFile = function ( sourceFilePath, withNewName )
     {
       return self.moveFile ( sourceFilePath, ".", withNewName );
-    }
+    };
 
     /**
      * Renames a directory to a new name, in the cwd
@@ -5155,7 +5312,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
     self.renameDirectory = function ( sourceDirectoryPath, withNewName )
     {
       return self.moveDirectory ( sourceDirectoryPath, ".", withNewName );
-    }
+    };
 
     /**
      * Deletes a file
@@ -5171,7 +5328,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Removes a directory, possibly recursively
@@ -5188,7 +5345,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       .catch ( function ( anError ) { deferred.reject (anError); } )
       .done ();
       return deferred.promise;
-    }
+    };
 
     /**
      * Asks the browser for the requested quota, and then requests the file system
@@ -5217,7 +5374,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
                 deferred.reject ( anError ); })
       .done();
       return deferred.promise;
-    }
+    };
 
     /**
      * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
@@ -5236,7 +5393,7 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       self._fileSystemType = fileSystemType;
 
       return self._initializeFileSystem(); // this returns a promise, so we can .then after.
-    }
+    };
 
     /**
      * Initializes the file manager with the requested file system type (self.PERSISTENT or self.TEMPORARY)
@@ -5249,11 +5406,15 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
       if (typeof options.requestedQuota === "undefined") { throw new Error ("No quota requested. If you don't know, specify ZERO."); }
 
       return self.init ( options.fileSystemType, options.requestedQuota );
-    }
+    };
 
     return self;
   };
 
+  FileManager.meta = { version: '00.04.450',
+                       class: _className,
+                       autoInitializable: false,
+                       categorizable: false };
   return FileManager;
 });
 

@@ -534,12 +534,14 @@ define (
        *
        * @method registerNotification
        * @param {String} theNotification  the name of the notification.
+       * @param {Boolean} async  if true, notifications are sent wrapped in setTimeout
        */
-      self.registerNotification = function (theNotification)
+      self.registerNotification = function (theNotification, async)
       {
         if ( typeof self._notificationListeners[ theNotification ] === "undefined")
         {
           self._notificationListeners [ theNotification ] = [];
+          self._notificationListeners [ theNotification ]._useAsyncNotifications = (typeof async !== "undefined" ? async : true);
         }
         if (self._traceNotifications)
         {
@@ -569,6 +571,7 @@ define (
         {
           console.log("Notifying " + self._notificationListeners[theNotification].length + " listeners for " + theNotification + " ( " + args + " ) ");
         }
+        var async = self._notificationListeners[theNotification]._useAsyncNotifications;
         var notifyListener = function (theListener, theNotification, args)
         {
           return function ()
@@ -578,7 +581,14 @@ define (
         };
         for (var i = 0; i < self._notificationListeners[theNotification].length; i++)
         {
-          setTimeout(notifyListener(self._notificationListeners[theNotification][i], theNotification, args), 0);
+          if (async)
+          {
+            setTimeout(notifyListener(self._notificationListeners[theNotification][i], theNotification, args), 0);
+          }
+          else
+          {
+            (notifyListener(self._notificationListeners[theNotification][i], theNotification, args))();
+          }
         }
       };
 
@@ -604,10 +614,17 @@ define (
         {
           console.log("Notifying " + self._notificationListeners[theNotification].length + " listeners for " + theNotification + " ( " + args + " ) ");
         }
+        var async = self._notificationListeners[theNotification]._useAsyncNotifications;
         var i = self._notificationListeners[theNotification].length - 1;
         if (i >= 0)
         {
-          setTimeout(function () {self._notificationListeners[theNotification][i](self, theNotification, args);}, 0);
+          if (async) {
+            setTimeout(function () {self._notificationListeners[theNotification][i](self, theNotification, args);}, 0);
+          }
+          else
+          {
+            self._notificationListeners[theNotification][i](self, theNotification, args);
+          }
         }
       };
 

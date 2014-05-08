@@ -176,6 +176,8 @@ div {
 .ui-split-view {
   width: 100%; }
 
+/* Note: ui-off-canvas-view is supported on iOS and Android 4.4+. Android <4.4
+   will fail spectacularly */
 .ui-off-canvas-view {
   width: calc(100% + 320px);
   -webkit-transform: translateX(-320px);
@@ -899,12 +901,12 @@ div {
  * Icon Glyphs
  *
  *****************************************************************************/
-.ui-glyph-arror-corners-inward {
-  -webkit-mask-image: url("./yasmf-assets/arror-corners-inward@2x.png");
-  -moz-mask-image: url("./yasmf-assets/arror-corners-inward@2x.png");
-  -ms-mask-image: url("./yasmf-assets/arror-corners-inward@2x.png");
-  -o-mask-image: url("./yasmf-assets/arror-corners-inward@2x.png");
-  mask-image: url("./yasmf-assets/arror-corners-inward@2x.png"); }
+.ui-glyph-arrow-corners-inward {
+  -webkit-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
+  -moz-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
+  -ms-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
+  -o-mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png");
+  mask-image: url("./yasmf-assets/arrow-corners-inward@2x.png"); }
 
 .ui-glyph-arrow-corners-outward {
   -webkit-mask-image: url("./yasmf-assets/arrow-corners-outward@2x.png");

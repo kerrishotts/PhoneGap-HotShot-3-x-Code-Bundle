@@ -4,9 +4,9 @@
  * 
  * main.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 2.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -39,7 +39,7 @@
          white:false,
          onevar:false 
  */
-/*global define, console*/
+/*global define, console, StatusBar*/
 define ( ["yasmf", "app/views/pathListView", "app/views/staticView"], function ( _y, PathListView, StaticView )
 {
    // define our app object
@@ -49,32 +49,32 @@ define ( ["yasmf", "app/views/pathListView", "app/views/staticView"], function (
 
    APP.onPause = function ()
    {
-      console.log ( "Application paused" );
-      // on iOS, this isn't processed until a resume event,
-      // since calls to the native layer are delayed
+     _y.UI.globalNotifications.notify("applicationPausing");
+     console.log ( "Application paused" );
    }
 
    APP.onResume = function ()
    {
-      console.log ( "Application resumed" );
+     _y.UI.globalNotifications.notify("applicationResuming");
+     console.log ( "Application resumed" );
    }
 
-   APP._lastConnectionStatus = "unknown";
-   APP._lastConnectionAlert = null;
-   APP.onConnectionStatusChanged = function (sender, notification)
-   {
-      var friendlyMessage = "";
-      if (APP._lastConnectionStatus == "onApplicationOffline" &&
-          notification == "onApplicationOnline")
-      {
-         friendlyMessage = _y.T("Your Internet Connection has been restored.");
-      }
-      if (APP._lastConnectionStatus !== "onApplicationOffline" &&
-          notification == "onApplicationOffline")
-      {
-         friendlyMessage = _y.T("Your Internet Connection is offline.");
-      }
-      APP._lastConnectionStatus = notification;
+  APP._lastConnectionStatus = "unknown";
+  APP._lastConnectionAlert = null;
+  APP.onConnectionStatusChanged = function (sender, notification)
+  {
+    var friendlyMessage = "";
+    if (APP._lastConnectionStatus == "applicationOffline" &&
+        notification == "applicationOnline")
+    {
+      friendlyMessage = _y.T("Your Internet Connection has been restored.");
+    }
+    if (APP._lastConnectionStatus !== "applicationOffline" &&
+        notification == "applicationOffline")
+    {
+      friendlyMessage = _y.T("Your Internet Connection is offline.");
+    }
+    APP._lastConnectionStatus = notification;
 
       if (friendlyMessage !== "")
       {
@@ -94,80 +94,100 @@ define ( ["yasmf", "app/views/pathListView", "app/views/staticView"], function (
      }
    }
 
-   APP.onBatteryStatusChanged = function (sender, notification, data)
-   {
-      console.log ( "Battery status: " + data[0] + "; is plugged in? " + data[1] );
-   }
+  APP.onBatteryStatusChanged = function (sender, notification, data)
+  {
+    console.log ( "Battery status: " + data[0].level + "; is plugged in? " + data[0].isPlugged );
+  }
 
-   APP.onMenuButton = function ()
-   {
-      if (typeof APP.navigationController !== "undefined")
+  APP.onMenuButtonPressed = function ()
+  {
+    if (typeof APP.navigationController !== "undefined")
+    {
+      if (typeof APP.navigationController.topView.onMenuButton !== "undefined")
       {
-         if (typeof APP.navigationController.topView.onMenuButton !== "undefined")
-         {
-            APP.navigationController.topView.onMenuButton();
-         }
+        APP.navigationController.topView.onMenuButton();
       }
-   }
+    }
+  }
 
-   APP.onSearchButton = function ()
-   {
-      if (typeof APP.navigationController !== "undefined")
+  APP.onSearchButtonPressed = function ()
+  {
+    if (typeof APP.navigationController !== "undefined")
+    {
+      if (typeof APP.navigationController.topView.onSearchButton !== "undefined")
       {
-         if (typeof APP.navigationController.topView.onSearchButton !== "undefined")
-         {
-            APP.navigationController.topView.onSearchButton();
-         }
+        APP.navigationController.topView.onSearchButton();
       }
-   }
+    }
+  }
 
   APP.updateNavigationBars = function ()
   {
     if ( APP.navigationBars.length == 1)
     {
-      APP.navigationBars[0].frame = window.nativeControls.Rect ( 0, 0, document.body.clientWidth, 64 );
+      APP.navigationBars[0].frame = window.nativeControls.Rect ( 0, 20, document.body.clientWidth, 44 );
     }
     else
     {
-      APP.navigationBars[0].frame = window.nativeControls.Rect ( 0, 0, 320, 64 );
-      APP.navigationBars[1].frame = window.nativeControls.Rect ( 320, 0, document.body.clientWidth - 320, 64 );
+      APP.navigationBars[0].frame = window.nativeControls.Rect ( 0, 20, 320, 44 );
+      APP.navigationBars[1].frame = window.nativeControls.Rect ( 320, 20, document.body.clientWidth - 320, 44 );
     }
   }
+
    // APP.start will load the first view and kick us off
    APP.start = function ()
    {
-      // start listening for resume/pause events
-      var gN = _y.UI.globalNotifications;
-      gN.registerNotification ( "onApplicationPause" );
-      gN.registerNotification ( "onApplicationResume" );
-      gN.registerNotification ( "onApplicationOnline" );
-      gN.registerNotification ( "onApplicationOffline" );
-      gN.registerNotification ( "onApplicationBatteryCritical" );
-      gN.registerNotification ( "onApplicationBatteryLow" );
-      gN.registerNotification ( "onApplicationBatteryStatus" );
-      gN.registerNotification ( "onApplicationMenuButton" );
-      gN.registerNotification ( "onApplicationSearchButton" );
+     // update the iOS 7 status bar
+     if (_y.device.platform() == "ios")
+     {
+       StatusBar.styleLightContent();
+     }
+     // start listening for resume/pause events
+     var gN = _y.UI.globalNotifications;
+     var notifications = { 
+       "online":          { notification: "applicationOnline",  handler: APP.onConnectionStatusChanged },
+       "offline":         { notification: "applicationOffline", handler: APP.onConnectionStatusChanged },
+       "batterycritical": { notification: "batteryCritical",    handler: APP.onBatteryStatusChanged },
+       "batterylow":      { notification: "batteryLow",         handler: APP.onBatteryStatusChanged },
+       "batterystatus":   { notification: "batteryStatus",      handler: APP.onBatteryStatusChanged },
+       "menubutton":      { notification: "menuButtonPressed",  handler: APP.onMenuButtonPressed },
+       "searchbutton":    { notification: "searchButtonPressed",handler: APP.onSearchButtonPressed }
+     };
 
-      gN.addListenerForNotification ( "onApplicationPause", APP.onPause );
-      gN.addListenerForNotification ( "onApplicationResume", APP.onResume );
-      gN.addListenerForNotification ( "onApplicationOnline", APP.onConnectionStatusChanged );
-      gN.addListenerForNotification ( "onApplicationOffline", APP.onConnectionStatusChanged );
-      gN.addListenerForNotification ( "onApplicationBatteryCritical", APP.onBatteryStatusChanged );
-      gN.addListenerForNotification ( "onApplicationBatteryLow", APP.onBatteryStatusChanged );
-      gN.addListenerForNotification ( "onApplicationBatteryStatus", APP.onBatteryStatusChanged );
-      gN.addListenerForNotification ( "onApplicationMenuButton", APP.onMenuButton );
-      gN.addListenerForNotification ( "onApplicationSearchButton", APP.onSearchButton );
+    if (_y.device.platform() === "ios")
+    {
+      // if we want to persist localStorage, we need to use PKLocalStorage plugin
+      window.PKLocalStorage.addPauseHandler ( APP.onPause );
+      window.PKLocalStorage.addResumeHandler ( APP.onResume );
+    }
+    else
+    {
+      // add the proper pause/resume handlers
+      notifications.pause = {notification:"pause", handler: APP.onPause};
+      notifications.resume = {notification:"resume", handler: APP.onResume};
+    }
 
-      window.addEventListener ( "pause", function () { gN.notify ("onApplicationPause"); }, false );
-      window.addEventListener ( "resume", function () { gN.notify ("onApplicationResume"); }, false );
-      window.addEventListener ( "online", function () { gN.notify ("onApplicationOnline"); }, false );
-      window.addEventListener ( "offline", function () { gN.notify ("onApplicationOffline"); }, false );
-      window.addEventListener ( "batterycritical", function ( level, isPlugged ) { gN.notify ("onApplicationBatteryCritical", [level, isPlugged]); }, false );
-      window.addEventListener ( "batterylow", function ( level, isPlugged ) { gN.notify ("onApplicationBatteryLow", [level, isPlugged]); }, false );
-      window.addEventListener ( "batterystatus", function ( level, isPlugged ) { gN.notify ("onApplicationBatteryStatus", [level, isPlugged]); }, false );
-      window.addEventListener ( "menubutton", function () { gN.notify ("onApplicationMenuButton"); }, false );
-      window.addEventListener ( "searchbutton", function () { gN.notify ("onApplicationSearchButton"); }, false );
+     for ( var DOMEvent in notifications )
+     {
+       if ( notifications.hasOwnProperty ( DOMEvent ) )
+       {
+         var notification = notifications[DOMEvent];
+         gN.registerNotification( notification.notification );
+         gN.addListenerForNotification( notification.notification, notification.handler );
+         (function (notification)
+         {
+           window.addEventListener( DOMEvent, function ()
+           {
+             var args = Array.prototype.slice.call(arguments);
+             gN.notify(notification, args);
+           }, false);
+         })(notification.notification);
+       }
+     }
 
+     gN.registerNotification ( "applicationPausing", false ); // synchronous notifications
+     gN.registerNotification ( "applicationResuming", false ); // synchronous
+    
 
       // find the rootContainer DOM element
       var rootContainer = _y.ge("rootContainer");
@@ -223,13 +243,15 @@ define ( ["yasmf", "app/views/pathListView", "app/views/staticView"], function (
           var mainNavBar = window.nativeControls.NavigationBar();
           APP.navigationBars = [ mainNavBar ];
       }
-     APP.navigationBars.map ( function (navBar)
-                              {
-                                navBar.tintColor = window.nativeControls.Color ( 69, 188, 100, 1);
+     APP.navigationBars.forEach ( function (navBar)
+                              { navBar.barTintColor = window.nativeControls.Color (96, 224, 32, 1);
+                                navBar.tintColor = window.nativeControls.Color ( "white" );
+                                navBar.textColor = window.nativeControls.Color ( "white" );
+                                navBar.translucent = true;
                               });
      _y.UI.orientationHandler.addListenerForNotification( "orientationChanged", APP.updateNavigationBars);
      APP.updateNavigationBars();
-     APP.navigationBars.map ( function (navBar)
+     APP.navigationBars.forEach ( function (navBar)
                               {
                                 navBar.addToView();
                               });

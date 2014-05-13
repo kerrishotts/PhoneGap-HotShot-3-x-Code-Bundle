@@ -251,7 +251,7 @@ function ( _y, pathStorageSingleton, pathListViewHTML,
 
         var fragment = document.createDocumentFragment();
 
-        paths.map (
+        paths.forEach (
           function ( path )
           {
             if (path !== null)
@@ -273,15 +273,15 @@ function ( _y, pathStorageSingleton, pathListViewHTML,
               var contentsElement = e.querySelector ( ".ui-list-item-contents"),
                   actionElement  = e.querySelector ( ".ui-list-action" );
 
-              Hammer ( contentsElement, {prevent_default:true} ).on ("tap", self.editExistingPath );
+              Hammer ( contentsElement, {} ).on ("tap", self.editExistingPath );
 
               if (!self.element.classList.contains("wide"))
               {
                 // the following is applicable only when we're rendering a list view
                 // (not a thumbnail view)
                 Hammer ( contentsElement, {swipe_velocity:0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true } ).on ("dragleft", self.exposeActionForPath );
-                Hammer ( contentsElement, {swipe_velocity:0.1,drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true } ).on ("dragright", self.hideActionForPath );
-                Hammer ( actionElement , {prevent_default:true}  ).on ("tap", self.deleteExistingPath );
+                Hammer ( contentsElement, {swipe_velocity:0.1,drag_block_horizontal:true,drag_block_vertical:true, prevent_defaut: true } ).on ("dragright", self.hideActionForPath );
+                Hammer ( actionElement , {prevent_default: true}  ).on ("tap", self.deleteExistingPath );
               }
               else
               {

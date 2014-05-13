@@ -4,9 +4,9 @@
  * 
  * pathListView.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 2.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this 
  * software and associated documentation files (the "Software"), to deal in the Software 
  * without restriction, including without limitation the rights to use, copy, modify, 
@@ -232,8 +232,7 @@ function ( _y, pathStorageSingleton, pathListViewHTML,
         self._navigationItem = window.nativeControls.NavigationItem();
         self._navigationItem.title = _y.T("APP_TITLE");
 
-        self._addPathButton = window.nativeControls.BarButton();
-        self._addPathButton.title = _y.T("NEW");
+        self._addPathButton = window.nativeControls.BarImageButton();
         self._addPathButton.image = "/www/js/lib/yasmf-assets/plus";
 
         self._addPathButton.addEventListener ( "tap", self.createNewPath );
@@ -255,7 +254,7 @@ function ( _y, pathStorageSingleton, pathListViewHTML,
 
         var fragment = document.createDocumentFragment();
 
-        paths.map (
+        paths.forEach (
           function ( path )
           {
             if (path !== null)
@@ -271,22 +270,21 @@ function ( _y, pathStorageSingleton, pathListViewHTML,
                                    {
                                       "UID": path.uid,
                                       "TRASH": _y.T("TRASH"),
-                                      "NAME": path.name,
-                                      "MODIFIED": _y.D(path.modifiedDate,"D")
+                                      "NAME": path.name
                                    } );
               // attach any event handlers
               var contentsElement = e.querySelector ( ".ui-list-item-contents"),
                   actionElement  = e.querySelector ( ".ui-list-action" );
 
-              Hammer ( contentsElement ).on ("tap", self.editExistingPath );
+              Hammer ( contentsElement, {} ).on ("tap", self.editExistingPath );
 
               if (!self.element.classList.contains("wide"))
               {
                 // the following is applicable only when we're rendering a list view
                 // (not a thumbnail view)
-                Hammer ( contentsElement, {swipe_velocity:0.1} ).on ("swipeleft", self.exposeActionForPath );
-                Hammer ( contentsElement, {swipe_velocity:0.1 } ).on ("swiperight", self.hideActionForPath );
-                Hammer ( actionElement   ).on ("tap", self.deleteExistingPath );
+                Hammer ( contentsElement, {swipe_velocity:0.1, drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true } ).on ("dragleft", self.exposeActionForPath );
+                Hammer ( contentsElement, {swipe_velocity:0.1,drag_block_horizontal:true,drag_block_vertical:true, prevent_default:true } ).on ("dragright", self.hideActionForPath );
+                Hammer ( actionElement , {prevent_default:true}  ).on ("tap", self.deleteExistingPath );
               }
               else
               {

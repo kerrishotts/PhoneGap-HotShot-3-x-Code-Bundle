@@ -40,154 +40,111 @@
          onevar:false
  */
 /*global define*/
-
-define ( ["yasmf",
-          "text!html/startView.html!strip",
-          "app/views/gameView", "app/views/optionsView", "app/views/highScoresView",
-          "hammer"],
-function ( _y, startViewHTML, GameView, OptionsView, HighScoresView, Hammer )
-        {
-          var _className = "StartView";
-          var StartView = function ()
-          {
-            var self = new _y.UI.ViewContainer ();
-            self.subclass ( _className );
-
-            self._playButton = null;
-            self._optionsButton = null;
-            self._highScoresButton = null;
-
-            self.overrideSuper ( self.class, "render", self.render );
-            self.render = function ()
-            {
-              return _y.template ( startViewHTML,
-                                  {
-                                    "APP_TITLE": _y.T("APP_TITLE"),
-                                    "PLAY": _y.T("PLAY"),
-                                    "OPTIONS": _y.T("OPTIONS"),
-                                    "HIGH_SCORES": _y.T("HIGH_SCORES")
-                                  });
-            }
-
-            self.quitApp = function ()
-            {
-              navigator.app.exitApp();
-            }
-
-            self.playGame = function ()
-            {
-              var aGameView = new GameView();
-              aGameView.init();
-              self.navigationController.pushView ( aGameView );
-            }
-
-            self.showOptions = function ()
-            {
-              var anOptionsView = new OptionsView();
-              anOptionsView.init();
-              self.navigationController.pushView ( anOptionsView );
-            }
-
-            self.showHighScores = function ()
-            {
-              var aHighScoreView = new HighScoresView();
-              aHighScoreView.init();
-              self.navigationController.pushView ( aHighScoreView );
-            }
-
-            self.overrideSuper (self.class, "renderToElement", self.renderToElement );
-            self.renderToElement = function ()
-            {
-              self.super ( _className, "renderToElement" );
-
-              self._playButton = self.element.querySelector ( ".game-actions .game-play" );
-              Hammer (self._playButton).on ("tap", self.playGame);
-
-              self._optionsButton = self.element.querySelector ( ".game-actions .game-options" );
-              Hammer (self._optionsButton).on ("tap", self.showOptions);
-
-              self._highScoresButton = self.element.querySelector ( ".game-actions .game-high-scores" );
-              Hammer (self._highScoresButton).on ("tap", self.showHighScores);
-
-              _y.UI.backButton.addListenerForNotification ( "backButtonPressed", self.quitApp );
-            }
-
-            self.startAnimation = function ()
-            {
-              var e = self.element.querySelector(".game-title");
-              e.style.webkitAnimationName = "animateTitle";
-            }
-
-            self.stopAnimation = function ()
-            {
-              var e = self.element.querySelector(".game-title");
-              e.style.webkitAnimationName = "inherit";
-            }
-
-            self.overrideSuper ( self.class, "init", self.init );
-            self.init = function ( theParentElement )
-            {
-              self.super ( _className, "init", [undefined, "div", "startView ui-container", theParentElement] );
-
-             self.addListenerForNotification("viewWillAppear", self.startAnimation);
-             self.addListenerForNotification("viewWillDisappear", self.stopAnimation);
-
-            }
-
-            self.overrideSuper ( self.class, "initWithOptions", self.init );
-            self.initWithOptions = function ( options )
-            {
-              var theParentElement;
-              if ( typeof options !== "undefined" )
-              {
-                if ( typeof options.parent !== "undefined" ) { theParentElement = options.parent; }
-              }
-              self.init ( theParentElement );
-            }
-
-            self.overrideSuper ( self.class, "destroy", self.destroy );
-            self.destroy = function ()
-            {
-              self._playButton = null;
-              self._optionsButton = null;
-              self._highScoresButton = null;
-
-              self.super ( _className, "destroy" );
-            }
-
-            return self;
-          };
-
-          _y.addTranslations (
-            {
-              "APP_TITLE":
-              {
-                "EN": "Cave Runner"
-              },
-              "BACK":
-              {
-                "EN": "Back",
-                "ES": "Volver"
-              },
-              "CANCEL":
-              {
-                "EN": "Cancel",
-                "ES": "Cancelar"
-              },
-              "PLAY":
-              {
-                "EN": "Play!"
-              },
-              "OPTIONS":
-              {
-                "EN": "Options"
-              },
-              "HIGH_SCORES":
-              {
-                "EN": "High Scores"
-              }
-            });
-
-          return StartView;
-
-        });
+define( [ "yasmf", "text!html/startView.html!strip", "app/views/gameView",
+  "app/views/optionsView", "app/views/highScoresView", "hammer"
+], function( _y, startViewHTML, GameView, OptionsView, HighScoresView, Hammer ) {
+  var _className = "StartView";
+  var StartView = function() {
+    var self = new _y.UI.ViewContainer();
+    self.subclass( _className );
+    self._playButton = null;
+    self._optionsButton = null;
+    self._highScoresButton = null;
+    self.overrideSuper( self.class, "render", self.render );
+    self.render = function() {
+      return _y.template( startViewHTML, {
+        "APP_TITLE": _y.T( "APP_TITLE" ),
+        "PLAY": _y.T( "PLAY" ),
+        "OPTIONS": _y.T( "OPTIONS" ),
+        "HIGH_SCORES": _y.T( "HIGH_SCORES" )
+      } );
+    }
+    self.quitApp = function() {
+      navigator.app.exitApp();
+    }
+    self.playGame = function() {
+      var aGameView = new GameView();
+      aGameView.init();
+      self.navigationController.pushView( aGameView );
+    }
+    self.showOptions = function() {
+      var anOptionsView = new OptionsView();
+      anOptionsView.init();
+      self.navigationController.pushView( anOptionsView );
+    }
+    self.showHighScores = function() {
+      var aHighScoreView = new HighScoresView();
+      aHighScoreView.init();
+      self.navigationController.pushView( aHighScoreView );
+    }
+    self.overrideSuper( self.class, "renderToElement", self.renderToElement );
+    self.renderToElement = function() {
+      self.super( _className, "renderToElement" );
+      self._playButton = self.element.querySelector( ".game-actions .game-play" );
+      Hammer( self._playButton ).on( "tap", self.playGame );
+      self._optionsButton = self.element.querySelector( ".game-actions .game-options" );
+      Hammer( self._optionsButton ).on( "tap", self.showOptions );
+      self._highScoresButton = self.element.querySelector(
+        ".game-actions .game-high-scores" );
+      Hammer( self._highScoresButton ).on( "tap", self.showHighScores );
+      _y.UI.backButton.addListenerForNotification( "backButtonPressed", self.quitApp );
+    }
+    self.startAnimation = function() {
+      var e = self.element.querySelector( ".game-title" );
+      e.style.webkitAnimationName = "animateTitle";
+    }
+    self.stopAnimation = function() {
+      var e = self.element.querySelector( ".game-title" );
+      e.style.webkitAnimationName = "inherit";
+    }
+    self.overrideSuper( self.class, "init", self.init );
+    self.init = function( theParentElement ) {
+      self.super( _className, "init", [ undefined, "div", "startView ui-container",
+        theParentElement
+      ] );
+      self.addListenerForNotification( "viewWillAppear", self.startAnimation );
+      self.addListenerForNotification( "viewWillDisappear", self.stopAnimation );
+    }
+    self.overrideSuper( self.class, "initWithOptions", self.init );
+    self.initWithOptions = function( options ) {
+      var theParentElement;
+      if ( typeof options !== "undefined" ) {
+        if ( typeof options.parent !== "undefined" ) {
+          theParentElement = options.parent;
+        }
+      }
+      self.init( theParentElement );
+    }
+    self.overrideSuper( self.class, "destroy", self.destroy );
+    self.destroy = function() {
+      self._playButton = null;
+      self._optionsButton = null;
+      self._highScoresButton = null;
+      self.super( _className, "destroy" );
+    }
+    return self;
+  };
+  _y.addTranslations( {
+    "APP_TITLE": {
+      "EN": "Cave Runner"
+    },
+    "BACK": {
+      "EN": "Back",
+      "ES": "Volver"
+    },
+    "CANCEL": {
+      "EN": "Cancel",
+      "ES": "Cancelar"
+    },
+    "PLAY": {
+      "EN": "Play!"
+    },
+    "OPTIONS": {
+      "EN": "Options"
+    },
+    "HIGH_SCORES": {
+      "EN": "High Scores"
+    }
+  } );
+  return StartView;
+} );

@@ -1,0 +1,4 @@
+#/bin/sh
+for project in localizationdemo filerv1 filerv2 filerv3 filerv4 filerv5 filerv6 filerv7 pathrec pathrecnative caverunner caverunner2 template; do
+  sh ./beautifyProject.shl $project
+done

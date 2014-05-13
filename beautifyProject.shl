@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# Runs js-beautify against the project specified in $1
+#
+find "$1"/www/js/app* -name "*.js" -exec js-beautify --config ./jsbeautify.json -r {} \;
+find "$1"/www/html -name "*.html" -exec js-beautify --config ./jsbeautify.json --html -r {} \;
+find "$1"/www/css -name "*.css" -exec js-beautify --config ./jsbeautify.json --css -r {} \;
+

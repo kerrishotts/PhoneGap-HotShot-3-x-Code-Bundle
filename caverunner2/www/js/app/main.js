@@ -40,51 +40,44 @@
          onevar:false
  */
 /*global define, console*/
-define ( ["yasmf", "app/views/startView"], function ( _y, StartView )
-{
-   // define our app object
-   var APP = {};
-
-   APP.onPause = function ()
-   {
-      console.log ( "Application paused" );
-   }
-
-   APP.onResume = function ()
-   {
-      console.log ( "Application resumed" );
-   }
-
-   APP.start = function ()
-   {
-     // update the iOS 7 status bar
-     if (_y.device.platform() == "ios")
-     {
-       StatusBar.hide();
-       //StatusBar.styleLightContent();
-     }
-      // start listening for resume/pause events
-      var gN = _y.UI.globalNotifications;
-      gN.registerNotification ( "onApplicationPause" );
-      gN.registerNotification ( "onApplicationResume" );
-
-      gN.addListenerForNotification ( "onApplicationPause", APP.onPause );
-      gN.addListenerForNotification ( "onApplicationResume", APP.onResume );
-
-      window.addEventListener ( "pause", function () { gN.notify ("onApplicationPause"); }, false );
-      window.addEventListener ( "resume", function () { gN.notify ("onApplicationResume"); }, false );
-
-      // find the rootContainer DOM element
-      var rootContainer = _y.ge("rootContainer");
-
-      var startView = new StartView ();
-      APP.startView = startView;
-      startView.init( );
-
-      var navigationController = new _y.UI.NavigationController();
-      navigationController.initWithOptions ( { rootView: startView, parent: rootContainer } );
-      APP.navigationController = navigationController;
-   }
-
-   return APP;
-});
+define( [ "yasmf", "app/views/startView" ], function( _y, StartView ) {
+  // define our app object
+  var APP = {};
+  APP.onPause = function() {
+    console.log( "Application paused" );
+  }
+  APP.onResume = function() {
+    console.log( "Application resumed" );
+  }
+  APP.start = function() {
+    // update the iOS 7 status bar
+    if ( _y.device.platform() == "ios" ) {
+      StatusBar.hide();
+      //StatusBar.styleLightContent();
+    }
+    // start listening for resume/pause events
+    var gN = _y.UI.globalNotifications;
+    gN.registerNotification( "onApplicationPause" );
+    gN.registerNotification( "onApplicationResume" );
+    gN.addListenerForNotification( "onApplicationPause", APP.onPause );
+    gN.addListenerForNotification( "onApplicationResume", APP.onResume );
+    window.addEventListener( "pause", function() {
+      gN.notify( "onApplicationPause" );
+    }, false );
+    window.addEventListener( "resume", function() {
+      gN.notify( "onApplicationResume" );
+    }, false );
+    // find the rootContainer DOM element
+    var rootContainer = _y.ge( "rootContainer" );
+    var startView = new StartView();
+    APP.startView = startView;
+    startView.init();
+    var navigationController = new _y.UI.NavigationController();
+    navigationController.initWithOptions( {
+      rootView: startView,
+      parent: rootContainer
+    } );
+    APP.navigationController = navigationController;
+  }
+  return APP;
+} );

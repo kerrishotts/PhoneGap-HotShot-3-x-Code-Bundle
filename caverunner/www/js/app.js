@@ -41,7 +41,6 @@
          onevar:false
  */
 /*global require, requirejs*/
-
 /**
  * requirejs configuration -- by default our libraries are in js/lib
  * but the app code is in /app, and the app's view are in /html.
@@ -52,33 +51,35 @@
  * The ship ensures that the cultures below rely on the globalize script
  * so they don't load out-of-order
  */
-requirejs.config({
+requirejs.config( {
   baseUrl: './js/lib',
   paths: {
     'app': '../app',
     'html': '../../html',
     'Q': 'q'
   },
-  urlArgs: "bust=" + (new Date()).getTime(),
+  urlArgs: "bust=" + ( new Date() ).getTime(),
   shim: {
-    "cultures/globalize.culture.en-US": ["globalize"],
-    "cultures/globalize.culture.es-US": ["globalize"],
-    "Q": { exports: "Q" },
-    "yasmf": ["Q"]
+    "cultures/globalize.culture.en-US": [ "globalize" ],
+    "cultures/globalize.culture.es-US": [ "globalize" ],
+    "Q": {
+      exports: "Q"
+    },
+    "yasmf": [ "Q" ]
   }
-});
-
+} );
 /**
  * Start the app once all the dependencies are met
  */
-require(['yasmf', 'app/main',
-         'Q',
-         'cultures/globalize.culture.en-US',
-         'cultures/globalize.culture.es-US'], function ( _y, APP, Q) {
+require( [ 'yasmf', 'app/main', 'Q', 'cultures/globalize.culture.en-US',
+  'cultures/globalize.culture.es-US'
+], function( _y, APP, Q ) {
   // for future reference, add _y to the global object
   window._y = _y;
   // and the app as well
   window.APP = APP;
   // and GO!
-  _y.executeWhenReady ( function () { _y.getDeviceLocale( APP.start ) } );
-});
+  _y.executeWhenReady( function() {
+    _y.getDeviceLocale( APP.start )
+  } );
+} );

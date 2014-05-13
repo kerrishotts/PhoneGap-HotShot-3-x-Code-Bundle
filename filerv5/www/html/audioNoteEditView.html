@@ -1,5 +1,5 @@
 <html>
-  <!--
+<!--
       audioNoteEditView.html
       @author Kerri Shotts
       @version 1.0.0
@@ -20,23 +20,25 @@
       OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
       OTHER DEALINGS IN THE SOFTWARE.
     -->
-  <body>
-    <div class="ui-navigation-bar">
-      <div class="ui-title" contenteditable="true">%NOTE_NAME%</div>
-      <div class="ui-bar-button-group ui-align-left">
-        <div class="ui-bar-button ui-tint-color ui-back-button">%BACK%</div>
-      </div>
-      <div class="ui-bar-button-group ui-align-right">
-        <div class="ui-bar-button ui-destructive-color">%DELETE_NOTE%</div>
-      </div>
+
+<body>
+  <div class="ui-navigation-bar">
+    <div class="ui-title" contenteditable="true">%NOTE_NAME%</div>
+    <div class="ui-bar-button-group ui-align-left">
+      <div class="ui-bar-button ui-tint-color ui-back-button">%BACK%</div>
     </div>
-    <div class="ui-scroll-container ui-avoid-navigation-bar">
-      <div class="audio-container">
-        <div class="ui-glyph ui-background-tint-color ui-glyph-circle-filled"></div>
-        <div class="ui-glyph ui-background-tint-color ui-glyph-play-filled"></div>
-        <div class="audio-information">--:-- / --:--</div>
-      </div>
-      <textarea class="ui-text-box" >%NOTE_CONTENTS%</textarea>
+    <div class="ui-bar-button-group ui-align-right">
+      <div class="ui-bar-button ui-destructive-color">%DELETE_NOTE%</div>
     </div>
-  </body>
+  </div>
+  <div class="ui-scroll-container ui-avoid-navigation-bar">
+    <div class="audio-container">
+      <div class="ui-glyph ui-background-tint-color ui-glyph-circle-filled"></div>
+      <div class="ui-glyph ui-background-tint-color ui-glyph-play-filled"></div>
+      <div class="audio-information">--:-- / --:--</div>
+    </div>
+    <textarea class="ui-text-box">%NOTE_CONTENTS%</textarea>
+  </div>
+</body>
+
 </html>

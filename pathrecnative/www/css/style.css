@@ -1,0 +1,184 @@
+/**
+ * PathRec Styles
+ *
+ * @author Kerri Shotts
+ * @version 2.0.0
+ *
+ * Copyright (c) 2013 Packt Publishing
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the Software
+ * without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+body {
+  background-color: #404040;
+}
+body.ios {
+  background-color: #404040;
+}
+body.android {
+  background-color: #404040;
+}
+.ui-tint-color,
+.android .ui-tint-color {
+  color: white;
+}
+.ui-tint-color:active,
+.android .ui-tint-color:active {
+  color: rgba(255, 255, 255, 0.5);
+}
+.ui-background-tint-color,
+.android .ui-background-tint-color {
+  background-color: white;
+}
+.ui-background-tint-color:active,
+.android .ui-background-tint-color:active {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.ui-navigation-bar {
+  background-image: -webkit-linear-gradient(top, rgb(96, 224, 32) 0%, rgba(96, 224, 32, 0.75) 100%);
+  background-image: -moz-linear-gradient(top, rgb(96, 224, 32) 0%, rgba(96, 224, 32, 0.75) 100%);
+  background-image: -ms-linear-gradient(top, rgb(96, 224, 32) 0%, rgba(96, 224, 32, 0.75) 100%);
+  background-image: -o-linear-gradient(top, rgb(96, 224, 32) 0%, rgba(96, 224, 32, 0.75) 100%);
+  background-image: linear-gradient(top, rgb(96, 224, 32) 0%, rgba(96, 224, 32, 0.75) 100%);
+  border-bottom: 1px solid rgba(48, 112, 16, 0.75);
+  color: white;
+}
+.android .ui-navigation-bar {
+  -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  border-bottom: 0;
+  background-color: rgba(96, 224, 32, 1);
+}
+.ui-container.left-side {
+  border-right: 1px solid rgba(48, 112, 16, 0.75);
+}
+.android .ui-container.left-side {
+  -webkit-box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+}
+.ui-back-button::before,
+.android .ui-back-button::before {
+  background-color: white;
+}
+.android .ui-back-button {
+  color: transparent;
+}
+.pathListView,
+.pathEditView,
+.staticView {
+  background-color: #404040;
+  color: #FFFFFF;
+}
+.android .pathListView,
+.android .pathEditView,
+.android .staticView {
+  background-color: #404040;
+  color: #FFFFFF;
+}
+.pathListView .ui-list-item {
+  overflow: hidden;
+  /* so we don't have to clear */
+  border-bottom: 1px solid #606060;
+}
+.android .pathListView .ui-list-item {
+  border-bottom: 1px solid #606060;
+  z-index: 1;
+}
+.pathListView.wide .ui-list-item {
+  border-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+  display: inline-block;
+  width: 25%;
+  min-height: 200px;
+  vertical-align: top;
+  padding-left: 0;
+}
+.pathListView .ui-list-item-contents {
+  background-color: #404040;
+}
+.android .pathListView .ui-list-item-contents {
+  background-color: #404040;
+}
+.pathListView .ui-list-item:active,
+.pathListView .ui-list-item-contents:active {
+  background-color: #000000;
+}
+.android .pathListView .ui-list-item:active,
+.android .pathListView .ui-list-item-contents:active {
+  background-color: #000000;
+}
+.pathListView .ui-list-item .path-name {
+  font-size: 25px;
+  line-height: 30px;
+  font-weight: 200;
+  margin-right: 35px;
+  margin-left: 0px;
+}
+.pathListView .ui-list-item:active .path-name,
+.android .pathListView .ui-list-item:active .path-name {
+  color: #FFFFFF;
+}
+.pathListView.wide .ui-list-item .path-name {
+  font-size: 20px;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: center;
+}
+.pathListView .ui-list-item .ui-indicator {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.android .pathListView .ui-list-item .ui-indicator {
+  background-color: #808080;
+}
+.pathListView .ui-list-item:active .ui-indicator {
+  background-color: #FFFFFF;
+}
+.android .pathListView .ui-list-item:active .ui-indicator {
+  background-color: #FFFFFF;
+}
+.pathListView.wide .ui-list-item .ui-indicator {
+  display: none;
+}
+.pathListView.wide .ui-list-item .ui-list-action-group {
+  display: none;
+}
+.pathEditView .ui-navigation-bar .ui-title {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+.pathEditView .ui-navigation-bar .ui-title {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.pathEditView .map-container {
+  width: 100%;
+  height: 100%;
+}
+.android .ui-split-view .pathEditView .ui-navigation-bar .ui-title {
+  left: 80px;
+}
+.ui-navigation-bar .ui-save-button {
+  display: none;
+}
+.ui-split-view .ui-navigation-bar .ui-save-button {
+  display: inherit;
+}

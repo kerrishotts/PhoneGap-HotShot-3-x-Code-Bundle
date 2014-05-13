@@ -1,0 +1,438 @@
+/**
+ * Filer v5 Styles
+ *
+ * @author Kerri Shotts
+ * @version 7.0.0
+ *
+ * Copyright (c) 2013 Packt Publishing
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this
+ * software and associated documentation files (the "Software"), to deal in the Software
+ * without restriction, including without limitation the rights to use, copy, modify,
+ * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following
+ * conditions:
+ * The above copyright notice and this permission notice shall be included in all copies
+ * or substantial portions of the Software.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/* General styles */
+
+/* background color */
+
+body {
+  background-color: #f1eee5;
+}
+body.android {
+  background-color: #e7ece6;
+}
+/* tint colors for text buttons  */
+
+.ui-tint-color {
+  color: #45bc64;
+}
+.android .ui-tint-color {
+  color: #484848;
+}
+/* :active indicates affordances; these slowly fade out to give the user the impression of a touch */
+
+.ui-tint-color:active {
+  color: rgba(69, 188, 100, 0.5);
+}
+.android .ui-tint-color:active {
+  color: rgba(72, 72, 72, 0.5);
+}
+/* backgrount tint colors are used for masked icons */
+
+.ui-background-tint-color {
+  background-color: #45bc64;
+}
+.android .ui-background-tint-color {
+  background-color: #484848;
+}
+.ui-background-tint-color:active {
+  background-color: rgba(69, 188, 100, 0.5);
+}
+.android .ui-background-tint-color:active {
+  background-color: rgba(72, 72, 72, 0.5);
+}
+/* Change navigation bar appearance */
+
+.ui-navigation-bar {
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+}
+.android .ui-navigation-bar {
+  -webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  border-bottom: 0;
+  background-color: #d7dcd6;
+}
+/* Change the tool bar appearance as well */
+
+.ui-tool-bar {
+  border-top: 1px solid rgba(87, 52, 32, 0.25);
+}
+.android .ui-tool-bar {
+  border-top: 0;
+  -webkit-box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2);
+  background-color: #d7dcd6;
+}
+/* For android, we need to set the left view's border color in a split view */
+
+.android .ui-container.left-side {
+  border-right: 1px solid #484848;
+}
+/* Color the back buttons as appropriate */
+
+.ui-back-button::before {
+  background-color: #45bc64;
+}
+.android .ui-back-button::before {
+  background-color: #484848;
+}
+.android .ui-back-button {
+  color: transparent;
+}
+/* Background colors for all our views */
+
+.noteListView,
+.noteEditView {
+  background-color: #f1eee5;
+  color: #573920;
+  /*rgba (87, 52, 32)*/
+}
+.android .noteListView,
+.android .noteEditView {
+  background-color: #e7ece6;
+  color: #484848;
+}
+/*
+ * NOTE LIST VIEW specific styles
+ */
+
+/* style the list items */
+
+.noteListView .ui-list-item {
+  overflow: auto;
+  /* so we don't have to clear */
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+}
+.android .noteListView .ui-list-item {
+  border-bottom: 1px solid #C0C0C0;
+  z-index: 1;
+}
+/* Give the list item contents a background color; otherwise we'll see the actions underneath */
+
+.noteListView .ui-list-item-contents {
+  background-color: #f1eee5;
+}
+.android .noteListView .ui-list-item-contents {
+  background-color: #e7ece6;
+}
+/* Affordance; gives the list item a color when touched */
+
+.noteListView .ui-list-item:active,
+.noteListView .ui-list-item-contents:active {
+  background-color: rgba(58, 97, 154, 1);
+}
+.android .noteListView .ui-list-item:active,
+.android .noteListView .ui-list-item-contents:active {
+  background-color: #f7fcf6;
+}
+/* note representation is the note's icon */
+
+.noteListView .ui-list-item .note-representation {
+  background-color: rgba(87, 52, 32, 0.5);
+  float: left;
+  height: 30px;
+  width: 30px;
+}
+.android .noteListView .ui-list-item .note-representation {
+  background-color: #484848;
+}
+.noteListView .ui-list-item:active .note-representation {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.android .noteListView .ui-list-item .note-representation {
+  background-color: #484848;
+}
+/* Android's UI has so little color, we've made each representation use a different color. */
+
+.android .noteListView .ui-list-item .note-representation.ui-glyph-page-text-new {
+  background-color: #33B5E5;
+}
+.android .noteListView .ui-list-item .note-representation.ui-glyph-sound-wave {
+  background-color: #AA66CC;
+}
+.android .noteListView .ui-list-item .note-representation.ui-glyph-photo {
+  background-color: #FFBB33;
+}
+.android .noteListView .ui-list-item .note-representation.ui-glyph-film {
+  background-color: #99CC00;
+}
+/* position and style the name of the note */
+
+.noteListView .ui-list-item .note-name {
+  font-size: 25px;
+  line-height: 30px;
+  font-weight: 200;
+  margin-right: 35px;
+  margin-left: 40px;
+}
+.noteListView .ui-list-item:active .note-name {
+  color: #FFFFFF;
+}
+.android .noteListView .ui-list-item:active .note-name {
+  color: #242424;
+}
+/* position and style the modified date */
+
+.noteListView .ui-list-item .note-modified-date {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 300;
+  color: rgba(87, 52, 32, 0.5);
+  float: left;
+}
+.android .noteListView .ui-list-item .note-modified-date {
+  color: #606060;
+}
+.noteListView .ui-list-item:active .note-modified-date,
+.noteListView .ui-list-item:active .note-info {
+  color: rgba(255, 255, 255, 0.5);
+}
+.android .noteListView .ui-list-item:active .note-modified-date,
+.android .noteListView .ui-list-item:active .note-info {
+  color: #242424;
+}
+/* position and style the note information */
+
+.noteListView .ui-list-item .note-info {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 300;
+  color: rgba(87, 52, 32, 0.5);
+  float: right;
+}
+.android .noteListView .ui-list-item .note-info {
+  color: #606060;
+}
+/* color the list indicator */
+
+.noteListView .ui-list-item .ui-indicator {
+  background-color: rgba(87, 52, 32, 0.5);
+}
+.android .noteListView .ui-list-item .ui-indicator {
+  background-color: #484848;
+}
+.noteListView .ui-list-item:active .ui-indicator {
+  background-color: #FFFFFF;
+}
+.android .noteListView .ui-list-item:active .ui-indicator {
+  background-color: #242424;
+}
+/*
+ * NOTE EDIT VIEW styles; these apply to each edit view
+ */
+
+/* enable selection in the title in navigation bar, since it is editable */
+
+.noteEditView .ui-navigation-bar .ui-title,
+.noteEditView .ui-text-box {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+.noteEditView .ui-navigation-bar .ui-title {
+  overflow: hidden;
+  white-space: nowrap;
+}
+/* Each edit view has a text box for the note; style appropriately */
+
+.noteEditView .ui-text-box {
+  display: block;
+  border: 0;
+  background-color: transparent;
+  padding: 10px;
+  margin: 0;
+  box-sizing: border-box;
+  width: 100%;
+  font-family: -apple-system-font, "Helvetica Neue", Helvetica, Arial, Sans-Serif;
+  font-size: 20px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  color: #573920;
+  line-height: 1.5em;
+  font-weight: 200;
+  height: 100%;
+  border-radius: 0;
+}
+.android .noteEditView .ui-text-box {
+  font-family: "Roboto", "DroidSans", Helvetica, Arial, Sans-Serif;
+  color: #484848;
+}
+/* A little out of place; but each view has specific needs for its text box.
+   For the audio note, it needs to be 100px shorter. */
+
+.AudioNoteEditView .ui-text-box {
+  /* Android < 4.4 doesn't understand calc, but in this case, it's fine; it'll get 100% */
+  height: calc(100% - 100px);
+}
+/* For IMAGE and VIDEO NOTE EDIT VIEWs, it needs to be 200px shorter. */
+
+.ImageNoteEditView .ui-text-box,
+.VideoNoteEditView .ui-text-box {
+  /* Android < 4.4 doesn't understand calc, but in this case, it's fine; it'll get 100% */
+  height: calc(100% - 200px);
+  -webkit-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  -moz-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  -ms-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  background-color: #f1eee5;
+}
+.android .ImageNoteEditView .ui-text-box,
+.android .VideoNoteEditView .ui-text-box {
+  background-color: #e7ece6;
+}
+/* The text box slides up and over the image/video element when editing so as to give
+   sufficient space. */
+
+.ImageNoteEditView .ui-text-box.editing,
+.VideoNoteEditView .ui-text-box.editing {
+  height: 100%;
+  margin-top: -200px;
+  /* without these, android puts the text bux underneath the image/video */
+  -webkit-transform: translateZ(1px);
+  -moz-transform: translateZ(1px);
+  -ms-transform: translateZ(1px);
+  -o-transform: translateZ(1px);
+  transform: translateZ(1px);
+  position: absolute;
+}
+/*
+ * AUDIO NOTE VIEW styles
+ */
+
+/* style the audio container */
+
+.AudioNoteEditView .audio-container {
+  text-align: center;
+  background-color: #FFF;
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+  height: 100px;
+}
+.android .AudioNoteEditView .audio-container {
+  background-color: #e7ece6;
+  border-bottom: 2px solid #484848;
+}
+/* make sure the buttons inside are 44x44px */
+
+.AudioNoteEditView .audio-container div {
+  display: inline-block;
+  min-width: 44px;
+  min-height: 44px;
+}
+/* position the audio information (position / duration) */
+
+.AudioNoteEditView .audio-information {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  min-height: 0 !important;
+  opacity: 0.5;
+}
+/*
+ * IMAGE NOTE EDIT VIEW styles
+ */
+
+/* style the container for the image */
+
+.ImageNoteEditView .image-container {
+  text-align: center;
+  background-color: #000;
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+  height: 200px;
+  background-position: center center;
+  background-size: contain;
+  position: relative;
+}
+.android .ImageNoteEditView .image-container {
+  background-color: #000;
+  border-bottom: 2px solid #484848;
+}
+/* any buttons inside -- like the camera button -- need to be
+   positioned absolutely */
+
+.ImageNoteEditView .image-container div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-mask-position-y: 100%;
+  -moz-mask-position-y: 100%;
+  -ms-mask-position-y: 100%;
+  mask-position-y: 100%;
+  background-color: white;
+}
+/* since masked icons can't have more than one color (+transparent),
+   we duplicate the icon with a different color so we can outline it.
+   The +1px enables the outline. That said, on Android < 4.4, the
+   outline isn't visible, due to the use of calc(). */
+
+.ImageNoteEditView .image-container div.outline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-mask-position-y: calc(100% + 1px);
+  -moz-mask-position-y: calc(100% + 1px);
+  -ms-mask-position-y: calc(100% + 1px);
+  mask-position-y: calc(100% + 1px);
+  background-color: black;
+}
+.VideoNoteEditView .video-container {
+  text-align: center;
+  background-color: #000;
+  height: 200px;
+  position: relative;
+}
+/* the video element inside needs to be 100% x 100% */
+
+.VideoNoteEditView .video-container .video-element video {
+  width: 100%;
+  height: 156px;
+}
+.android .VideoNoteEditView .video-container .video-element video {
+  height: 154px;
+}
+/* style the video actions bar */
+
+.VideoNoteEditView .video-container .video-actions {
+  height: 44px;
+  text-align: center;
+  line-height: 44px;
+  border-top: 1px solid rgba(87, 52, 32, 0.25);
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+}
+.android .VideoNoteEditView .video-container .video-actions {
+  height: 48px;
+  line-height: 48px;
+  background-color: #d7dcd6;
+  border-top: 2px solid #484848;
+  border-bottom: 2px solid #484848;
+}

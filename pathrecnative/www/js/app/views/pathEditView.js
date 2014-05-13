@@ -4,9 +4,9 @@
  *
  * pathEditView.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 2.0.0
  *
- * Copyright (c) 2013 PacktPub Publishing
+ * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
  * without restriction, including without limitation the rights to use, copy, modify,
@@ -64,7 +64,6 @@ define(["yasmf", "app/models/pathStorageSingleton",
            self._navigationItem = null;
            self._locateButton = null;
            self._recordButton = null;
-           self._saveButton = null;
            self._renameButton = null;
 
            // the path we're editing
@@ -225,13 +224,13 @@ define(["yasmf", "app/models/pathStorageSingleton",
              inputBox.cancelButtonIndex = 1;
              inputBox.addEventListener ( "tap", function ( evt )
              {
-               var parms = evt.data.split("|||");
-               if (parms[0] != inputBox.cancelButtonIndex)
+               var data = JSON.parse (atob(evt.data));
+               if (data.buttonPressed != inputBox.cancelButtonIndex)
                {
-                 if (parms[1].trim() !== "")
+                 if (data.values[0].trim() !== "")
                  {
-                   self._path.name = parms[1];
-                   self._navigationItem.title = parms[1];
+                   self._path.name = data.values[0];
+                   self._navigationItem.title = data.values[0];
                    self.savePath();
                  }
                }
@@ -276,9 +275,7 @@ define(["yasmf", "app/models/pathStorageSingleton",
              return _y.template(pathEditViewHTML,
                                 {
                                   "PATH_NAME":   self._path.name,
-                                  "BACK":        _y.T("BACK"),
-                                  "DELETE_PATH": _y.T("app.pev.DELETE_PATH"),
-                                  "SAVE_PATH":   _y.T("app.pev.SAVE_PATH")
+                                  "BACK":        _y.T("BACK")
                                 });
            }
 
@@ -291,7 +288,7 @@ define(["yasmf", "app/models/pathStorageSingleton",
              // and now find and link up any elements we want to keep track of
 
              self._scrollContainer = self.element.querySelector(".ui-scroll-container");
-             self._mapContainer = self.element.querySelector(".ui-map-container");
+             self._mapContainer = self.element.querySelector(".map-container");
 
              // and make sure we know about the physical back button
              _y.UI.backButton.addListenerForNotification("backButtonPressed", self.goBack);
@@ -299,38 +296,22 @@ define(["yasmf", "app/models/pathStorageSingleton",
              // create native controls
              self._navigationItem = window.nativeControls.NavigationItem();
              self._navigationItem.title = self._path.name;
-             self._navigationItem.addEventListener ("pop", function ()
-             {
-               self.goBack();
-             });
+             self._navigationItem.addEventListener ("pop", self.goBack );
 
-             self._renameButton = window.nativeControls.BarButton();
-             self._saveButton = window.nativeControls.BarButton();
-             self._recordButton = window.nativeControls.BarButton();
-             self._locateButton = window.nativeControls.BarButton();
+             self._renameButton = window.nativeControls.BarTextButton();
+             self._recordButton = window.nativeControls.BarImageButton();
+             self._locateButton = window.nativeControls.BarImageButton();
 
              self._renameButton.addEventListener ( "tap", self.renamePath );
-             self._saveButton.addEventListener ( "tap", self.savePath );
              self._recordButton.addEventListener ( "tap", self.togglePathRecording );
              self._locateButton.addEventListener ( "tap", self.centerMapAroundLocation );
 
-             self._navigationItem.rightButtons = [ self._locateButton, self._recordButton ];
-             if (_y.device.iPad())
-             {
-                self._navigationItem.leftButtons = [ self._saveButton, self._renameButton ];
-             }
-             else
-             {
-                self._navigationItem.leftButtons = [ self._renameButton ];
-             }
-
              self._renameButton.title = _y.T("app.pev.RENAME");
-             self._saveButton.title = _y.T("app.pev.SAVE_PATH");
-             self._recordButton.title = "R"
              self._recordButton.image = "www/js/lib/yasmf-assets/circle-outlined";
-             self._locateButton.title = "L"
              self._locateButton.image = "www/js/lib/yasmf-assets/gps-locate";
 
+             self._navigationItem.rightButtons = [ self._locateButton, self._recordButton ];
+             self._navigationItem.leftButtons = [ self._renameButton ];
 
            }
 
@@ -366,13 +347,13 @@ define(["yasmf", "app/models/pathStorageSingleton",
 
                             // and create a polyline that we can work with
                             self._polyline = new gmaps.Polyline ( {
-                                                                    strokeColor: '#80A0C0', strokeOpacity:0.85,
-                                                                    strokeWeight:5 } );
+                                                                    strokeColor: '#60E020', strokeOpacity:0.85,
+                                                                    strokeWeight:10 } );
                             self._polyline.setMap ( self._map );
 
                             // add all the places in our path currently to the
                             // polyline
-                            self._path.places.map (
+                            self._path.places.forEach (
                               function ( place )
                               {
                                 self._polyline.getPath().push ( place.googleLatitudeLongitude );
@@ -385,7 +366,15 @@ define(["yasmf", "app/models/pathStorageSingleton",
            {
              APP.navigationBars[APP.navigationBars.length-1].pop();
            }
-
+           
+            self.registerGlobalNotifications = function registerGlobalNotifications()
+            {
+              _y.UI.globalNotifications.addListenerForNotification ( "applicationPausing", self.savePath );
+            };
+            self.deRegisterGlobalNotifications = function deRegisterGlobalNotifications()
+            {
+              _y.UI.globalNotifications.removeListenerForNotification ("applicationPausing", self.savePath );
+            }
 
            self.overrideSuper(self.class, "init", self.init);
            self.init = function (theParentElement, thePath)
@@ -394,12 +383,13 @@ define(["yasmf", "app/models/pathStorageSingleton",
 
              self.super(_className, "init", [undefined, "div", self.class + " pathEditView ui-container", theParentElement]);
 
+             self.addListenerForNotification("viewWasPopped", self.deRegisterGlobalNotifications);
              self.addListenerForNotification("viewWasPopped", self.releaseBackButton);
              self.addListenerForNotification("viewWasPopped", self.destroy);
 
              // we also need to listen for when we are pushed or popped
+             self.addListenerForNotification ( "viewWasPushed", self.registerGlobalNotifications );
              self.addListenerForNotification ( "viewWasPushed", self.pushNavigation );
-             //self.addListenerForNotification ( "viewWasPopped", self.popNavigation );
            }
 
            self.overrideSuper(self.class, "initWithOptions", self.init);
@@ -435,6 +425,8 @@ define(["yasmf", "app/models/pathStorageSingleton",
 
              self.releaseBackButton();
              // Stop listening for our disappearance
+             self.removeListenerForNotification("viewWasPopped", self.deregisterGlobalNotifications);
+             self.removeListenerForNotification("viewWasPushed", self.registerGlobalNotifications);
              self.removeListenerForNotification("viewWasPopped", self.releaseBackButton);
              self.removeListenerForNotification("viewWasPopped", self.destroy);
 
@@ -451,14 +443,12 @@ define(["yasmf", "app/models/pathStorageSingleton",
              self._polyline = null;
 
              // release our native objects
-             self._saveButton.destroy();
              self._recordButton.destroy();
              self._locateButton.destroy();
              self._navigationItem.destroy();
              self._navigationItem = null;
              self._recordButton = null;
              self._locateButton = null;
-             self._saveButton = null;
 
 
              self.super(_className, "destroy");

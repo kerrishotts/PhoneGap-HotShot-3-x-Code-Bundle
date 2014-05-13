@@ -152,6 +152,7 @@ cordova plugin rm org.apache.cordova.file-extras
 cordova plugin rm org.apache.cordova.keyboard
 cordova plugin rm org.apache.cordova.battery-status
 cordova plugin rm org.apache.cordova.network-information
+cordova plugin rm com.photokandy.localstorage
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
@@ -161,6 +162,7 @@ cordova plugin add https://github.com/leecrossley/cordova-plugin-social-message.
 cordova plugin add org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.battery-status
 cordova plugin add org.apache.cordova.network-information
+cordova plugin add com.photokandy.localstorage
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -174,10 +176,12 @@ cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.geolocation
 cordova plugin rm org.apache.cordova.keyboard
 cordova plugin rm org.apache.cordova.statusbar
+cordova plugin rm com.photokandy.localstorage
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
 cordova plugin add org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.statusbar
+cordova plugin add com.photokandy.localstorage
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -192,11 +196,13 @@ cordova plugin rm org.apache.cordova.geolocation
 cordova plugin rm com.photokandy.nativecontrols 
 cordova plugin rm org.apache.cordova.keyboard
 cordova plugin rm org.apache.cordova.statusbar
+cordova plugin rm com.photokandy.localstorage
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
 cordova plugin add com.photokandy.nativecontrols 
 cordova plugin add org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.statusbar
+cordova plugin add com.photokandy.localstorage
 echo "... ... preparing platforms..."
 cordova prepare
 

@@ -32,6 +32,7 @@ Furthermore, the code herein is not a complete Cordova project. The build artifa
 |         10 | Maps and GPS                       | [PathRec](#pathrec)           | [Demo](https://app.io/v6Fbyf) (offsite)
 |         11 | Canvas Games and the Accelerometer | [CaveRunner](#caverunner)        | See v2
 |         12 | Adding a Back-end (Parse)          | [CaveRunner2](#caverunner2)       | [Demo](https://app.io/kAxEF4) (offsite)
+|         13 | Native Controls (online)           | [PathRecNative](#pathrecNative)           | N/A
 | Appendix A | User Interface Resources           | Not Applicable    | N/A
 | Appendix B | Tips, Tricks, and Quirks           | Not Applicable    | N/A
 
@@ -202,6 +203,7 @@ cordova plugin add org.apache.cordova.media-capture
 cordova plugin add https://github.com/leecrossley/cordova-plugin-social-message.git
 cordova plugin add org.apache.cordova.battery-status
 cordova plugin add org.apache.cordova.network-information
+cordova plugin add com.photokandy.localstorage
 ```
 
 ### [PathRec](id:pathrec)
@@ -214,7 +216,23 @@ cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
 cordova plugin add org.apache.cordova.keyboard
 cordova plugin add org.apache.cordova.statusbar
+cordova plugin add com.photokandy.localstorage
 ```
+
+### [PathRecNative](id:pathrecnative)
+
+PathRecNative is an extension of the PathRec app using some native controls. Works only on iOS 7.
+
+#### Plugins Required
+```
+cordova plugin add org.apache.cordova.globalization
+cordova plugin add org.apache.cordova.geolocation
+cordova plugin add org.apache.cordova.keyboard
+cordova plugin add org.apache.cordova.statusbar
+cordova plugin add com.photokandy.nativecontrols
+cordova plugin add com.photokandy.localstorage
+```
+
 
 ### [CaveRunner](id:caverunner)
 

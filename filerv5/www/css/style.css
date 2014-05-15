@@ -289,6 +289,7 @@ body.android {
 
 .AudioNoteEditView .ui-text-box {
   /* Android < 4.4 doesn't understand calc, but in this case, it's fine; it'll get 100% */
+  height: -webkit-calc(100% - 100px);
   height: calc(100% - 100px);
 }
 /* For IMAGE and VIDEO NOTE EDIT VIEWs, it needs to be 200px shorter. */
@@ -296,6 +297,7 @@ body.android {
 .ImageNoteEditView .ui-text-box,
 .VideoNoteEditView .ui-text-box {
   /* Android < 4.4 doesn't understand calc, but in this case, it's fine; it'll get 100% */
+  height: -webkit-calc(100% - 200px);
   height: calc(100% - 200px);
   -webkit-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
   -moz-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
@@ -399,6 +401,7 @@ body.android {
   left: 0;
   right: 0;
   bottom: 0;
+  -webkit-mask-position-y: -webkit-calc(100% + 1px);
   -webkit-mask-position-y: calc(100% + 1px);
   -moz-mask-position-y: calc(100% + 1px);
   -ms-mask-position-y: calc(100% + 1px);

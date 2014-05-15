@@ -289,6 +289,7 @@ body.android {
 
 .AudioNoteEditView .ui-text-box {
   /* Android < 4.4 doesn't understand calc, but in this case, it's fine; it'll get 100% */
+  height: -webkit-calc(100% - 100px);
   height: calc(100% - 100px);
 }
 /*

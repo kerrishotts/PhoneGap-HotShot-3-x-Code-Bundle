@@ -37,19 +37,20 @@
          trailing:false,
          undef:true,
          white:false,
-         onevar:false 
+         onevar:false, 
+         loopfunc:true
  */
-/*global define, console*/
+/*global define, console, StatusBar*/
 define( [ "yasmf", "app/views/pathListView", "app/views/staticView" ], function( _y,
   PathListView, StaticView ) {
   // define our app object
   var APP = {};
   APP.onPause = function() {
+    _y.UI.globalNotifications.notify( "applicationPausing" );
     console.log( "Application paused" );
-    // on iOS, this isn't processed until a resume event,
-    // since calls to the native layer are delayed
   }
   APP.onResume = function() {
+    _y.UI.globalNotifications.notify( "applicationResuming" );
     console.log( "Application resumed" );
   }
   APP._lastConnectionStatus = "unknown";
@@ -102,19 +103,13 @@ define( [ "yasmf", "app/views/pathListView", "app/views/staticView" ], function(
   APP.start = function() {
     // update the iOS 7 status bar
     if ( _y.device.platform() == "ios" ) {
-      StatusBar.styleLightContent();
+      if (typeof StatusBar !== "undefined") {
+        StatusBar.styleLightContent();
+      }
     }
     // start listening for resume/pause events
     var gN = _y.UI.globalNotifications;
     var notifications = {
-      "pause": {
-        notification: "applicationPause",
-        handler: APP.onPause
-      },
-      "resume": {
-        notification: "applicationResume",
-        handler: APP.onResume
-      },
       "online": {
         notification: "applicationOnline",
         handler: APP.onConnectionStatusChanged
@@ -144,6 +139,21 @@ define( [ "yasmf", "app/views/pathListView", "app/views/staticView" ], function(
         handler: APP.onSearchButtonPressed
       }
     };
+    if ( _y.device.platform() === "ios" ) {
+      // if we want to persist localStorage, we need to use PKLocalStorage plugin
+      window.PKLocalStorage.addPauseHandler( APP.onPause );
+      window.PKLocalStorage.addResumeHandler( APP.onResume );
+    } else {
+      // add the proper pause/resume handlers
+      notifications.pause = {
+        notification: "pause",
+        handler: APP.onPause
+      };
+      notifications.resume = {
+        notification: "resume",
+        handler: APP.onResume
+      };
+    }
     for ( var DOMEvent in notifications ) {
       if ( notifications.hasOwnProperty( DOMEvent ) ) {
         var notification = notifications[ DOMEvent ];
@@ -157,6 +167,8 @@ define( [ "yasmf", "app/views/pathListView", "app/views/staticView" ], function(
         } )( notification.notification );
       }
     }
+    gN.registerNotification( "applicationPausing", false ); // synchronous notifications
+    gN.registerNotification( "applicationResuming", false ); // synchronous
     // find the rootContainer DOM element
     var rootContainer = _y.ge( "rootContainer" );
     // create a new note list

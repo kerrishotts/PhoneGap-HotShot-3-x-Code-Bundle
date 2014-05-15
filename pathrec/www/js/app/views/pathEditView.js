@@ -269,14 +269,24 @@ define( [ "yasmf", "app/models/pathStorageSingleton", "text!html/pathEditView.ht
         } )
       }, 100 );
     }
+    self.registerGlobalNotifications = function registerGlobalNotifications() {
+      _y.UI.globalNotifications.addListenerForNotification( "applicationPausing",
+                                                           self.savePath );
+    };
+    self.deRegisterGlobalNotifications = function deRegisterGlobalNotifications() {
+      _y.UI.globalNotifications.removeListenerForNotification( "applicationPausing",
+                                                              self.savePath );
+    }
     self.overrideSuper( self.class, "init", self.init );
     self.init = function( theParentElement, thePath ) {
       self._path = thePath;
       self.super( _className, "init", [ undefined, "div", self.class +
         " pathEditView ui-container", theParentElement
       ] );
+      self.addListenerForNotification( "viewWasPopped", self.deRegisterGlobalNotifications );
       self.addListenerForNotification( "viewWasPopped", self.releaseBackButton );
       self.addListenerForNotification( "viewWasPopped", self.destroy );
+      self.addListenerForNotification( "viewWasPushed", self.registerGlobalNotifications );
     }
     self.overrideSuper( self.class, "initWithOptions", self.init );
     self.initWithOptions = function( options ) {
@@ -300,6 +310,8 @@ define( [ "yasmf", "app/models/pathStorageSingleton", "text!html/pathEditView.ht
     self.destroy = function() {
       self.releaseBackButton();
       // Stop listening for our disappearance
+      self.removeListenerForNotification( "viewWasPopped", self.deregisterGlobalNotifications );
+      self.removeListenerForNotification( "viewWasPushed", self.registerGlobalNotifications );
       self.removeListenerForNotification( "viewWasPopped", self.releaseBackButton );
       self.removeListenerForNotification( "viewWasPopped", self.destroy );
       // release our objects

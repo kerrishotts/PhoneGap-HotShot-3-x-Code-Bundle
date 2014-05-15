@@ -15,9 +15,16 @@ You can look at FilerV7 for an example, these files have the necessary changes:
 * `www/app/views/textNoteEditView.js`: Adds a listener for the global `applicationPausing` notification (created in `main.js`), and when it occurs, the note is persisted to `localStorage` in `persistNote`. When the application resumes, the data in `localStorage` is wipe, and the note is saved normally. However should the application be *terminated* before resumption, `localStorage` will contain the note in progress.
 * `www/app/views/noteListView.js`: When the collection is loaded, it checks to see if there is a note in progress in `localStorage` in `checkForPersistedNotes`. If there is one, it is created with the specific UID, added to the collection and saved.
 
-Specifically, the flow is as follows:
+In PathRec/PathRecNative, the changes necessary are simpler, because `localStorage` is the backing store:
 
-## main.js
+* `www/app/main.js`: Registers new notification listeners
+* `www/app/views/pathEditView.js`: Adds listeners for the global `applicationPausing` notification, and saves the path when it occurs.
+
+## Global
+
+`main.js` is changed in exactly the same way in FilerV7 or PathRec[Native].
+
+### main.js
 
 In `main.js`, the `APP.onPause` and `APP.onResume` handlers are modified to send a global notification:
 
@@ -68,7 +75,48 @@ gN.registerNotification ( "applicationResuming", false ); // synchronous
 ```
 It's important to note that these events use YASMF's feature for sending notifications. YASMF sends most notifications wrapped in a `setTimeout`, but `setTimeout` (or native actions) can't be used during a backgrounding operation. Above, the `false` forces YASMF to call each handler directly, which will work as desired.
 
-## noteStorage.js
+## PathRec[Native]
+
+The following changes are specific to PathRec[Native].
+
+## pathEditView.js
+
+We add two new methods:
+
+```
+    self.registerGlobalNotifications = function registerGlobalNotifications() {
+      _y.UI.globalNotifications.addListenerForNotification( "applicationPausing",
+        self.savePath );
+    };
+    self.deRegisterGlobalNotifications = function deRegisterGlobalNotifications() {
+      _y.UI.globalNotifications.removeListenerForNotification( "applicationPausing",
+        self.savePath );
+    }
+```
+
+These attach/detach a listener for the `applicationPausing` event created in `main.js`. When it occurs, `savePath` is called, which saves the path into `localStorage`.
+
+To call these two methods, we add listeners in `init`:
+
+```
+      self.addListenerForNotification( "viewWasPopped", self.deRegisterGlobalNotifications );
+      self.addListenerForNotification( "viewWasPopped", self.releaseBackButton );
+      self.addListenerForNotification( "viewWasPopped", self.destroy );
+      self.addListenerForNotification( "viewWasPushed", self.registerGlobalNotifications );
+```
+
+And we remove these listeners in `destroy`:
+
+```
+      self.removeListenerForNotification( "viewWasPopped", self.deregisterGlobalNotifications );
+      self.removeListenerForNotification( "viewWasPushed", self.registerGlobalNotifications );
+```
+
+## FilerV7
+
+The following changes are specific to Filer V7.
+
+### noteStorage.js
 
 In `noteStorage`, we alter `createNote` to take an additional (optional) parameter like so:
 
@@ -87,7 +135,7 @@ self.createNote = function ( noteType, theNoteUID )
 ```
 This lets us pass a specific UID during the creation process, which we'll use when we handle restoring notes from `localStorage`.
 
-## textNoteEditView.js
+### textNoteEditView.js
 
 This is the only edit view in which we need to make changes since all other edit views will inherit the functionality by default. 
 
@@ -132,7 +180,7 @@ self.deRegisterGlobalNotifications = function deRegisterGlobalNotifications()
 
 Then we add listeners for `viewWasPushed` and `viewWasPopped` to handle these settings in `init`. We also add appropriate cleanup to `destroy`. 
 
-## noteListView.js
+### noteListView.js
 
 The list view is the first view that comes on-screen, so we handle loading a persisted note here. We create a new method, `checkForPersistedNotes` that looks like this:
 
@@ -174,6 +222,6 @@ self.checkForPersistedNotes = function ()
 
 Later, down in `init`, we add the above handler as a listener to the `collectionLoaded` event.
 
-## Other uses
+## Challenge
 
 Of course, we could have gone a step further and actually displayed an edit view for the persisted note, which would have given the user a sense of continuity -- that is, the app would have appeared similar to how it looked when they left. We'll leave this as an exercise to the reader.

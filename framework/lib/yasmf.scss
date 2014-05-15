@@ -333,6 +333,7 @@ div {
    will fail spectacularly */
 .ui-off-canvas-view
 {
+  width: -webkit-calc(100% + 320px);
   width: calc(100% + 320px);
   @include transform(translateX(-320px));
   @include transitionWPR(transform 0.3s ease-in-out);
@@ -340,6 +341,7 @@ div {
 
 .phone .ui-off-canvas-view
 {
+  width: -webkit-calc(100% + 280px);
   width: calc(100% + 280px);
   @include transform(translateX(-280px));
 }
@@ -382,11 +384,13 @@ div {
 
 .ui-container.right-side
 {
+  width: -webkit-calc(100% - 320px);
   width: calc(100% - 320px);
   left: 320px;
 }
 .phone .ui-off-canvas-view .ui-container.right-side
 {
+  width: -webkit-calc(100% - 280px);
   width: calc(100% - 280px);
   left: 280px;
 }

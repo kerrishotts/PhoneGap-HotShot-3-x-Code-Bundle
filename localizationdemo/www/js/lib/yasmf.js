@@ -4362,7 +4362,8 @@ define (
          trailing:false,
          undef:true,
          white:false,
-         onevar:false
+         onevar:false,
+         loopfunc:true
  */
 /*global define, Q, LocalFileSystem, console*/
 
@@ -4488,8 +4489,9 @@ define ('yasmf/util/fileManager',["Q", "yasmf/util/object"], function ( Q, BaseO
                                 part = part.trim();
                                 if (part !== "")
                                 { // remove /private if it is the first item in the new array, for iOS sake
-                                  if (!(part === "private" && newPathComponents.length === 0))
-                                  {
+                                  if (!((part === "private" ||
+                                         part === "localhost") && 
+                                        newPathComponents.length === 0)) {
                                     newPathComponents.push ( part );
                                   }
                                 }

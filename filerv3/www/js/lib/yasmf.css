@@ -179,6 +179,7 @@ div {
 /* Note: ui-off-canvas-view is supported on iOS and Android 4.4+. Android <4.4
    will fail spectacularly */
 .ui-off-canvas-view {
+  width: -webkit-calc(100% + 320px);
   width: calc(100% + 320px);
   -webkit-transform: translateX(-320px);
   -moz-transform: translateX(-320px);
@@ -192,6 +193,7 @@ div {
   transition: transform 0.3s ease-in-out; }
 
 .phone .ui-off-canvas-view {
+  width: -webkit-calc(100% + 280px);
   width: calc(100% + 280px);
   -webkit-transform: translateX(-280px);
   -moz-transform: translateX(-280px);
@@ -240,10 +242,12 @@ div {
   border-right: 1px solid rgba(255, 255, 255, 0.25); }
 
 .ui-container.right-side {
+  width: -webkit-calc(100% - 320px);
   width: calc(100% - 320px);
   left: 320px; }
 
 .phone .ui-off-canvas-view .ui-container.right-side {
+  width: -webkit-calc(100% - 280px);
   width: calc(100% - 280px);
   left: 280px; }
 

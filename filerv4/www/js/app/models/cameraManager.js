@@ -287,24 +287,24 @@ define( [ "yasmf", "Q" ], function( _y, Q ) {
      */
     self.takePicture = function() {
       var fm = new _y.FileManager();
-      fm.globalDebug = true;
+      //fm.globalDebug = true;
       var targetPath = _y.filename.getPathPart( self.src ).substr( 1 );
-      console.log( "takePicture; targetPath: " + targetPath );
+      //console.log( "takePicture; targetPath: " + targetPath );
       var targetName = _y.filename.getFilePart( self.src );
-      console.log( "takePicture; targetName: " + targetName );
+      //console.log( "takePicture; targetName: " + targetName );
       return fm.init( fm.PERSISTENT, 0 ).then( function() {
-        console.log( "_captureImage" );
+        //console.log( "_captureImage" );
         return self._captureImage();
       } ).then( function( theURI ) {
-        console.log( "takePicture; theURI: " + theURI );
-        console.log( "resolveLocalFileSystemURL" );
+        //console.log( "takePicture; theURI: " + theURI );
+        //console.log( "resolveLocalFileSystemURL" );
         return fm.resolveLocalFileSystemURL( theURI );
       } ).then( function( fileEntry ) {
-        console.log( fileEntry );
-        console.log( "MoveFile" );
+        //console.log( fileEntry );
+        //console.log( "MoveFile" );
         fm.moveFile( fileEntry, targetPath, targetName );
       } ).then( function() {
-        console.log( "Done; notify" );
+        //console.log( "Done; notify" );
         self.notify( "photoCaptured" );
         return;
       } );

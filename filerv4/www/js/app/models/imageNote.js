@@ -39,7 +39,7 @@
          white:false,
          onevar:false 
  */
-/*global define*/
+/*global define, console, Camera*/
 define( [ "yasmf", "app/models/baseNote", "app/models/cameraManager" ], function( _y,
   BaseNote, CameraManager ) {
   var _className = "ImageNote";
@@ -115,6 +115,7 @@ define( [ "yasmf", "app/models/baseNote", "app/models/cameraManager" ], function
       }
       self._camera = new CameraManager();
       self._camera.init( theMediaContents );
+      //self._camera.cameraSource = Camera.PictureSourceType.PHOTOLIBRARY;
       self.notify( "mediaContentsChanged" );
       self._camera.addListenerForNotification( "photoCaptured", self._updateUnit );
       self._camera.addListenerForNotification( "photoCaptured", self._updateModificationDate );

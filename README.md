@@ -1,6 +1,6 @@
 # PhoneGap HotShot 3.x Mobile Application Development Code Bundle
 
-This repository stores the code for the book entitled PhoneGap HotShot 3.x Mobile Application Development published by Packt Publishing. You can purchase the book at [Packt's Site](http://www.packtpub.com/phonegap-3-x-mobile-application-development-hotshot/book).
+This repository stores the code for the book entitled PhoneGap HotShot 3.x Mobile Application Development published by Packt Publishing. You can purchase the book at [Packt's Site](http://www.packtpub.com/phonegap-3-x-mobile-application-development-hotshot/book). If you obtained the code package from Packt, you may wish to download the package from GitHub in order to receive the most recent changes. The package is available at [https://github.com/kerrishotts/PhoneGap-HotShot-3-x-Code-Bundle](https://github.com/kerrishotts/PhoneGap-HotShot-3-x-Code-Bundle).
 
 The code herein is not listed in chapter order but by project name. A lookup from chapter number to project name is provided below.
 

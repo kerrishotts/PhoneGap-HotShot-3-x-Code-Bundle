@@ -37,7 +37,8 @@
          trailing:false,
          undef:true,
          white:false,
-         onevar:false 
+         onevar:false,
+         loopfunc:true
  */
 /*global define, console, StatusBar*/
 define( [ "yasmf", "app/views/pathListView", "app/views/staticView" ], function( _y,
@@ -111,7 +112,9 @@ define( [ "yasmf", "app/views/pathListView", "app/views/staticView" ], function(
   APP.start = function() {
     // update the iOS 7 status bar
     if ( _y.device.platform() == "ios" ) {
-      StatusBar.styleLightContent();
+      if (typeof StatusBar !== "undefined") {
+        StatusBar.styleLightContent();
+      }
     }
     // start listening for resume/pause events
     var gN = _y.UI.globalNotifications;

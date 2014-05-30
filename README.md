@@ -6,6 +6,8 @@ The code herein is not listed in chapter order but by project name. A lookup fro
 
 Furthermore, the code herein is not a complete Cordova project. The build artifacts (namely the `platforms`, `plugins`, etc., directories) are ignored. Only the `www` directory and `config.xml` file for each project is provided. In order to execute any of these projects, you'll need to create a new Cordova project and copy the relevant files from this repository into your project.
 
+> You should also check out [notes.md](./notes.md) within this repository -- there are important issues and discussions of which you should be aware.
+
 # Table of Contents
 
 * [Chapter/Project Lookup](#chapterproject-lookup)
@@ -118,7 +120,7 @@ The very first version of our note taking app, Filer. Sets up the typical projec
 #### Plugins Required 
 ```
 cordova plugin add org.apache.cordova.globalization
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
 ```
 
 ### [FilerV2](id:filerv2)
@@ -128,7 +130,7 @@ The second version of Filer. The key point is using the File API to write to per
 #### Plugins Required
 ```
 cordova plugin add org.apache.cordova.globalization
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
 cordova plugin add org.apache.cordova.file
 ```
 
@@ -139,7 +141,7 @@ In the third version of Filer, we extend the app to permit audio memos.
 #### Plugins Required
 ```
 cordova plugin add org.apache.cordova.globalization
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 ```
@@ -151,7 +153,7 @@ In the fourth version of Filer, we extend the app to permit image notes obtained
 #### Plugins Required
 ```
 cordova plugin add org.apache.cordova.globalization
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
@@ -164,7 +166,7 @@ In the fifth version of Filer, we extend the app to permit video notes obtained 
 #### Plugins Required
 ```
 cordova plugin add org.apache.cordova.globalization
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
@@ -178,7 +180,7 @@ In the sixth version of Filer, we extend the app to share notes to various socia
 #### Plugins Required
 ```
 cordova plugin add org.apache.cordova.globalization
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
@@ -195,7 +197,7 @@ In the seventh version of Filer, we learn to deal with tablet form factors.
 #### Plugins Required
 ```
 cordova plugin add org.apache.cordova.globalization
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
@@ -214,7 +216,7 @@ PathRec is a simple app that uses the geolocation API to record paths and show t
 ```
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
 cordova plugin add org.apache.cordova.statusbar
 cordova plugin add com.photokandy.localstorage
 ```
@@ -227,7 +229,7 @@ PathRecNative is an extension of the PathRec app using some native controls. Wor
 ```
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
 cordova plugin add org.apache.cordova.statusbar
 cordova plugin add com.photokandy.nativecontrols
 cordova plugin add com.photokandy.localstorage
@@ -242,7 +244,7 @@ Cave Runner is a simple HTML5 Canvas game that uses the accelerometer as one of 
 ```
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.device-motion
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
 cordova plugin add org.apache.cordova.statusbar
 ```
 
@@ -260,7 +262,7 @@ Cave Runner 2 extends Cave Runner with a Parse back end that provides high score
 ```
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.device-motion
-cordova plugin add org.apache.cordova.keyboard
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
 cordova plugin add org.apache.cordova.statusbar
 ```
 

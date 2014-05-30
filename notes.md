@@ -3,6 +3,26 @@
 
 > **NOTE**: If you utilize the code package available on GitHub at [https://github.com/kerrishotts/PhoneGap-HotShot-3-x-Code-Bundle](https://github.com/kerrishotts/PhoneGap-HotShot-3-x-Code-Bundle), the fixes below are already incorporated into the code.
 
+### Cordova 3.5
+
+Shortly after the book was published, Cordova 3.5 was released. The projects within have been rebuilt, and thus far, no obvious issues are apparent. Should any issues be identified, the repository and this file will be updated with the corrected information.
+
+### Keyboard Plugin can't be added
+
+Just an FYI, but Apache removed the `org.apache.cordova.keyboard plugin` from the repository. It's still available, but the command to add it is now different.
+
+    cordova plugin add "https://github.com/apache/cordova-plugins#master:keyboard"
+    
+**Affects:** All projects    
+
+### Keyboard Plugin doesn't resize webview on iOS 7
+
+Also, for whatever reason, recent versions of the plugin are essentially no-op on iOS 7 -- which means you may experience unwanted scrolling when the keyboard is visible. You can select a specific version of the plugin to alleviate these problems as follows:
+
+    cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard"
+    
+**Affects:** All projects
+
 ### Data is not persisted should the app be terminated after a `pause` event
 
 This is because there is no auto-save mechanism in place. One could add such a mechanism by listening to `blur` events and calling `saveNote` and `savePath` as appropriate. But this doesn't handle the case should the user put the app in the background without `blur`ing off a field.

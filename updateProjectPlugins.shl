@@ -12,9 +12,11 @@ cordova platform update ios
 cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin add org.apache.cordova.globalization
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -25,9 +27,11 @@ cordova platform update ios
 cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin add org.apache.cordova.globalization
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -40,10 +44,12 @@ echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.file-extras
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.file
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -57,11 +63,13 @@ cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.media
 cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.file-extras
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -75,12 +83,14 @@ cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.media
 cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.camera
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -96,13 +106,15 @@ cordova plugin rm org.apache.cordova.media-capture
 cordova plugin rm org.apache.cordova.file
 cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.file-extras
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.file
 cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
 cordova plugin add org.apache.cordova.media-capture
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 echo "... ... preparing platforms..."
 cordova prepare
 
@@ -120,7 +132,8 @@ cordova plugin rm org.apache.cordova.camera
 cordova plugin rm org.apache.cordova.file-extras
 cordova plugin rm socialmessage
 cordova plugin rm uk.co.ilee.socialmessage
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin rm org.apache.cordova.battery-status
 cordova plugin rm org.apache.cordova.network-information
 cordova plugin add org.apache.cordova.globalization
@@ -129,7 +142,8 @@ cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
 cordova plugin add org.apache.cordova.media-capture
 cordova plugin add https://github.com/leecrossley/cordova-plugin-social-message.git
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 cordova plugin add org.apache.cordova.battery-status
 cordova plugin add org.apache.cordova.network-information
 echo "... ... preparing platforms..."
@@ -149,7 +163,8 @@ cordova plugin rm org.apache.cordova.camera
 cordova plugin rm socialmessage
 cordova plugin rm uk.co.ilee.socialmessage
 cordova plugin rm org.apache.cordova.file-extras
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin rm org.apache.cordova.battery-status
 cordova plugin rm org.apache.cordova.network-information
 cordova plugin rm com.photokandy.localstorage
@@ -159,7 +174,8 @@ cordova plugin add org.apache.cordova.media
 cordova plugin add org.apache.cordova.camera
 cordova plugin add org.apache.cordova.media-capture
 cordova plugin add https://github.com/leecrossley/cordova-plugin-social-message.git
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 cordova plugin add org.apache.cordova.battery-status
 cordova plugin add org.apache.cordova.network-information
 cordova plugin add com.photokandy.localstorage
@@ -174,12 +190,14 @@ cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.geolocation
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin rm org.apache.cordova.statusbar
 cordova plugin rm com.photokandy.localstorage
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 cordova plugin add org.apache.cordova.statusbar
 cordova plugin add com.photokandy.localstorage
 echo "... ... preparing platforms..."
@@ -194,13 +212,15 @@ echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.geolocation
 cordova plugin rm com.photokandy.nativecontrols 
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin rm org.apache.cordova.statusbar
 cordova plugin rm com.photokandy.localstorage
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.geolocation
 cordova plugin add com.photokandy.nativecontrols 
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 cordova plugin add org.apache.cordova.statusbar
 cordova plugin add com.photokandy.localstorage
 echo "... ... preparing platforms..."
@@ -214,11 +234,13 @@ cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.device-motion
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin rm org.apache.cordova.statusbar
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.device-motion
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 cordova plugin add org.apache.cordova.statusbar
 echo "... ... preparing platforms..."
 cordova prepare
@@ -231,11 +253,13 @@ cordova platform update android
 echo "... ... updating plugins..."
 cordova plugin rm org.apache.cordova.globalization
 cordova plugin rm org.apache.cordova.device-motion
-cordova plugin rm org.apache.cordova.keyboard
+cordova plugin rm org.apache.cordova.keyboard # this may generate an error, that's OK
+cordova plugin rm org.apache.cordova.labs.keyboard # namespace changed
 cordova plugin rm org.apache.cordova.statusbar
 cordova plugin add org.apache.cordova.globalization
 cordova plugin add org.apache.cordova.device-motion
-cordova plugin add org.apache.cordova.keyboard
+# cordova plugin add org.apache.cordova.keyboard # this no longer works
+cordova plugin add "https://github.com/apache/cordova-plugins#17bdd5fe62:keyboard" # but this does
 cordova plugin add org.apache.cordova.statusbar
 echo "... ... preparing platforms..."
 cordova prepare
@@ -243,3 +267,5 @@ cordova prepare
 cd ..
 echo "Update complete."
 
+sh ./copyIconsAndSplashes.shl
+echo "Icons and Splashes copied."

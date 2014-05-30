@@ -37,7 +37,7 @@
          trailing:false,
          undef:true,
          white:false,
-         onevar:false 
+         onevar:false
  */
 /*global define*/
 define( [ "yasmf", "app/models/noteStorageSingleton",
@@ -207,6 +207,7 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
         " noteEditView ui-container", theParentElement
       ] );
       // listen for our appearance
+      self.addListenerForNotification( "viewWasPushed", self.captureBackButton );
       self.addListenerForNotification( "viewWasPushed", self.registerGlobalNotifications );
       // listen for our disappearance
       self.addListenerForNotification( "viewWasPopped", self.releaseBackButton );
@@ -227,6 +228,9 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
       }
       self.init( theParentElement, theNote );
     };
+    self.captureBackButton = function() {
+      _y.UI.backButton.addListenerForNotification ( "backButtonPressed", self.goBack );
+    };
     self.releaseBackButton = function() {
       // and make sure we forget about the physical back button
       _y.UI.backButton.removeListenerForNotification( "backButtonPressed", self.goBack );
@@ -238,6 +242,9 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
     self.overrideSuper( self.class, "destroy", self.destroy );
     self.destroy = function() {
       self.releaseBackButton();
+      // remove handlers
+      self.removeListenerForNotification( "viewWasPushed", self.captureBackButton );
+      self.removeListenerForNotification( "viewWasPushed", self.registerGlobalNotifications );
       // Stop listening for our disappearance
       self.removeListenerForNotification( "viewWasPopped", self.releaseBackButton );
       self.removeListenerForNotification( "viewWasPopped", self.destroy );

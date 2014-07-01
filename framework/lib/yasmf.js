@@ -1,13 +1,20 @@
 /**
  *
- * YASMF-UTIL (Yet Another Simple Mobile Framework Utilities) provides basic utilities
- * for working on mobile devices.
+ * # YASMF-Next (Yet Another Simple Mobile Framework Next Gen)
  *
- * It provides several convenience functions (such as _y.ge) and various modules (such
- * as device, filename, etc).
+ * YASMF-Next is the successor to the YASMF framework. While that framework was useful
+ * and usable even in a production environment, as my experience has grown, it became
+ * necessary to re-architect the entire framework in order to provide a modern
+ * mobile framework.
  *
- * yasmf-util.js
- * @module yasmf-util.js
+ * YASMF-Next is the result. It's young, under active development, and not at all
+ * compatible with YASMF v0.2. It uses all sorts of more modern technologies such as
+ * SASS for CSS styling, AMD, etc.
+ *
+ * YASMF-Next is intended to be a simple and fast framework for mobile and desktop
+ * devices. It provides several utility functions and also provides a UI framework.
+ *
+ * @module _y
  * @author Kerri Shotts
  * @version 0.4
  *
@@ -46,24 +53,20 @@
          onevar:false
  */
 /*global define*/
-
-define ( function ( require ) {
-  var _y = require('yasmf/util/core');
-  _y.datetime = require ('yasmf/util/datetime');
-  _y.filename = require ('yasmf/util/filename');
-  _y.misc = require ('yasmf/util/misc');
-  _y.device = require ('yasmf/util/device');
-  _y.BaseObject = require ('yasmf/util/object');
-  _y.FileManager = require ('yasmf/util/fileManager');
-
-  _y.UI = require ('yasmf/ui/core');
-  _y.UI.event = require ('yasmf/ui/event');
-  _y.UI.ViewContainer = require ('yasmf/ui/viewContainer');
-  _y.UI.NavigationController = require ('yasmf/ui/navigationController');
-  _y.UI.SplitViewController = require ('yasmf/ui/splitViewController');
-  _y.UI.TabViewController = require ('yasmf/ui/tabViewController');
-  _y.UI.Alert = require ('yasmf/ui/alert');
-
+define( function( require ) {
+  var _y = require( 'yasmf/util/core' );
+  _y.datetime = require( 'yasmf/util/datetime' );
+  _y.filename = require( 'yasmf/util/filename' );
+  _y.misc = require( 'yasmf/util/misc' );
+  _y.device = require( 'yasmf/util/device' );
+  _y.BaseObject = require( 'yasmf/util/object' );
+  _y.FileManager = require( 'yasmf/util/fileManager' );
+  _y.UI = require( 'yasmf/ui/core' );
+  _y.UI.event = require( 'yasmf/ui/event' );
+  _y.UI.ViewContainer = require( 'yasmf/ui/viewContainer' );
+  _y.UI.NavigationController = require( 'yasmf/ui/navigationController' );
+  _y.UI.SplitViewController = require( 'yasmf/ui/splitViewController' );
+  _y.UI.TabViewController = require( 'yasmf/ui/tabViewController' );
+  _y.UI.Alert = require( 'yasmf/ui/alert' );
   return _y;
-});
-
+} );

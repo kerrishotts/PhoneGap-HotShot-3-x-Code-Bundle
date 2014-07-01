@@ -1,5 +1,3 @@
-define (
-  function ()
-  {
-    return window.Q;
-  });
+define( function() {
+  return window.Q;
+} );

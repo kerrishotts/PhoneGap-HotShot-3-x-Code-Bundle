@@ -2,7 +2,6 @@
  *
  * Provides miscellaneous functions that had no other category.
  *
- * misc.js
  * @module misc.js
  * @author Kerri Shotts
  * @version 0.4
@@ -43,26 +42,23 @@
          onevar:false
  */
 /*global define*/
-define (
-   function ()
-   {
-      return {
-        /**
-         * Returns a pseudo-UUID. Not guaranteed to be unique (far from it, probably), but
-         * close enough for most purposes. You should handle collisions gracefully on your
-         * own, of course. see http://stackoverflow.com/a/8809472
-         * @method makeFauxUUID
-         * @return {String}
-         */
-         makeFauxUUID: function ()
-         {
-          var d = new Date().getTime();
-          var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-              var r = (d + Math.random()*16)%16 | 0;
-              d = Math.floor(d/16);
-              return (c=='x' ? r : (r&0x7|0x8)).toString(16);
-          });
-          return uuid;
-         }
-      };
-   });
+define( function() {
+  return {
+    /**
+     * Returns a pseudo-UUID. Not guaranteed to be unique (far from it, probably), but
+     * close enough for most purposes. You should handle collisions gracefully on your
+     * own, of course. see http://stackoverflow.com/a/8809472
+     * @method makeFauxUUID
+     * @return {String}
+     */
+    makeFauxUUID: function() {
+      var d = new Date().getTime();
+      var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace( /[xy]/g, function( c ) {
+        var r = ( d + Math.random() * 16 ) % 16 | 0;
+        d = Math.floor( d / 16 );
+        return ( c == 'x' ? r : ( r & 0x7 | 0x8 ) ).toString( 16 );
+      } );
+      return uuid;
+    }
+  };
+} );

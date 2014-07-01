@@ -1,6 +1,8 @@
 #PhoneGap HotShot Mobile Application Development 3.x
 ## Notes
 
+> **Note**: The book and scripts within this code package use the `--copy-from` feature of the Cordova CLI. This was introduced in v3.3.1, so if you are not at that version, it would probably be a good idea to update your version of Cordova or perform the copies from the templates to your project manually.
+
 > **NOTE**: If you utilize the code package available on GitHub at [https://github.com/kerrishotts/PhoneGap-HotShot-3-x-Code-Bundle](https://github.com/kerrishotts/PhoneGap-HotShot-3-x-Code-Bundle), the fixes below are already incorporated into the code.
 
 ### Cordova 3.5

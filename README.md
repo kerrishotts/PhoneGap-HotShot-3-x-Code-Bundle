@@ -8,6 +8,8 @@ Furthermore, the code herein is not a complete Cordova project. The build artifa
 
 > You should also check out [notes.md](./notes.md) within this repository -- there are important issues and discussions of which you should be aware.
 
+> **Note**: The book and scripts within use the `--copy-from` feature of the Cordova CLI. This was introduced in v3.3.1, so if you are not at that version, it would probably be a good idea to update your version of Cordova or perform the copies from the templates to your project manually.
+
 # Table of Contents
 
 * [Chapter/Project Lookup](#chapterproject-lookup)
